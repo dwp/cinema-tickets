@@ -1,16 +1,19 @@
 {
   "name": "cinema-tickets",
   "description": "This is a coding exercise which will allow you to demonstrate how you code and your approach to a given problem.",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "engines": {
-    "node": ">=16.15.1"
+    "node": ">=16.11.1"
   },
   "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
     "test": "mocha --require mocha.global.js --recursive test"
   },
   "devDependencies": {
     "chai": "4.3.6",
     "mocha": "10.0.0",
+    "nodemon": "2.0.19",
     "sinon": "14.0.0"
   },
   "dependencies": {
