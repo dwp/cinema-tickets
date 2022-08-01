@@ -8,13 +8,15 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "mocha --require mocha.global.js --recursive test"
+    "test": "mocha --require mocha.global.js --recursive test",
+    "test:lint": "standard"
   },
   "devDependencies": {
     "chai": "4.3.6",
     "mocha": "10.0.0",
     "nodemon": "2.0.19",
-    "sinon": "14.0.0"
+    "sinon": "14.0.0",
+    "standard": "^17.0.0"
   },
   "dependencies": {
     "axios": "0.27.2",
@@ -26,8 +28,18 @@
   },
   "author": "Nick Holvast",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/aNerdInTheHand/cinema-tickets/issues"
-  },
-  "homepage": "https://github.com/aNerdInTheHand/cinema-tickets#readme"
+  "standard": {
+    "env": [
+      "mocha"
+    ],
+    "globals": [
+      "assert",
+      "chai",
+      "expect",
+      "sinon"
+    ],
+    "ignore": [
+      "src/pairtest"
+    ]
+  }
 }
