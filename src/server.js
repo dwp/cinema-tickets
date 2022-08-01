@@ -1,15 +1,18 @@
 module.exports = ({
   app,
   C,
+  exit,
   handlers,
   helpers,
+  logger,
   routing
 }) => {
   // return initialised startServer function
   const startServer = helpers.initStartServer({
     app,
-    exit: process.exit,
+    exit: exit,
     host: C.serverConfig.host,
+    logger,
     port: C.serverConfig.port,
     startMsg: C.serverConfig.startMsg
   })
