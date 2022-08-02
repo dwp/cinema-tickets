@@ -4,57 +4,63 @@ This repository is a code test to satisfy the problem defined in [task.md](./TAS
 
 ## 🏃 Running the application 🏃
 
-There are two options for running this application locally.
+<details>
 
-Prior to both, clone the repo to your machine and open a terminal window in the root of the project.
+  <summary>Click to expand running instructions</summary>
 
-### 💻 NodeJS 💻
+  There are two options for running this application locally.
 
-Run the application using `node`.
+  Prior to both, clone the repo to your machine and open a terminal window in the root of the project.
 
-#### Prerequisites
+  ### 💻 NodeJS 💻
 
-- `node` version `16.11.1` or higher (though this has only been tested on major version `16`)
+  Run the application using `node`.
 
-#### Commands
+  #### Prerequisites
 
-```sh
-npm i
-npm start
-```
+  - `node` version `16.11.1` or higher (though this has only been tested on major version `16`)
 
-This will run the following commands in order:
+  #### Commands
 
-```sh
-npm run test:lint && npm run test:unit && node src/index.js
-```
+  ```sh
+  npm i
+  npm start
+  ```
 
-If either of the test commands fail, the application will not start.
+  This will run the following commands in order:
 
-If you wish to make any changes to the application, hot reloading is enabled by running:
+  ```sh
+  npm run test:lint && npm run test:unit && node src/index.js
+  ```
 
-```sh
-npm run dev
-```
+  If either of the test commands fail, the application will not start.
 
-This bypasses the `npm test` commands.
+  If you wish to make any changes to the application, hot reloading is enabled by running:
 
-### 🐳 Docker 🐳
+  ```sh
+  npm run dev
+  ```
 
-#### Prerequisites
+  This bypasses the `npm test` commands.
 
-- Docker
+  ### 🐳 Docker 🐳
 
-#### Commands
+  #### Prerequisites
 
-```sh
-npm run docker:start
-```
+  - Docker
 
-### Verifying
+  #### Commands
 
-You can check the application is running by opening another terminal window and hitting:
+  ```sh
+  npm run docker:start
+  ```
 
-```sh
-curl localhost:3000/healthcheck
-```
+  ### Verifying
+
+  You can check the application is running by opening another terminal window and hitting:
+
+  ```sh
+  curl localhost:3000/healthcheck
+  ```
+
+</details>
