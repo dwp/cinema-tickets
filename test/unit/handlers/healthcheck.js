@@ -9,13 +9,14 @@ describe('handlers/healthcheck', () => {
     errorStub,
     logStub,
     resSendSpy,
-    resStatusStub,
+    resStatusSpy,
     resMock
 
   const C = {
     routes: {
       healthcheck: {
-        path: 'kcehchtlaeh'
+        path: 'kcehchtlaeh',
+        responseString: '😅'
       }
     },
     serverConfig: {
@@ -50,14 +51,14 @@ describe('handlers/healthcheck', () => {
     }
 
     resSendSpy = sinon.spy()
-    resStatusStub = sinon.stub()
+    resStatusSpy = sinon.stub()
 
     // mocks res object
     resMock = {
       send: resSendSpy,
-      status: resStatusStub
+      status: resStatusSpy
     }
-    resStatusStub.returns(resMock)
+    resStatusSpy.returns(resMock)
   })
 
   afterEach(() => {
@@ -65,18 +66,33 @@ describe('handlers/healthcheck', () => {
   })
 
   describe('successful healthcheck', () => {
-    it('should return a 200 response', async () => {
+    it('should log that there has been a request and not log an error', async () => {
       const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
       await healthcheckHandler({ req, res: resMock })
+      
+      assert.isTrue(
+        logStub.calledOnceWith(`Request to ${C.routes.healthcheck.path}`),
+        'console.log not called with expected request log message'
+      )
 
       assert.isTrue(
         errorStub.notCalled,
         'error stub called unexpectedly'
       )
+    })
+
+    it('should return a 200 response and response string', async () => {
+      const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
+      await healthcheckHandler({ req, res: resMock })
 
       assert.isTrue(
-        resStatusStub.calledOnceWith(C.serverConfig.responseCodes.success),
+        resStatusSpy.calledOnceWith(C.serverConfig.responseCodes.success),
         'res.status not called once with success code'
+      )
+      
+      assert.isTrue(
+        resSendSpy.calledOnceWith(C.routes.healthcheck.responseString),
+        'res.send not called with response string'
       )
     })
   })
