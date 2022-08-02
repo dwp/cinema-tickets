@@ -14,7 +14,7 @@ import initTicketService from './services/ticketService.js'
 import TicketPaymentService from './thirdparty/paymentgateway/TicketPaymentService.js'
 import SeatReservationService from './thirdparty/seatbooking/SeatReservationService.js'
 const makePayment = new TicketPaymentService().makePayment
-const reserveSeats = new SeatReservationService().reserveSeats
+const reserveSeat = new SeatReservationService().reserveSeat
 
 // config
 const logger = console
@@ -24,7 +24,7 @@ const app = express()
 // objects to pass to server config
 const gateway = {
   makePayment,
-  reserveSeats
+  reserveSeat
 }
 
 const handlers = {

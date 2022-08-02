@@ -24,7 +24,7 @@ export default ({
       C,
       logger,
       makePayment: gateway.makePayment,
-      reserveSeats: gateway.reserveSeats
+      reserveSeat: gateway.reserveSeat
     })
   }
 
