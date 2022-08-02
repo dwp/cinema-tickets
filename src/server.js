@@ -10,7 +10,7 @@ module.exports = ({
   // return initialised startServer function
   const startServer = helpers.initStartServer({
     app,
-    exit: exit,
+    exit,
     host: C.serverConfig.host,
     logger,
     port: C.serverConfig.port,
@@ -18,7 +18,7 @@ module.exports = ({
   })
 
   const initialisedHandlers = {
-    healthcheck: handlers.initHealthcheckHandler({ C })
+    healthcheck: handlers.initHealthcheckHandler({ C, logger })
   }
 
   routing({
