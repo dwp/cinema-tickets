@@ -1,8 +1,12 @@
 export default ({
   app,
   C,
+  express,
   handlers
 }) => {
+  // middleware to handle POST body
+  app.use(express.json())
+  
   // /healthcheck
   app
     .route(C.routes.healthcheck.path)

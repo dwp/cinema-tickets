@@ -2,8 +2,9 @@ export default ({
   C,
   logger,
   services
-}) => async ({ req, res }) => {
+}) => async (req, res) => {
   logger.log(`Request to ${C.routes.tickets.path}`)
+  logger.log('req', req.body)
   try {
     const result = services
       .ticketService

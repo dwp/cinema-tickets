@@ -62,5 +62,25 @@ This repository is a code test to satisfy the problem defined in [task.md](./TAS
   ```sh
   curl localhost:3000/healthcheck
   ```
-
 </details>
+
+## 🤔 Assumptions 🤔
+
+I have made some assumptions as I go due to the limited brief.
+
+### Request Structure
+
+I have assumed the request is coming from an external service with the following simple shape:
+
+```json
+{
+    "accountId": 39,
+    "ticketsRequested": {
+        "adult": 2,
+        "child": 1,
+        "infant": 1
+    }
+}
+```
+
+## 🧐 Challenges 🧐

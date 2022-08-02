@@ -5,6 +5,7 @@ export default ({
   gateway,
   handlers,
   helpers,
+  express,
   logger,
   routing,
   services
@@ -30,12 +31,18 @@ export default ({
 
   const initialisedHandlers = {
     healthcheck: handlers.initHealthcheckHandler({ C, logger }),
-    tickets: handlers.initTicketHandler({ C, logger, services: initialisedServices })
+    tickets: handlers.initTicketHandler({
+      C,
+      express,
+      logger,
+      services: initialisedServices
+    })
   }
 
   routing({
     app,
     C,
+    express,
     handlers: initialisedHandlers
   })
 

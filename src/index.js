@@ -44,6 +44,7 @@ const startServer = initServer({
   app,
   C,
   exit,
+  express,
   gateway,
   handlers,
   helpers,
