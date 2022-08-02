@@ -1,4 +1,4 @@
-module.exports = ({
+export default ({
   C,
   logger,
   makePayment,
@@ -6,6 +6,7 @@ module.exports = ({
 }) => {
   const purchaseTickets = ({ accountId, ticketsRequested }) => {
     logger.log('Requesting ticket purchase')
+    logger.log(makePayment)
     try {
       /**
        * potential request format from handler

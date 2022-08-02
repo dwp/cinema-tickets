@@ -2,10 +2,12 @@ export default ({
   app,
   C,
   exit,
+  gateway,
   handlers,
   helpers,
   logger,
-  routing
+  routing,
+  services
 }) => {
   // return initialised startServer function
   const startServer = helpers.initStartServer({
@@ -17,8 +19,18 @@ export default ({
     startMsg: C.serverConfig.startMsg
   })
 
+  const initialisedServices = {
+    ticketService: services.initTicketService({
+      C,
+      logger,
+      makePayment: gateway.makePayment,
+      reserveSeats: gateway.reserveSeats
+    })
+  }
+
   const initialisedHandlers = {
-    healthcheck: handlers.initHealthcheckHandler({ C, logger })
+    healthcheck: handlers.initHealthcheckHandler({ C, logger }),
+    tickets: handlers.initTicketHandler({ C, logger, services: initialisedServices })
   }
 
   routing({
