@@ -69,7 +69,7 @@ describe('handlers/healthcheck', () => {
     it('should log that there has been a request and not log an error', async () => {
       const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
       await healthcheckHandler({ req, res: resMock })
-      
+
       assert.isTrue(
         logStub.calledOnceWith(`Request to ${C.routes.healthcheck.path}`),
         'console.log not called with expected request log message'
@@ -89,7 +89,7 @@ describe('handlers/healthcheck', () => {
         resStatusSpy.calledOnceWith(C.serverConfig.responseCodes.success),
         'res.status not called once with success code'
       )
-      
+
       assert.isTrue(
         resSendSpy.calledOnceWith(C.routes.healthcheck.responseString),
         'res.send not called with response string'

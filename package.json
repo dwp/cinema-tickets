@@ -12,7 +12,7 @@
     "docker:restart": "npm run docker:stop && npm run docker:start",
     "docker:start": "npm run docker:build && npm run docker:run",
     "docker:stop": "docker stop cinema-tickets-service && docker rm cinema-tickets-service",
-    "start": "node src/index.js",
+    "start": "npm test && node src/index.js",
     "test": "npm run test:lint && npm run test:unit",
     "test:lint": "standard",
     "test:unit": "mocha --require test/unit/config/mocha.global.js --recursive test"
