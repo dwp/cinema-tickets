@@ -1,4 +1,4 @@
-const initStartServer = require('../../../src/helpers/startServer')
+import initStartServer from '../../../src/helpers/startServer.js'
 const sandbox = sinon.createSandbox()
 
 describe('helpers/startServer', () => {

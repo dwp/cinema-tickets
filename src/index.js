@@ -1,30 +1,49 @@
-const express = require('express')
+// import { createRequire } from 'module'
+// const require = createRequire(import.meta.url)
 
-const C = require('./constants')
-const initServer = require('./server')
+import express from 'express'
 
-// const logger = console
+import C from './constants/index.js'
+import initServer from './server.js'
+
+const logger = console
 const exit = process.exit
 
 const app = express()
 
+import initHealthcheckHandler from './handlers/healthcheck.js'
+
+import initStartServer from './helpers/startServer.js'
+
+// third party provided 'services'
+import TicketPaymentService from './thirdparty/paymentgateway/TicketPaymentService.js'
+const makePayment = new TicketPaymentService().makePayment
+import SeatReservationService from './thirdparty/seatbooking/SeatReservationService.js'
+const reserveSeats = new SeatReservationService().reserveSeats
+
+const gateway = {
+  makePayment,
+  reserveSeats
+}
+
 const handlers = {
-  initHealthcheckHandler: require('./handlers/healthcheck')
+  initHealthcheckHandler
 }
 
 const helpers = {
-  initStartServer: require('./helpers/startServer')
+  initStartServer
 }
 
-const routing = require('./routes')
+import routing from './routes/index.js'
 
 const startServer = initServer({
   app,
   C,
   exit,
+  gateway,
   handlers,
   helpers,
-  logger: console,
+  logger,
   routing
 })
 

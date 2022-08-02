@@ -1,5 +1,5 @@
-const chai = require('chai')
-const sinon = require('sinon')
+import chai from 'chai'
+import sinon from 'sinon'
 
 global.assert = chai.assert
 global.chai = chai

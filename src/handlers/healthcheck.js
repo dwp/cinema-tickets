@@ -1,4 +1,4 @@
-module.exports = ({
+export default ({
   C,
   logger
 }) => async ({ req, res }) => {

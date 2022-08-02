@@ -1,4 +1,4 @@
-const initHealthcheckHandler = require('../../../src/handlers/healthcheck')
+import initHealthcheckHandler from '../../../src/handlers/healthcheck.js'
 
 const sandbox = sinon.createSandbox()
 

@@ -1,7 +1,9 @@
-const routes = require('./routes')
-const serverConfig = require('./serverConfig')
+import routes from './routes.js'
+import serverConfig from './serverConfig.js'
+import tickets from './tickets.js'
 
-module.exports = {
+export default {
   routes,
-  serverConfig
+  serverConfig,
+  tickets
 }
