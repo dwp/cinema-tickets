@@ -14,8 +14,8 @@ export default ({
        *   totalPayment: number
        * }
        */
-      makePayment(accountId, ticketsRequested.totalPayment = 0)
-      reserveSeat(accountId, ticketsRequested.numberOfSeats = 0)
+      makePayment(accountId, ticketsRequested.totalPayment)
+      reserveSeat(accountId, ticketsRequested.numberOfSeats)
       return true
     } catch (error) {
       logger.error(error)
