@@ -22,6 +22,7 @@ export default ({
 
   // initialised helpers passed to handlers/services
   const initialisedHelpers = {
+    calculateSeatsToReserve: helpers.initCalculateSeatsToReserve({ C }),
     calculateTotalPayment: helpers.initCalculateTotalPayment({ C }),
     validateRequest: helpers.initValidateRequest({ C })
   }

@@ -12,13 +12,18 @@ export default ({
       ticketRequest: req.body.ticketsRequested
     })
     const totalPayment = helpers.calculateTotalPayment({ tickets: req.body.ticketsRequested })
+    const numberOfSeatsReserved = helpers.calculateSeatsToReserve({ tickets: req.body.ticketsRequested })
     const result = services
       .ticketService
       .purchaseTickets({ accountId: 1, ticketsRequested: {} })
     logger.log(result)
     res
       .status(C.serverConfig.responseCodes.success)
-      .send(`Ticket purchase successful. X seats reserved. Total payment received: £${totalPayment}.00.`)
+      .send({
+        numberOfSeatsReserved,
+        success: true,
+        totalPayment
+      })
   } catch (error) {
     logger.error(error)
     res

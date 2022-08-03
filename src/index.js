@@ -7,6 +7,7 @@ import routing from './routes/index.js'
 import initServer from './server.js'
 import initHealthcheckHandler from './handlers/healthcheck.js'
 import initTicketHandler from './handlers/tickets.js'
+import initCalculateSeatsToReserve from './helpers/calculateSeatsToReserve.js'
 import initCalculateTotalPayment from './helpers/calculateTotalPayment.js'
 import initStartServer from './helpers/startServer.js'
 import initValidateRequest from './helpers/validateRequest.js'
@@ -35,6 +36,7 @@ const handlers = {
 }
 
 const helpers = {
+  initCalculateSeatsToReserve,
   initCalculateTotalPayment,
   initStartServer,
   initValidateRequest

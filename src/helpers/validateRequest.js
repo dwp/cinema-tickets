@@ -8,7 +8,7 @@ export default ({
   const errors = []
 
   if (!accountId) errors.push(errorMessages.noAccountId)
-  
+
   else {
     if (typeof accountId !== 'number') errors.push(errorMessages.invalidAccountId)
 
