@@ -1,6 +1,7 @@
 export default ({
   C,
   logger,
+  helpers,
   services
 }) => async (req, res) => {
   logger.log(`Request to ${C.routes.tickets.path}`)

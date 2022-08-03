@@ -83,4 +83,26 @@ I have assumed the request is coming from an external service with the following
 }
 ```
 
+### Busines logic
+
+Though not explicitly stated in the business logic, I have assumed that the number of infant tickets must not exceed the number of adult tickets, due to the statement 'They [infants] will be sitting on an Adult's lap'.
+
 ## 🧐 Challenges 🧐
+
+### Time constraints
+
+The main challenge for me was a lack of time due to my personal circumstances. Though given seven days to complete this, I have only had three (work) days to complete this due to upcoming caring responsibilities. Although this is plenty of time to satisfy the requirements of the task, it meant I had to prioritise. The following list is what I deemed essential to demonstrate:
+
+* satisfy the criteria of the test
+* demonstrate my ability to construct a full functioning `express` application
+* demonstrate my preferred functional coding style
+* demonstrate an ability to write unit and end to end tests
+
+Things that I would have preferred to achieve but had to deprioritise:
+
+* full test coverage (I have tried to show *how* I would test different components, such as helper functions, services and handlers, without duplicating the effort of testing all of them)
+* bespoke error handling
+
+### Rewriting to ES Modules
+
+I had written my skeleton `express` app using `CommonJS` (e.g., `const xyz = require('./xyz')`). However, when I came to consume the `thirdparty` services, which cannot be altered as per the instructions, I realised they were exported as `ES Modules`. While it was an easy change to refactor my code to use modules, it was unnecessary time spent. If I was to do this exercise again I would have made sure to double check the configuration of the `thirdparty` modules, especially as they are part of the codebase rather than externally consumed modules.
