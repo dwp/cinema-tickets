@@ -8,11 +8,11 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "docker:build": "docker build . -t cinema-tickets-service",
-    "docker:run": "docker run -p 3001:3000 -d --name cinema-tickets-service cinema-tickets-service",
+    "docker:run": "docker run -p 3000:3000 -d --name cinema-tickets-service cinema-tickets-service",
     "docker:restart": "npm run docker:stop && npm run docker:start",
     "docker:start": "npm run docker:build && npm run docker:run",
     "docker:stop": "docker stop cinema-tickets-service && docker rm cinema-tickets-service",
-    "start": "npm test && node src/index.js",
+    "start": "node src/index.js",
     "test": "npm run test:lint && npm run test:coverage",
     "test:coverage": "c8 --all npm run test:unit",
     "test:lint": "standard",
