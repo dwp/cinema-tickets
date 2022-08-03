@@ -21,15 +21,14 @@ describe('helpers/calculateTotalPayment', () => {
 
   describe('invalid requests', () => {
     it('should reject an empty request', () => {
-      const error = new Error('Invalid ticket request')
       const tickets = {}
       assert.throws(
-        calculateTotalPayment({ tickets }),
-        error,
-        'Expected error not thrown'
-        )
-      })
+        () => calculateTotalPayment({ tickets }),
+        ReferenceError,
+        /Invalid ticket request/
+      )
     })
+  })
 
   describe('valid requests', () => {
     it('should calculate requests for only adults', () => {
