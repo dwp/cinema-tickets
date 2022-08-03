@@ -5,13 +5,13 @@ describe('helpers/calculateTotalPayment', () => {
     tickets: {
       type: {
         adult: {
-          price: 20,
+          price: 20
         },
         child: {
-          price: 10,
+          price: 10
         },
         infant: {
-          price: 0,
+          price: 0
         }
       }
     }
@@ -24,7 +24,7 @@ describe('helpers/calculateTotalPayment', () => {
       const tickets = {}
       assert.throws(
         () => calculateTotalPayment({ tickets }),
-        ReferenceError,
+        Error,
         /Invalid ticket request/
       )
     })
@@ -45,7 +45,7 @@ describe('helpers/calculateTotalPayment', () => {
         'Total payment does not equal expected payment'
       )
     })
-    
+
     it('should calculate requests for adults and children', () => {
       const tickets = {
         adult: 1,
@@ -54,8 +54,8 @@ describe('helpers/calculateTotalPayment', () => {
       }
       const totalPayment = calculateTotalPayment({ tickets })
       const expectedPayment = (
-        (C.tickets.type.adult.price * tickets.adult)
-        + (C.tickets.type.child.price * tickets.child)
+        (C.tickets.type.adult.price * tickets.adult) +
+        (C.tickets.type.child.price * tickets.child)
       )
       assert.equal(
         expectedPayment,
@@ -63,7 +63,7 @@ describe('helpers/calculateTotalPayment', () => {
         'Total payment does not equal expected payment'
       )
     })
-    
+
     it('should calculate requests for adults, children and infants', () => {
       const tickets = {
         adult: 10,
@@ -72,8 +72,8 @@ describe('helpers/calculateTotalPayment', () => {
       }
       const totalPayment = calculateTotalPayment({ tickets })
       const expectedPayment = (
-        (C.tickets.type.adult.price * tickets.adult)
-        + (C.tickets.type.child.price * tickets.child)
+        (C.tickets.type.adult.price * tickets.adult) +
+        (C.tickets.type.child.price * tickets.child)
       )
       assert.equal(
         expectedPayment,
