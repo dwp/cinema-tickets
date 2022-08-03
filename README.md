@@ -87,6 +87,8 @@ I have assumed the request is coming from an external service with the following
 
 Though not explicitly stated in the business logic, I have assumed that the number of infant tickets must not exceed the number of adult tickets, due to the statement 'They [infants] will be sitting on an Adult's lap'.
 
+I have also assumed that the 20 ticket limit is fixed and that infant and adult tickets count towards this total despite only taking up one seat, i.e., a request for 20 adult tickets and 1 infant ticket will fail.
+
 ## 🧐 Challenges 🧐
 
 ### Time constraints

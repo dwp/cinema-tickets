@@ -28,6 +28,6 @@ export default ({
     logger.error(error)
     res
       .status(C.serverConfig.responseCodes.error)
-      .send('Internal application error')
+      .send(error.toString())
   }
 }
