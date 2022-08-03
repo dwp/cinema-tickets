@@ -3,5 +3,5 @@ export default ({
 }) => ({
   tickets
 }) => (
-  0
+  tickets.adult + tickets.child
 )
