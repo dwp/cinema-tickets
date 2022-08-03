@@ -22,6 +22,12 @@ describe('helpers/validateRequest', () => {
         Error,
         `${errors.invalidAccountId},${errors.invalidTicketType},${errors.invalidTicketNumber}`
       )
+      // sanity check against false negatives
+      assert.doesNotThrow(
+        () => validateRequest({ accountId, ticketRequest }),
+        Error,
+        `${errors.insufficientAdultTickets}`
+      )
     })
     it('(noTicketsRequested): should reject a valid account ID and no tickets requested', () => {
       const accountId = 1
@@ -93,11 +99,9 @@ describe('helpers/validateRequest', () => {
       const accountId = 39
       const ticketRequest = { adult: 3, child: 7, infant: 3 }
 
-      const requestIsValid = validateRequest({ accountId, ticketRequest })
-
-      assert.isTrue(
-        requestIsValid,
-        'Request unexpectedly not valid'
+      assert.doesNotThrow(
+        () => validateRequest({ accountId, ticketRequest }),
+        Error
       )
     })
   })

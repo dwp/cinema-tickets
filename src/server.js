@@ -20,6 +20,12 @@ export default ({
     startMsg: C.serverConfig.startMsg
   })
 
+  // initialised helpers passed to handlers/services
+  const initialisedHelpers = {
+    calculateTotalPayment: helpers.initCalculateTotalPayment({ C }),
+    validateRequest: helpers.initValidateRequest({ C })
+  }
+
   const initialisedServices = {
     ticketService: services.initTicketService({
       C,
@@ -34,6 +40,7 @@ export default ({
     tickets: handlers.initTicketHandler({
       C,
       express,
+      helpers: initialisedHelpers,
       logger,
       services: initialisedServices
     })

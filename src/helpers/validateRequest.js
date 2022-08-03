@@ -7,8 +7,8 @@ export default ({
   const errorMessages = C.tickets.responses.error
   const errors = []
 
-  // account ID checks
   if (!accountId) errors.push(errorMessages.noAccountId)
+  
   else {
     if (typeof accountId !== 'number') errors.push(errorMessages.invalidAccountId)
 
@@ -29,6 +29,4 @@ export default ({
   }
 
   if (errors.length > 0) throw new Error(errors)
-
-  return true
 }
