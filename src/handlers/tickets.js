@@ -3,29 +3,36 @@ export default ({
   logger,
   helpers,
   services
-}) => async (req, res) => {
+}) => (req, res) => {
   logger.log(`Request to ${C.routes.tickets.path}`)
-  logger.log('req', req.body)
   try {
+    // throws if validation fails
     helpers.validateRequest({
       accountId: req.body.accountId,
       ticketRequest: req.body.ticketsRequested
     })
+    const numberOfSeatsRequested = helpers.calculateSeatsToReserve({ tickets: req.body.ticketsRequested })
     const totalPayment = helpers.calculateTotalPayment({ tickets: req.body.ticketsRequested })
-    const numberOfSeatsReserved = helpers.calculateSeatsToReserve({ tickets: req.body.ticketsRequested })
+    const ticketsRequested = {
+      numberOfSeatsRequested,
+      totalPayment
+    }
     const result = services
       .ticketService
-      .purchaseTickets({ accountId: 1, ticketsRequested: {} })
+      .purchaseTickets({
+        accountId: req.body.accountId,
+        ticketsRequested
+      })
     logger.log(result)
     res
       .status(C.serverConfig.responseCodes.success)
       .send({
-        numberOfSeatsReserved,
         success: true,
+        numberOfSeatsRequested,
         totalPayment
       })
   } catch (error) {
-    logger.error(error)
+    logger.error('Returning error to client')
     res
       .status(C.serverConfig.responseCodes.error)
       .send(error.toString())

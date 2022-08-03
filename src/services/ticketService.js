@@ -7,15 +7,8 @@ export default ({
   const purchaseTickets = ({ accountId, ticketsRequested }) => {
     logger.log('Requesting ticket purchase')
     try {
-      /**
-       * potential request format from handler
-       * ticketsRequested: {
-       *   numberOfSeats: number,
-       *   totalPayment: number
-       * }
-       */
       makePayment(accountId, ticketsRequested.totalPayment)
-      reserveSeat(accountId, ticketsRequested.numberOfSeats)
+      reserveSeat(accountId, ticketsRequested.numberOfSeatsRequested)
       return true
     } catch (error) {
       logger.error(error)
