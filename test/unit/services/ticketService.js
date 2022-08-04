@@ -9,7 +9,7 @@ describe('services/ticketService', () => {
     reserveSeatStub
 
   const logString = 'Requesting ticket purchase'
-  const error = new Error(`@here can't log in to gitlab help`)
+  const error = new Error('@here can\'t log in to gitlab help')
   const validAccountId = 23948
   const invalidAccountId = 'Jeff'
   const validTicketsRequested = {
@@ -54,7 +54,7 @@ describe('services/ticketService', () => {
       .throws(error)
     makePaymentStub
       .throws('makePaymentStub called with unexpected arguments')
-    
+
     reserveSeatStub
       .withArgs(validAccountId, validTicketsRequested.numberOfSeatsRequested)
       .returns(undefined)
@@ -139,7 +139,7 @@ describe('services/ticketService', () => {
         reserveSeat: reserveSeatStub
       })
 
-      const result = ticketService
+      ticketService
         .purchaseTickets({
           accountId: invalidAccountId,
           ticketsRequested: invalidTicketsRequested
