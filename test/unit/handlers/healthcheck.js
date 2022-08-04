@@ -66,9 +66,18 @@ describe('handlers/healthcheck', () => {
   })
 
   describe('successful healthcheck', () => {
+    it('should not throw an error', () => {
+      const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
+
+      assert.doesNotThrow(
+        () => healthcheckHandler({ req, res: resMock }),
+        Error
+      )
+    })
+
     it('should log that there has been a request and not log an error', async () => {
       const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
-      await healthcheckHandler({ req, res: resMock })
+      healthcheckHandler({ req, res: resMock })
 
       assert.isTrue(
         logStub.calledOnceWith(`Request to ${C.routes.healthcheck.path}`),
@@ -83,7 +92,7 @@ describe('handlers/healthcheck', () => {
 
     it('should return a 200 response and response string', async () => {
       const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
-      await healthcheckHandler({ req, res: resMock })
+      healthcheckHandler({ req, res: resMock })
 
       assert.isTrue(
         resStatusStub.calledOnceWith(C.serverConfig.responseCodes.success),
@@ -93,6 +102,18 @@ describe('handlers/healthcheck', () => {
       assert.isTrue(
         resSendSpy.calledOnceWith(C.routes.healthcheck.responseString),
         'res.send not called with response string'
+      )
+    })
+  })
+
+  describe('unsuccessful healthcheck', () => {
+    it('should throw an error', () => {
+      resStatusStub.throws(error)
+      const healthcheckHandler = initHealthcheckHandler({ C, logger: consoleMock })
+
+      assert.throws(
+        () => healthcheckHandler({ req, res: resMock }),
+        error
       )
     })
   })
