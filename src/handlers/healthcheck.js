@@ -1,7 +1,7 @@
 export default ({
   C,
   logger
-}) => async ({ req, res }) => {
+}) => ({ req, res }) => {
   logger.log(`Request to ${C.routes.healthcheck.path}`)
   try {
     res
