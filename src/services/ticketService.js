@@ -1,5 +1,4 @@
 export default ({
-  C,
   logger,
   makePayment,
   reserveSeat
