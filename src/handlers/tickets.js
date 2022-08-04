@@ -4,9 +4,10 @@ export default ({
   helpers,
   services
 }) => (req, res) => {
+  console.log(res.status)
   logger.log(`Request to ${C.routes.tickets.path}`)
   try {
-    // throws if validation fails
+    // throws error if validation fails
     helpers.validateRequest({
       accountId: req.body.accountId,
       ticketRequest: req.body.ticketsRequested
@@ -23,11 +24,10 @@ export default ({
         accountId: req.body.accountId,
         ticketsRequested
       })
-    logger.log(result)
     res
       .status(C.serverConfig.responseCodes.success)
       .send({
-        success: true,
+        success: result,
         numberOfSeatsRequested,
         totalPayment
       })

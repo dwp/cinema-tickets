@@ -9,7 +9,7 @@ describe('handlers/healthcheck', () => {
     errorStub,
     logStub,
     resSendSpy,
-    resStatusSpy,
+    resStatusStub,
     resMock
 
   const C = {
@@ -51,14 +51,14 @@ describe('handlers/healthcheck', () => {
     }
 
     resSendSpy = sinon.spy()
-    resStatusSpy = sinon.stub()
+    resStatusStub = sinon.stub()
 
     // mocks res object
     resMock = {
       send: resSendSpy,
-      status: resStatusSpy
+      status: resStatusStub
     }
-    resStatusSpy.returns(resMock)
+    resStatusStub.returns(resMock)
   })
 
   afterEach(() => {
@@ -86,7 +86,7 @@ describe('handlers/healthcheck', () => {
       await healthcheckHandler({ req, res: resMock })
 
       assert.isTrue(
-        resStatusSpy.calledOnceWith(C.serverConfig.responseCodes.success),
+        resStatusStub.calledOnceWith(C.serverConfig.responseCodes.success),
         'res.status not called once with success code'
       )
 
