@@ -4,7 +4,6 @@ export default ({
   helpers,
   services
 }) => (req, res) => {
-  console.log(res.status)
   logger.log(`Request to ${C.routes.tickets.path}`)
   try {
     // throws error if validation fails

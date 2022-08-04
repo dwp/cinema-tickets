@@ -27,7 +27,7 @@ describe('handlers/tickets', () => {
     // variables
     validBody = {
       accountId: 39,
-      tickets: {
+      ticketsRequested: {
         adult: 2,
         child: 1,
         infant: 1
@@ -81,15 +81,13 @@ describe('handlers/tickets', () => {
         purchaseTickets: purchaseTicketsStub
       }
     }
-    
+
     // configure stubs
-    logStub = sinon.stub()
     logStub
       .withArgs(logString)
       .returns(undefined)
     logStub
       .returns(Error('console.log called with unexpected parameters'))
-    errorStub = sinon.stub()
     errorStub
       .withArgs(error)
       .returns(undefined)
@@ -97,11 +95,11 @@ describe('handlers/tickets', () => {
       .returns(Error('console.error called with unexpected parameters'))
 
     calculateSeatsToReserveStub
-      .withArgs({ tickets: req.body.tickets })
+      .withArgs({ tickets: req.body.ticketsRequested })
       .returns(999)
       
     calculateTotalPaymentStub
-      .withArgs({ tickets: req.body.tickets })
+      .withArgs({ tickets: req.body.ticketsRequested })
       .returns(9001)
     calculateTotalPaymentStub
       .throws(Error('calculateTotalPayment not called with exact arguments expected'))
@@ -109,7 +107,7 @@ describe('handlers/tickets', () => {
     validateRequestStub
       .withArgs({
         accountId: req.body.accountId,
-        ticketRequest: req.body.tickets
+        ticketRequest: req.body.ticketsRequested
       })
       .returns(undefined)
     validateRequestStub
@@ -133,6 +131,20 @@ describe('handlers/tickets', () => {
   })
 
   describe('successful call to ticket handler', () => {
+    it.only('should not throw an error', () => {
+      const ticketHandler = initTicketHandler({
+        C,
+        logger: loggerMock,
+        helpers: helpersMock,
+        services: servicesMock
+      })
+
+      assert.doesNotThrow(
+        () => ticketHandler(req, resMock),
+        Error
+      )
+    })
+
     it.only('should successfully call the expected functions', () => {
       const ticketHandler = initTicketHandler({
         C,
@@ -141,11 +153,59 @@ describe('handlers/tickets', () => {
         services: servicesMock
       })
       ticketHandler(req, resMock)
+
+      assert.isTrue(
+        logStub.calledOnceWith(logString),
+        'console.log not called with request information'
+      )
+
+      assert.isTrue(
+        validateRequestStub.calledOnceWith({
+          accountId: req.body.accountId,
+          ticketRequest: req.body.ticketsRequested
+        }),
+        'validateRequest not called once with expected req.body params'
+      )
+
+      assert.isTrue(
+        calculateSeatsToReserveStub.calledOnceWith({ tickets: req.body.ticketsRequested }),
+        'calculateSeatsToReserve not called once with correct number of tickets'
+      )
+
+      assert.isTrue(
+        calculateTotalPaymentStub.calledOnceWith({ tickets: req.body.ticketsRequested }),
+        'calculateTotalPayment not called once with correct number of tickets'
+      )
+
+      assert.isTrue(
+        purchaseTicketsStub.calledOnceWith({
+          accountId: req.body.accountId,
+          ticketsRequested: {
+            numberOfSeatsRequested: 999, // returned from calculateSeatsToReserveStub
+            totalPayment: 9001 // returned from calculateTotalPaymentStub
+          }
+        }),
+        'ticketService.purchaseTickets not called once with arguments returned from helper functions'
+      )
       
       assert.isTrue(
         statusStub.calledOnceWith(C.serverConfig.responseCodes.success),
         'res.status not called with 200'
-        )
+      )
+
+      assert.isTrue(
+        sendSpy.calledOnceWith({
+          success: true,
+          numberOfSeatsRequested: 999,
+          totalPayment: 9001
+        }),
+        'res.send not called with correct arguments'
+      )
+
+      assert.isTrue(
+        errorStub.notCalled,
+        'console.error called unexpectedly'
+      )
     })
   })
 })
