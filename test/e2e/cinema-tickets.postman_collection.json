@@ -177,51 +177,6 @@
 			]
 		},
 		{
-			"name": "Healthcheck",
-			"item": [
-				{
-					"name": "GET /healthcheck",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
-									"})",
-									"",
-									"pm.test(\"Body matches string\", function () {",
-									"    pm.expect(pm.response.text()).to.include(\"Application is healthy\")",
-									"})",
-									"",
-									"pm.test(\"Response time is less than 130ms\", function () {",
-									"    pm.expect(pm.response.responseTime).to.be.below(130)",
-									"})",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:3000/healthcheck",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"healthcheck"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Error",
 			"item": [
 				{
@@ -235,10 +190,8 @@
 									"    pm.response.to.have.status(500);",
 									"});",
 									"",
-									"pm.test(\"Total payment\", function () {",
-									"    var jsonData = pm.response.json();",
-									"    // 20 * 20",
-									"    pm.expect(jsonData.totalPayment).to.eql(400);",
+									"pm.test(\"Body returns invalid account ID\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"No account ID provided\");",
 									"});"
 								],
 								"type": "text/javascript"
@@ -271,7 +224,7 @@
 					"response": []
 				},
 				{
-					"name": "Invalid account ID and too many infants",
+					"name": "Too many tickets",
 					"event": [
 						{
 							"listen": "test",
@@ -316,7 +269,7 @@
 					"response": []
 				},
 				{
-					"name": "Too many tickets",
+					"name": "Invalid account ID, not enough adults",
 					"event": [
 						{
 							"listen": "test",
@@ -358,6 +311,51 @@
 							"port": "3000",
 							"path": [
 								"tickets"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Healthcheck",
+			"item": [
+				{
+					"name": "GET /healthcheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Application is healthy\")",
+									"})",
+									"",
+									"pm.test(\"Response time is less than 130ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(130)",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/healthcheck",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"healthcheck"
 							]
 						}
 					},
