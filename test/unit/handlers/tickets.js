@@ -21,7 +21,8 @@ describe('handlers/tickets', () => {
     validBody
 
   const logString = `Request to ${C.routes.tickets.path}`
-  const error = new Error('MacBook melting...')
+  const errorMessage = 'MacBook melting...'
+  const error = new Error(errorMessage)
 
   beforeEach(() => {
     // variables
@@ -111,7 +112,7 @@ describe('handlers/tickets', () => {
       })
       .returns(undefined)
     validateRequestStub
-      .throws(Error(error))
+      .throws([error])
 
     purchaseTicketsStub
       .withArgs({
@@ -210,7 +211,7 @@ describe('handlers/tickets', () => {
   })
 
   describe('invalid call to ticket handler', () => {
-    it.only('should throw an error', () => {
+    it('should throw an error', () => {
       req = { body: invalidBody }
       const ticketHandler = initTicketHandler({
         C,
@@ -237,7 +238,11 @@ describe('handlers/tickets', () => {
       )
 
       assert.isTrue(
-        sendSpy.calledOnceWith(`Error: ${error}`),
+        sendSpy.calledOnceWith({
+          success: false,
+          statusCode: C.serverConfig.responseCodes.error,
+          errors: [errorMessage]
+        }),
         'res.send not called with error'
       )
     })
