@@ -31,9 +31,18 @@ export default ({
         totalPayment
       })
   } catch (error) {
+    // return errors as array of strings
+    const errors = error
+      .toString()
+      .replace(/Error:\s/, '')
+      .split(',') // quick and dirty but means errors can't have commas
     logger.error('Returning error to client')
     res
       .status(C.serverConfig.responseCodes.error)
-      .send(error.toString())
+      .send({
+        success: false,
+        statusCode: C.serverConfig.responseCodes.error,
+        errors
+      })
   }
 }
