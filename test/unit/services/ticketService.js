@@ -9,7 +9,7 @@ describe('services/ticketService', () => {
     reserveSeatStub
 
   const logString = 'Requesting ticket purchase'
-  const error = new Error('@here can\'t log in to gitlab help')
+  const error = new Error('@here cannae log in to gitlab help')
   const validAccountId = 23948
   const invalidAccountId = 'Jeff'
   const validTicketsRequested = {
@@ -139,20 +139,12 @@ describe('services/ticketService', () => {
         reserveSeat: reserveSeatStub
       })
 
-      ticketService
-        .purchaseTickets({
+      assert.throws(
+        () => ticketService.purchaseTickets({
           accountId: invalidAccountId,
           ticketsRequested: invalidTicketsRequested
-        })
-
-      assert.isTrue(
-        logStub.calledOnceWith(logString),
-        'console.log not called with expected string'
-      )
-
-      assert.isTrue(
-        errorStub.calledOnceWith(error),
-        'console.error not called with expected string'
+        }),
+        error
       )
     })
   })
