@@ -44,10 +44,10 @@ describe('handlers/tickets', () => {
 
     // override in error tests with invalidBody
     req = { body: validBody }
-    
+
     // spies
     sendSpy = sandbox.spy()
-    
+
     // stubs
     errorStub = sandbox.stub()
     logStub = sandbox.stub()
@@ -97,7 +97,7 @@ describe('handlers/tickets', () => {
     calculateSeatsToReserveStub
       .withArgs({ tickets: req.body.ticketsRequested })
       .returns(999)
-      
+
     calculateTotalPaymentStub
       .withArgs({ tickets: req.body.ticketsRequested })
       .returns(9001)
@@ -111,7 +111,7 @@ describe('handlers/tickets', () => {
       })
       .returns(undefined)
     validateRequestStub
-      .throws(Error('validateRequest failed'))
+      .throws(Error(error))
 
     purchaseTicketsStub
       .withArgs({
@@ -125,13 +125,13 @@ describe('handlers/tickets', () => {
     purchaseTicketsStub
       .throws(Error('ticketService.purchaseTickets not called with correct arguments'))
   })
-  
+
   afterEach(() => {
     sandbox.restore()
   })
 
-  describe('successful call to ticket handler', () => {
-    it.only('should not throw an error', () => {
+  describe('valid call to ticket handler', () => {
+    it('should not throw an error', () => {
       const ticketHandler = initTicketHandler({
         C,
         logger: loggerMock,
@@ -145,7 +145,7 @@ describe('handlers/tickets', () => {
       )
     })
 
-    it.only('should successfully call the expected functions', () => {
+    it('should successfully call the expected functions', () => {
       const ticketHandler = initTicketHandler({
         C,
         logger: loggerMock,
@@ -187,7 +187,7 @@ describe('handlers/tickets', () => {
         }),
         'ticketService.purchaseTickets not called once with arguments returned from helper functions'
       )
-      
+
       assert.isTrue(
         statusStub.calledOnceWith(C.serverConfig.responseCodes.success),
         'res.status not called with 200'
@@ -205,6 +205,40 @@ describe('handlers/tickets', () => {
       assert.isTrue(
         errorStub.notCalled,
         'console.error called unexpectedly'
+      )
+    })
+  })
+
+  describe('invalid call to ticket handler', () => {
+    it.only('should throw an error', () => {
+      req = { body: invalidBody }
+      const ticketHandler = initTicketHandler({
+        C,
+        logger: loggerMock,
+        helpers: helpersMock,
+        services: servicesMock
+      })
+
+      ticketHandler(req, resMock)
+
+      assert.isTrue(
+        logStub.calledOnceWith(logString),
+        'console.log not called with request details'
+      )
+
+      assert.isTrue(
+        errorStub.calledOnceWith('Returning error to client'),
+        'console.error not called with error message'
+      )
+
+      assert.isTrue(
+        statusStub.calledOnceWith(C.serverConfig.responseCodes.error),
+        'res.status not called with 500'
+      )
+
+      assert.isTrue(
+        sendSpy.calledOnceWith(`Error: ${error}`),
+        'res.send not called with error'
       )
     })
   })
