@@ -19,6 +19,7 @@ This repository is a code test to satisfy the problem defined in [task.md](./TAS
   #### Prerequisites
 
   - `node` version `16.11.1` or higher (though this has only been tested on major version `16`)
+  - [Postman](https://www.postman.com/company/about-postman/) to run end-to-end tests
 
   #### Commands
 
@@ -65,7 +66,33 @@ This repository is a code test to satisfy the problem defined in [task.md](./TAS
 
   ### Testing
   
-  TODO
+  There are two types of tests included with the repository - unit tests and end-to-end (e2e) tests.
+  
+  The unit tests run isolated logic tests against each file, while the e2e tests make calls to the service and make assertions against the result.
+
+  The unit tests are written using the `mocha` testing framework and the `chai` assertion library and the e2e tests are in the format of a Postman collection.
+
+  Also included under the `test` scripts are a `test: coverage` and `test: lint` script. The coverage script uses the [c8](https://github.com/bcoe/c8) tool to provide test coverage (I chose `c8` over `nyc` as it seems to be able to handle Module JS better) and the `lint` script uses `standard`. These two commands are included in the `npm test` command and they will run prior to the unit tests.
+
+  #### Unit tests
+
+  To run the unit tests (as well as the linting and coverage scripts), the application does not need to be running. From the root of the directory in the terminal of your choice (having previously run `npm i`), simply run:
+
+  ```sh
+  npm test
+  ```
+
+  to view a report in the console of the test suit, including a list of all passing tests logically grouped by service and expected behaviour, and a table showing test coverage.
+
+  #### e2e tests
+
+  > Note: the application must be running in order to run the e2e tests. It can be running locally or in Docker, though both cannot be running at the same time as they use the same port.
+
+  To run the e2e tests, [import the collection](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman) into Postman by selecting the `Upload Files` option and uploading the `test/e2e/cinema-tickets.postman_collection.json` file.
+
+  Hover over the `cinema-tickets` collection and click the hamburger menu, then `Run collection`. This opens a `Runner` tab with an option to `Run cinema-tickets`.
+
+  This runs through the Postman collection which covers multiple scenarios, testing for both valid and invalid requests.
 
 </details>
 
@@ -100,7 +127,7 @@ TODO - assuming returns `true` in real world scenario
 
 ## Approach
 
-TODO (functional style, code coverage, TDD on helper function unit tests but not handlers etc.)
+TODO (functional style, start with express skeleton + healthcheck, code coverage, TDD on helper function unit tests but not handlers etc.)
 
 ## 🧐 Challenges 🧐
 
