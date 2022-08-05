@@ -115,7 +115,7 @@ I have assumed the request is coming from an external service with the following
 }
 ```
 
-### Busines logic
+### Business logic
 
 Though not explicitly stated in the business logic, I have assumed that the number of infant tickets must not exceed the number of adult tickets, due to the statement 'They [infants] will be sitting on an Adult's lap'.
 
@@ -125,30 +125,79 @@ I have also assumed that the 20 ticket limit is fixed and that infant and adult 
 
 As I cannot change the `thirdparty` code which returns nothing and just throws an error if basic validation fails, I have assumed they would return `true` in a real world scenario and so this is what I return from my `ticketService` if there are no errors thrown. This is obviously oversimplifying things but works for this small application.
 
-## Approach
+## 🧑‍🔬 Approach 🧑‍🔬
 
-TODO (functional style, start with express skeleton + healthcheck, code coverage, TDD on helper function unit tests but not handlers etc.)
+### Coding style
+
+I prefer a functional coding style whereby all functions are initialised with any dependencies, then return the function as it is to be called.
+
+As a very basic example, if I was defining a function to lookup a constant from a provided `key`, instead of the following:
+
+```js
+import C from './constants'
+
+export default ({ key }) => C[key]
+```
+
+I would define it as follows:
+
+```js
+export default ({ C }) => ({ key }) => C[key]
+```
+
+Whilst I find that this style is neat and readable (though can take some getting used to), the main benefit is in testing, as you have total control over dependencies and can mock, stub and spy on anything at all without having to use any complicated dependency injection tools.
+
+### Code structure
+
+I was working on a very limited timescale but started by building a skeleton `express` application in a functional style, with a `/healthcheck` route.
+
+I then expanded this to add a `/tickets` route with a basic handler, which I then fleshed out to call a `ticketService`, which in turn calls the `thirdparty` 'gateway' services (seat reservation and payment).
+
+The `handler` is injected with initialised helper functions, including a request validation function, and the initialised `ticketService`. The service is initialised with the third party services.
+
+The program flow is as follows:
+
+1. Request made to `/tickets` route
+2. Request forwarded to `ticketHandler`
+3. Pass request to request validation helper
+  1. If validation fails, return list of errors to client
+  2. If validation succeeds, call helper functions to calculate total amount to pay and number of seats to reserve
+  3. Create formatted object with the above
+4. Call `ticketService` with formatted request
+5. Call both third party services
+  1. If validation fails, throw an error to handler (it should never fail this validation due to the previous validation in the handler)
+  2. If validation succeeds, return `true` to handler to allow handler to proceed
+6. Service returns result (either `true` or `Error`) to handler
+7. Handler returns result to client
+
+### Testing
+
+Due to time constraints I have not attempted to achieved 100% code coverage. As the `index.js` file mainly deals with importing dependencies this is tricky to test in the functional style. I have not tested `src/routes/index.js` or `src/app.js` simply because I have already demonstrated the testing approach in other files and I ran out of time.
+
+For helper functions where the functionality is known and limited I have practiced TDD (writing tests first and then source code to satisfy the tests) but in the interests of getting up and running quickly I didn't fully TDD the handler or service, which were frequently changing. As functionality evolved, I did practice some TDD in these files.
 
 ## 🧐 Challenges 🧐
 
 ### Time constraints
 
-The main challenge for me was a lack of time due to my personal circumstances. Though given seven days to complete this, I have only had three (work) days to complete this due to upcoming caring responsibilities. Although this is plenty of time to satisfy the requirements of the task, it meant I had to prioritise. The following list is what I deemed essential to demonstrate:
-
-* satisfy the criteria of the test
-* demonstrate my ability to construct a full functioning `express` application
-* demonstrate my preferred functional coding style
-* demonstrate an ability to write unit and end to end tests
-
-Things that I would have preferred to achieve but had to deprioritise:
-
-* full test coverage (I have tried to show *how* I would test different components, such as helper functions, services and handlers, without duplicating the effort of testing all of them)
-* bespoke error handling
+The main challenge for me was a lack of time due to my personal circumstances. Although I have had time to satisfy the requirements of the task, I probably sacrificed some planning for the sake of completing the task. I hope that I have managed to provide a decent overview of my programming ability.
 
 ### Rewriting to ES Modules
 
 I had written my skeleton `express` app using `CommonJS` (e.g., `const xyz = require('./xyz')`). However, when I came to consume the `thirdparty` services, which cannot be altered as per the instructions, I realised they were exported as `ES Modules`. While it was an easy change to refactor my code to use modules, it was unnecessary time spent. If I was to do this exercise again I would have made sure to double check the configuration of the `thirdparty` modules, especially as they are part of the codebase rather than externally consumed modules.
 
-## Alternative proposal
+## 💡 What would I change? 💡
 
-TODO - lambda fronted by API gateway
+### Validation 
+
+If I undertook this test again, the main thing I would have changed is my error handling. This would have been a good use case for middleware in validating every request. As I developed this quickly and with only one relevant route (not counting the `/healthcheck` route) I developed the validation (which throws the errors) as a helper function and have not had time to refactor.
+
+I have also been inconsistent in adding validation to my `calculateSeatsToReserve` and `calculateTotalPayment` helper functions. In theory no invalid requests should make it to these functions so instead of half testing for invalid requests in one function, and not at all in another, I would have had faith in my initial validation and not validated in subsequent helpers as it add unneccesary bulk to the code, especially the test code, and is covered by e2e tests anyway.
+
+### Alternative proposal
+
+If time allowed I would have taken steps to show how this could have been a good use case for an AWS lambda function fronted by API Gateway. However, this would have made more sense if the `thirdparty` code had been hosted in external APIs rather than bundled with the code, so I would have only documented how I would have done it rather than actually implementing it.
+
+### Frontend service
+
+If time had been no issue it would have been cool to build a separate frontend service to call this service.
