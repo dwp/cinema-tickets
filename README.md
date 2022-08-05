@@ -145,7 +145,28 @@ I would define it as follows:
 export default ({ C }) => ({ key }) => C[key]
 ```
 
+and instantiate it like so:
+
+```js
+import initLookupConstant from './lookupConstant.js'
+const lookupConstant = ({ C })
+
+// can now call with key
+const key = 'Jeff'
+const jeffConstant = lookupConstant({ key })
+```
+
 Whilst I find that this style is neat and readable (though can take some getting used to), the main benefit is in testing, as you have total control over dependencies and can mock, stub and spy on anything at all without having to use any complicated dependency injection tools.
+
+I also prefer to define function signatures as objects:
+
+```js
+const iDontDoThis = (a, b, c)
+
+const iDoThis = ({ a, b, c })
+```
+
+I find this makes functions less brittle as you don't have to worry about calling them with parameters in order.
 
 ### Code structure
 
