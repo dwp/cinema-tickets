@@ -123,7 +123,7 @@ I have also assumed that the 20 ticket limit is fixed and that infant and adult 
 
 ### Thirdparty code
 
-TODO - assuming returns `true` in real world scenario
+As I cannot change the `thirdparty` code which returns nothing and just throws an error if basic validation fails, I have assumed they would return `true` in a real world scenario and so this is what I return from my `ticketService` if there are no errors thrown. This is obviously oversimplifying things but works for this small application.
 
 ## Approach
 
