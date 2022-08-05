@@ -148,6 +148,7 @@ export default ({ C }) => ({ key }) => C[key]
 and instantiate it like so:
 
 ```js
+import C from './constants'
 import initLookupConstant from './lookupConstant.js'
 const lookupConstant = ({ C })
 
