@@ -14,7 +14,7 @@
     "docker:stop": "docker stop cinema-tickets-service && docker rm cinema-tickets-service",
     "start": "node src/index.js",
     "test": "npm run test:lint && npm run test:coverage",
-    "test:coverage": "c8 --all npm run test:unit",
+    "test:coverage": "c8 --all -x src/pairtest -x src/thirdparty npm run test:unit",
     "test:lint": "standard",
     "test:unit": "mocha --require test/unit/config/mocha.global.js --recursive test"
   },
