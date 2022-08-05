@@ -176,6 +176,10 @@ Due to time constraints I have not attempted to achieved 100% code coverage. As 
 
 For helper functions where the functionality is known and limited I have practiced TDD (writing tests first and then source code to satisfy the tests) but in the interests of getting up and running quickly I didn't fully TDD the handler or service, which were frequently changing. As functionality evolved, I did practice some TDD in these files.
 
+### CI
+
+I have a very basic [Github workflow](https://github.com/aNerdInTheHand/cinema-tickets/actions) that runs on every commit and audits my dependencies and runs the unit tests.
+
 ## 🧐 Challenges 🧐
 
 ### Time constraints
@@ -193,6 +197,10 @@ I had written my skeleton `express` app using `CommonJS` (e.g., `const xyz = req
 If I undertook this test again, the main thing I would have changed is my error handling. This would have been a good use case for middleware in validating every request. As I developed this quickly and with only one relevant route (not counting the `/healthcheck` route) I developed the validation (which throws the errors) as a helper function and have not had time to refactor.
 
 I have also been inconsistent in adding validation to my `calculateSeatsToReserve` and `calculateTotalPayment` helper functions. In theory no invalid requests should make it to these functions so instead of half testing for invalid requests in one function, and not at all in another, I would have had faith in my initial validation and not validated in subsequent helpers as it add unneccesary bulk to the code, especially the test code, and is covered by e2e tests anyway.
+
+### Logging
+
+I would probably have used a third party logger like [bunyan](https://github.com/trentm/node-bunyan) instead of hijacking `console` for my logging!
 
 ### Alternative proposal
 
