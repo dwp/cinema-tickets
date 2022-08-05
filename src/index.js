@@ -4,7 +4,7 @@ import C from './constants/index.js'
 import routing from './routes/index.js'
 
 // init functions
-import initServer from './server.js'
+import initApp from './app.js'
 import initHealthcheckHandler from './handlers/healthcheck.js'
 import initTicketHandler from './handlers/tickets.js'
 import initCalculateSeatsToReserve from './helpers/calculateSeatsToReserve.js'
@@ -46,7 +46,7 @@ const services = {
   initTicketService
 }
 
-const startServer = initServer({
+const startServer = initApp({
   app,
   C,
   exit,
