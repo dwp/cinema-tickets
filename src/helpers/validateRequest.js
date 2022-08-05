@@ -14,6 +14,7 @@ export default ({
 
     if (!ticketRequest || (ticketRequest.adult + ticketRequest.child + ticketRequest.infant === 0)) errors.push(errorMessages.noTicketsRequested)
     if (Object.keys(ticketRequest).length === 0) errors.push(errorMessages.invalidTicketType)
+    if (ticketRequest.adult === 0) errors.push(errorMessages.adultTicketRequired)
 
     const invalidRequestKeys = Object.keys(ticketRequest)
       .filter(key => !C.tickets.allowedTypes.includes(key.toUpperCase()))

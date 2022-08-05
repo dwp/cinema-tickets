@@ -23,6 +23,7 @@ export default ({
         accountId: req.body.accountId,
         ticketsRequested
       })
+
     res
       .status(C.serverConfig.responseCodes.success)
       .send({
@@ -31,11 +32,10 @@ export default ({
         totalPayment
       })
   } catch (error) {
-    // return errors as array of strings
     const errors = error
       .toString()
       .replace(/Error:\s/, '')
-      .split(',') // quick and dirty but means errors can't have commas
+      .split(',') // quick and dirty, means errors can't have commas
     logger.error('Returning error to client')
     res
       .status(C.serverConfig.responseCodes.error)

@@ -62,6 +62,11 @@ This repository is a code test to satisfy the problem defined in [task.md](./TAS
   ```sh
   curl localhost:3000/healthcheck
   ```
+
+  ### Testing
+  
+  TODO
+
 </details>
 
 ## 🤔 Assumptions 🤔
@@ -89,6 +94,14 @@ Though not explicitly stated in the business logic, I have assumed that the numb
 
 I have also assumed that the 20 ticket limit is fixed and that infant and adult tickets count towards this total despite only taking up one seat, i.e., a request for 20 adult tickets and 1 infant ticket will fail.
 
+### Thirdparty code
+
+TODO - assuming returns `true` in real world scenario
+
+## Approach
+
+TODO (functional style, code coverage, TDD on helper function unit tests but not handlers etc.)
+
 ## 🧐 Challenges 🧐
 
 ### Time constraints
@@ -108,3 +121,7 @@ Things that I would have preferred to achieve but had to deprioritise:
 ### Rewriting to ES Modules
 
 I had written my skeleton `express` app using `CommonJS` (e.g., `const xyz = require('./xyz')`). However, when I came to consume the `thirdparty` services, which cannot be altered as per the instructions, I realised they were exported as `ES Modules`. While it was an easy change to refactor my code to use modules, it was unnecessary time spent. If I was to do this exercise again I would have made sure to double check the configuration of the `thirdparty` modules, especially as they are part of the codebase rather than externally consumed modules.
+
+## Alternative proposal
+
+TODO - lambda fronted by API gateway
