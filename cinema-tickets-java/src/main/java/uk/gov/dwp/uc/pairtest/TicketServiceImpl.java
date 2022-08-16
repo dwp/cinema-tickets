@@ -39,7 +39,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private int calculateTotalNumberOfSeatsToReserve(Map<Type, Integer> mapOfTicketsPerType) {
-        return mapOfTicketsPerType.get(Type.ADULT);
+        int adultTicketCount = mapOfTicketsPerType.get(Type.ADULT);
+        int childTicketCount = mapOfTicketsPerType.get(Type.CHILD);
+
+        return adultTicketCount + childTicketCount;
     }
 
     private int calculateTotalPaymentAmount(Map<Type, Integer> mapOfTicketsPerType) {
