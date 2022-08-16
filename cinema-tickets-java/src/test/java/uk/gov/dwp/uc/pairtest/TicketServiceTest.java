@@ -75,4 +75,19 @@ public class TicketServiceTest {
     ticketService.purchaseTickets(1L, adultRequest, infantRequest);
     verify(ticketPaymentService, times(1)).makePayment(1L, 20);
   }
+
+
+  @Test
+  public void testMoreInfantsThanAdultsThrowsException() {
+    TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 1);
+    TicketTypeRequest infantRequest = new TicketTypeRequest(Type.INFANT, 2);
+
+    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+        ticketService.purchaseTickets(1L, adultRequest, infantRequest));
+
+    String expectedMessage = "ERROR: Each infant ticket must be accompanied by an adult ticket";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 }
