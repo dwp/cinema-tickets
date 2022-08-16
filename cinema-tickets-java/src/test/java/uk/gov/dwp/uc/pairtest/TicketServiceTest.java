@@ -145,5 +145,29 @@ public class TicketServiceTest {
   }
 
   @Test
-  public void testMoreThan20
+  public void testMoreThan20TicketsCannotBeRequestedAtOnce() {
+    TicketTypeRequest request = new TicketTypeRequest(Type.ADULT, 21);
+
+    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+        ticketService.purchaseTickets(1L, request));
+
+    String expectedMessage = "ERROR: Only 20 tickets can be requested at once";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  @Test
+  public void testMoreThan20TicketsCannotBeRequestedAtOnceDifferentTicketTypes() {
+    TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 18);
+    TicketTypeRequest childRequest = new TicketTypeRequest(Type.CHILD, 3);
+
+    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+        ticketService.purchaseTickets(1L, adultRequest, childRequest));
+
+    String expectedMessage = "ERROR: Only 20 tickets can be requested at once";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 }
