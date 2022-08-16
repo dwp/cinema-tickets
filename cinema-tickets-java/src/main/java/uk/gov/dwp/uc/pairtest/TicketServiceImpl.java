@@ -20,18 +20,13 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
+        // generate Map of ticket type and number of tickets for the TicketTypeRequest vararg
         Map<Type, Integer> mapOfTicketsPerType = getMapOfTicketsPerType(ticketTypeRequests);
 
-        int numberOfAdultTickets = mapOfTicketsPerType.get(Type.ADULT);
-        int numberOfChildTickets = mapOfTicketsPerType.get(Type.CHILD);
-        int numberOfInfantTickets = mapOfTicketsPerType.get(Type.INFANT);
+        // check whether the requests are valid and throw appropriate exceptions if not
+        validatePurchaseRequest(mapOfTicketsPerType);
 
-        if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
-            throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
-        } else if (numberOfInfantTickets > numberOfAdultTickets) {
-            throw new InvalidPurchaseException("ERROR: Each infant ticket must be accompanied by an adult ticket");
-        }
-
+        // make request to payment service
         int totalPaymentAmount = calculateTotalPaymentAmount(mapOfTicketsPerType);
         ticketPaymentService.makePayment(accountId, totalPaymentAmount);
     }
@@ -42,6 +37,18 @@ public class TicketServiceImpl implements TicketService {
         int infantTicketAmount = mapOfTicketsPerType.get(Type.INFANT) * INFANT_TICKET_PRICE;
 
         return adultTicketAmount + childTicketAmount + infantTicketAmount;
+    }
+
+    private void validatePurchaseRequest(Map<Type, Integer> mapOfTicketsPerType) {
+        int numberOfAdultTickets = mapOfTicketsPerType.get(Type.ADULT);
+        int numberOfChildTickets = mapOfTicketsPerType.get(Type.CHILD);
+        int numberOfInfantTickets = mapOfTicketsPerType.get(Type.INFANT);
+
+        if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
+            throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
+        } else if (numberOfInfantTickets > numberOfAdultTickets) {
+            throw new InvalidPurchaseException("ERROR: Each infant ticket must be accompanied by an adult ticket");
+        }
     }
 
     private Map<Type, Integer> getMapOfTicketsPerType(TicketTypeRequest... ticketTypeRequests) {
