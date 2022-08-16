@@ -57,4 +57,13 @@ public class TicketServiceTest {
 
     assertTrue(actualMessage.contains(expectedMessage));
   }
+
+  @Test
+  public void testOneAdultOneChildRequestsPaymentOf30() {
+    TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 1);
+    TicketTypeRequest childRequest = new TicketTypeRequest(Type.CHILD, 1);
+
+    ticketService.purchaseTickets(1L, adultRequest, childRequest);
+    verify(ticketPaymentService, times(1)).makePayment(1L, 30);
+  }
 }
