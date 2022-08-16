@@ -1,5 +1,7 @@
 package uk.gov.dwp.uc.pairtest;
 
+import java.util.HashMap;
+import java.util.Map;
 import thirdparty.paymentgateway.TicketPaymentService;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
@@ -18,17 +20,11 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void purchaseTickets(Long accountId, TicketTypeRequest... ticketTypeRequests) throws InvalidPurchaseException {
-        int numberOfAdultTickets = 0;
-        int numberOfChildTickets = 0;
-        int numberOfInfantTickets = 0;
+        Map<Type, Integer> mapOfTicketsPerType = getMapOfTicketsPerType(ticketTypeRequests);
 
-        for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
-            switch (ticketTypeRequest.getTicketType()) {
-                case ADULT -> numberOfAdultTickets += ticketTypeRequest.getNoOfTickets();
-                case CHILD -> numberOfChildTickets += ticketTypeRequest.getNoOfTickets();
-                case INFANT -> numberOfInfantTickets += ticketTypeRequest.getNoOfTickets();
-            }
-        }
+        int numberOfAdultTickets = mapOfTicketsPerType.get(Type.ADULT);
+        int numberOfChildTickets = mapOfTicketsPerType.get(Type.CHILD);
+        int numberOfInfantTickets = mapOfTicketsPerType.get(Type.INFANT);
 
         if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
             throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
@@ -42,5 +38,17 @@ public class TicketServiceImpl implements TicketService {
                 (numberOfInfantTickets * INFANT_TICKET_PRICE);
 
         ticketPaymentService.makePayment(accountId, totalPaymentAmount);
+    }
+
+    private Map<Type, Integer> getMapOfTicketsPerType(TicketTypeRequest... ticketTypeRequests) {
+        Map<Type, Integer> mapOfTicketsPerType = new HashMap<>(Map.of(Type.ADULT, 0, Type.CHILD, 0, Type.INFANT, 0));
+
+        for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
+            int numberOfSeats = mapOfTicketsPerType.get(ticketTypeRequest.getTicketType());
+            Type ticketType = ticketTypeRequest.getTicketType();
+            mapOfTicketsPerType.put(ticketType, numberOfSeats + ticketTypeRequest.getNoOfTickets());
+        }
+
+        return mapOfTicketsPerType;
     }
 }
