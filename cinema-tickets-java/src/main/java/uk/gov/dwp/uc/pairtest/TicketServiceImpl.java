@@ -32,6 +32,8 @@ public class TicketServiceImpl implements TicketService {
 
         if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
             throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
+        } else if (numberOfInfantTickets > numberOfAdultTickets) {
+            throw new InvalidPurchaseException("ERROR: Each infant ticket must be accompanied by an adult ticket");
         }
 
         int totalPaymentAmount =
