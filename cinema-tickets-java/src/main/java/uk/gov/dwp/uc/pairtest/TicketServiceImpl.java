@@ -32,7 +32,10 @@ public class TicketServiceImpl implements TicketService {
         // make request to payment service
         int totalPaymentAmount = calculateTotalPaymentAmount(mapOfTicketsPerType);
         ticketPaymentService.makePayment(accountId, totalPaymentAmount);
-        seatReservationService.reserveSeat(accountId, 1);
+
+        //make request to seat reservation service
+        int numberOfAdultTickets = mapOfTicketsPerType.get(Type.ADULT);
+        seatReservationService.reserveSeat(accountId, numberOfAdultTickets);
     }
 
     private int calculateTotalPaymentAmount(Map<Type, Integer> mapOfTicketsPerType) {
