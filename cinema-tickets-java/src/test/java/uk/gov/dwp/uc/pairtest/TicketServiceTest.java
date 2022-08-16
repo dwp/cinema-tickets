@@ -66,4 +66,13 @@ public class TicketServiceTest {
     ticketService.purchaseTickets(1L, adultRequest, childRequest);
     verify(ticketPaymentService, times(1)).makePayment(1L, 30);
   }
+
+  @Test
+  public void testOneAdultOneInfantRequestsPaymentOf30() {
+    TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 1);
+    TicketTypeRequest infantRequest = new TicketTypeRequest(Type.INFANT, 1);
+
+    ticketService.purchaseTickets(1L, adultRequest, infantRequest);
+    verify(ticketPaymentService, times(1)).makePayment(1L, 20);
+  }
 }
