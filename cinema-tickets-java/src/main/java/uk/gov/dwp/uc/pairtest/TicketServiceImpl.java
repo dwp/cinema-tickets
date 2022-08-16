@@ -60,10 +60,11 @@ public class TicketServiceImpl implements TicketService {
     int numberOfAdultTickets = mapOfTicketsPerType.get(Type.ADULT);
     int numberOfChildTickets = mapOfTicketsPerType.get(Type.CHILD);
     int numberOfInfantTickets = mapOfTicketsPerType.get(Type.INFANT);
+    int totalNumberOfTickets = numberOfAdultTickets + numberOfChildTickets + numberOfInfantTickets;
 
     if (accountId <= 0) {
       throw new InvalidPurchaseException("ERROR: Account number must be greater than 0");
-    } else if (numberOfAdultTickets + numberOfChildTickets + numberOfInfantTickets > 20) {
+    } else if (totalNumberOfTickets > 20) {
       throw new InvalidPurchaseException("ERROR: Only 20 tickets can be requested at once");
     } else if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0)
         && numberOfAdultTickets == 0) {
