@@ -32,12 +32,16 @@ public class TicketServiceImpl implements TicketService {
             throw new InvalidPurchaseException("ERROR: Each infant ticket must be accompanied by an adult ticket");
         }
 
-        int totalPaymentAmount =
-            (numberOfAdultTickets * ADULT_TICKET_PRICE) +
-                (numberOfChildTickets * CHILD_TICKET_PRICE) +
-                (numberOfInfantTickets * INFANT_TICKET_PRICE);
-
+        int totalPaymentAmount = calculateTotalPaymentAmount(mapOfTicketsPerType);
         ticketPaymentService.makePayment(accountId, totalPaymentAmount);
+    }
+
+    private int calculateTotalPaymentAmount(Map<Type, Integer> mapOfTicketsPerType) {
+        int adultTicketAmount = mapOfTicketsPerType.get(Type.ADULT) * ADULT_TICKET_PRICE;
+        int childTicketAmount = mapOfTicketsPerType.get(Type.CHILD) * CHILD_TICKET_PRICE;
+        int infantTicketAmount = mapOfTicketsPerType.get(Type.INFANT) * INFANT_TICKET_PRICE;
+
+        return adultTicketAmount + childTicketAmount + infantTicketAmount;
     }
 
     private Map<Type, Integer> getMapOfTicketsPerType(TicketTypeRequest... ticketTypeRequests) {
