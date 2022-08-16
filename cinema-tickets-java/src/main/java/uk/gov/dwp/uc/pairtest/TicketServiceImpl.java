@@ -19,18 +19,17 @@ public class TicketServiceImpl implements TicketService {
         int numberOfInfantTickets = 0;
 
         for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
-            if (ticketTypeRequest.getTicketType() == Type.ADULT) {
-                numberOfAdultTickets += ticketTypeRequest.getNoOfTickets();
-            } else if (ticketTypeRequest.getTicketType() == Type.CHILD) {
-                numberOfChildTickets += ticketTypeRequest.getNoOfTickets();
-            } else if (ticketTypeRequest.getTicketType() == Type.INFANT) {
-                numberOfInfantTickets += ticketTypeRequest.getNoOfTickets();
+            switch (ticketTypeRequest.getTicketType()) {
+                case ADULT -> numberOfAdultTickets += ticketTypeRequest.getNoOfTickets();
+                case CHILD -> numberOfChildTickets += ticketTypeRequest.getNoOfTickets();
+                case INFANT -> numberOfInfantTickets += ticketTypeRequest.getNoOfTickets();
             }
         }
 
-        if ((numberOfChildTickets != 0 || numberOfInfantTickets != 0) && numberOfAdultTickets == 0) {
+        if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
             throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
         }
+
         ticketPaymentService.makePayment(accountId, 20);
     }
 }
