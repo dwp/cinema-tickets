@@ -24,7 +24,7 @@ public class TicketServiceImpl implements TicketService {
         Map<Type, Integer> mapOfTicketsPerType = getMapOfTicketsPerType(ticketTypeRequests);
 
         // check whether the requests are valid and throw appropriate exceptions if not
-        validatePurchaseRequest(mapOfTicketsPerType);
+        validatePurchaseRequest(mapOfTicketsPerType, accountId);
 
         // make request to payment service
         int totalPaymentAmount = calculateTotalPaymentAmount(mapOfTicketsPerType);
@@ -39,12 +39,14 @@ public class TicketServiceImpl implements TicketService {
         return adultTicketAmount + childTicketAmount + infantTicketAmount;
     }
 
-    private void validatePurchaseRequest(Map<Type, Integer> mapOfTicketsPerType) {
+    private void validatePurchaseRequest(Map<Type, Integer> mapOfTicketsPerType, Long accountId) {
         int numberOfAdultTickets = mapOfTicketsPerType.get(Type.ADULT);
         int numberOfChildTickets = mapOfTicketsPerType.get(Type.CHILD);
         int numberOfInfantTickets = mapOfTicketsPerType.get(Type.INFANT);
 
-        if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
+        if (accountId <= 0) {
+            throw new InvalidPurchaseException("ERROR: Account number must be greater than 0");
+        } else if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
             throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
         } else if (numberOfInfantTickets > numberOfAdultTickets) {
             throw new InvalidPurchaseException("ERROR: Each infant ticket must be accompanied by an adult ticket");
