@@ -60,6 +60,8 @@ public class TicketServiceImpl implements TicketService {
 
         if (accountId <= 0) {
             throw new InvalidPurchaseException("ERROR: Account number must be greater than 0");
+        } else if (numberOfAdultTickets + numberOfChildTickets + numberOfInfantTickets > 20) {
+            throw new InvalidPurchaseException("ERROR: Only 20 tickets can be requested at once");
         } else if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0) && numberOfAdultTickets == 0) {
             throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
         } else if (numberOfInfantTickets > numberOfAdultTickets) {
