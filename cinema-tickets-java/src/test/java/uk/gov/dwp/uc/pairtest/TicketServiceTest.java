@@ -44,4 +44,17 @@ public class TicketServiceTest {
 
     assertTrue(actualMessage.contains(expectedMessage));
   }
+
+  @Test
+  public void testOneInfantWithoutAdultCannotMakeARequest() {
+    TicketTypeRequest request = new TicketTypeRequest(Type.INFANT, 1);
+
+    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+        ticketService.purchaseTickets(1L, request));
+
+    String expectedMessage = "ERROR: At least one adult ticket is required when purchasing a child/infant ticket";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 }
