@@ -90,4 +90,17 @@ public class TicketServiceTest {
 
     assertTrue(actualMessage.contains(expectedMessage));
   }
+
+  @Test
+  public void testAccountNumberOf0ThrowsException() {
+    TicketTypeRequest request = new TicketTypeRequest(Type.ADULT, 1);
+
+    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+        ticketService.purchaseTickets(0L, request));
+
+    String expectedMessage = "ERROR: Account number must be greater than 0";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+  }
 }
