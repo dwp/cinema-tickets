@@ -74,7 +74,7 @@ public class TicketServiceTest {
   }
 
   @Test
-  public void testOneAdultOneInfantRequestsPaymentOf30() {
+  public void testOneAdultOneInfantRequestsPaymentOf20() {
     TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 1);
     TicketTypeRequest infantRequest = new TicketTypeRequest(Type.INFANT, 1);
 
@@ -143,4 +143,7 @@ public class TicketServiceTest {
 
     verify(seatReservationService, times(1)).reserveSeat(1L, 1);
   }
+
+  @Test
+  public void testMoreThan20
 }
