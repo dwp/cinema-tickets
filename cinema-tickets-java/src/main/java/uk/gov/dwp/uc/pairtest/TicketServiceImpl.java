@@ -30,7 +30,10 @@ public class TicketServiceImpl implements TicketService {
             throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
         }
 
-        int totalPaymentAmount = (numberOfAdultTickets * 20) + (numberOfChildTickets * 10);
+        int totalPaymentAmount =
+            (numberOfAdultTickets * 20) +
+                (numberOfChildTickets * 10) +
+                (numberOfInfantTickets * 0);
 
         ticketPaymentService.makePayment(accountId, totalPaymentAmount);
     }
