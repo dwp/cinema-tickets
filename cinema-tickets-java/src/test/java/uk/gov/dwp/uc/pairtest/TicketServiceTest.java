@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import thirdparty.paymentgateway.TicketPaymentService;
+import thirdparty.seatbooking.SeatReservationService;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
@@ -17,13 +18,18 @@ import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 @RunWith(MockitoJUnitRunner.class)
 public class TicketServiceTest {
 
-  // Mocked implementations of the third party service
+  // Mocked implementations of the third party services
   @Mock
   private TicketPaymentService ticketPaymentService;
+
+  @Mock
+  private SeatReservationService seatReservationService;
 
   // create instance of TicketService with mocked services injected
   @InjectMocks
   private TicketServiceImpl ticketService;
+
+  // tests below are for payment
 
   @Test
   public void testOneAdultRequestsPaymentOf20() {
@@ -102,5 +108,14 @@ public class TicketServiceTest {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+  }
+
+  // Tests below are for seat reservation
+
+  @Test
+  public void testOneAdultReservesOneSeat() {
+    TicketTypeRequest request = new TicketTypeRequest(Type.ADULT, 1);
+    ticketService.purchaseTickets(1L, request);
+    verify(seatReservationService, times(1)).reserveSeat(1L, 1);
   }
 }
