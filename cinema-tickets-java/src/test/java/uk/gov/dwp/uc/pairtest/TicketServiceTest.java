@@ -134,4 +134,13 @@ public class TicketServiceTest {
 
     verify(seatReservationService, times(1)).reserveSeat(1L, 2);
   }
+
+  @Test
+  public void testOneAdultOneInfantReservesOneSeat() {
+    TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 1);
+    TicketTypeRequest infantRequest = new TicketTypeRequest(Type.INFANT, 1);
+    ticketService.purchaseTickets(1L, adultRequest, infantRequest);
+
+    verify(seatReservationService, times(1)).reserveSeat(1L, 1);
+  }
 }
