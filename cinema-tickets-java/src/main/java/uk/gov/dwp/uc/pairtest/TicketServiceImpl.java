@@ -8,6 +8,10 @@ import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 public class TicketServiceImpl implements TicketService {
     private TicketPaymentService ticketPaymentService;
 
+    private final int ADULT_TICKET_PRICE = 20;
+    private final int CHILD_TICKET_PRICE = 10;
+    private final int INFANT_TICKET_PRICE = 0;
+
     public TicketServiceImpl(TicketPaymentService ticketPaymentService) {
         this.ticketPaymentService = ticketPaymentService;
     }
@@ -31,9 +35,9 @@ public class TicketServiceImpl implements TicketService {
         }
 
         int totalPaymentAmount =
-            (numberOfAdultTickets * 20) +
-                (numberOfChildTickets * 10) +
-                (numberOfInfantTickets * 0);
+            (numberOfAdultTickets * ADULT_TICKET_PRICE) +
+                (numberOfChildTickets * CHILD_TICKET_PRICE) +
+                (numberOfInfantTickets * INFANT_TICKET_PRICE);
 
         ticketPaymentService.makePayment(accountId, totalPaymentAmount);
     }
