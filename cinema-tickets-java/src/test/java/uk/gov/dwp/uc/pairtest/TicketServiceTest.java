@@ -118,4 +118,11 @@ public class TicketServiceTest {
     ticketService.purchaseTickets(1L, request);
     verify(seatReservationService, times(1)).reserveSeat(1L, 1);
   }
+
+  @Test
+  public void testTwoAdultsReservesTwoSeats() {
+    TicketTypeRequest request = new TicketTypeRequest(Type.ADULT, 2);
+    ticketService.purchaseTickets(1L, request);
+    verify(seatReservationService, times(1)).reserveSeat(1L, 2);
+  }
 }
