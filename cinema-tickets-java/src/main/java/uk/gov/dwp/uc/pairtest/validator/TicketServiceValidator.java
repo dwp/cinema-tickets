@@ -10,6 +10,12 @@ import uk.gov.dwp.uc.pairtest.exception.TooManyTicketsException;
 
 public class TicketServiceValidator {
 
+  /*
+    private constructor to stop instantiation of the validator class
+    validateRequest static method only intended use of this class
+   */
+  private TicketServiceValidator() {}
+
   public static void validateRequest(TicketTypeRequest... ticketTypeRequests) {
     Map<Type, Integer> mapOfTicketsPerType = getMapOfTicketsPerType(ticketTypeRequests);
 
