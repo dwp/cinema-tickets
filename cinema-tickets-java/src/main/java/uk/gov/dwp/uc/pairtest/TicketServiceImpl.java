@@ -4,6 +4,7 @@ import java.util.Arrays;
 import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.seatbooking.SeatReservationService;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
+import uk.gov.dwp.uc.pairtest.exception.AccountNumberException;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
 public class TicketServiceImpl implements TicketService {
@@ -31,10 +32,10 @@ public class TicketServiceImpl implements TicketService {
 
   private void validateRequest(Long accountId, TicketTypeRequest... ticketTypeRequests) {
     if (accountId <= 0) {
-      throw new InvalidPurchaseException("ERROR: Account number must be greater than 0");
+      throw new AccountNumberException();
     }
 
-    TicketServiceValidatorImpl.validateRequest(ticketTypeRequests);
+    TicketServiceValidator.validateRequest(ticketTypeRequests);
   }
 
   private int calculateTotalNumberOfSeatsToReserve(TicketTypeRequest... ticketTypeRequests) {

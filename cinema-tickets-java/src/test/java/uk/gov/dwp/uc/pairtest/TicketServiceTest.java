@@ -13,7 +13,11 @@ import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.seatbooking.SeatReservationService;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
+import uk.gov.dwp.uc.pairtest.exception.AccountNumberException;
+import uk.gov.dwp.uc.pairtest.exception.InfantAdultTicketsException;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.exception.NoAdultTicketException;
+import uk.gov.dwp.uc.pairtest.exception.TooManyTicketsException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TicketServiceTest {
@@ -42,26 +46,16 @@ public class TicketServiceTest {
   public void testOneChildWithoutAdultCannotMakeARequest() {
     TicketTypeRequest request = new TicketTypeRequest(Type.CHILD, 1);
 
-    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+    assertThrows(NoAdultTicketException.class, () ->
         ticketService.purchaseTickets(1L, request));
-
-    String expectedMessage = "ERROR: At least one adult ticket is required when purchasing a child/infant ticket";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
   public void testOneInfantWithoutAdultCannotMakeARequest() {
     TicketTypeRequest request = new TicketTypeRequest(Type.INFANT, 1);
 
-    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+    assertThrows(NoAdultTicketException.class, () ->
         ticketService.purchaseTickets(1L, request));
-
-    String expectedMessage = "ERROR: At least one adult ticket is required when purchasing a child/infant ticket";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
@@ -88,26 +82,16 @@ public class TicketServiceTest {
     TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 1);
     TicketTypeRequest infantRequest = new TicketTypeRequest(Type.INFANT, 2);
 
-    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+    assertThrows(InfantAdultTicketsException.class, () ->
         ticketService.purchaseTickets(1L, adultRequest, infantRequest));
-
-    String expectedMessage = "ERROR: Each infant ticket must be accompanied by an adult ticket";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
   public void testAccountNumberOf0ThrowsException() {
     TicketTypeRequest request = new TicketTypeRequest(Type.ADULT, 1);
 
-    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+    assertThrows(AccountNumberException.class, () ->
         ticketService.purchaseTickets(0L, request));
-
-    String expectedMessage = "ERROR: Account number must be greater than 0";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   // Tests below are for seat reservation
@@ -148,13 +132,8 @@ public class TicketServiceTest {
   public void testMoreThan20TicketsCannotBeRequestedAtOnce() {
     TicketTypeRequest request = new TicketTypeRequest(Type.ADULT, 21);
 
-    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+    assertThrows(TooManyTicketsException.class, () ->
         ticketService.purchaseTickets(1L, request));
-
-    String expectedMessage = "ERROR: Only 20 tickets can be requested at once";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 
   @Test
@@ -162,12 +141,7 @@ public class TicketServiceTest {
     TicketTypeRequest adultRequest = new TicketTypeRequest(Type.ADULT, 18);
     TicketTypeRequest childRequest = new TicketTypeRequest(Type.CHILD, 3);
 
-    Exception exception = assertThrows(InvalidPurchaseException.class, () ->
+    assertThrows(TooManyTicketsException.class, () ->
         ticketService.purchaseTickets(1L, adultRequest, childRequest));
-
-    String expectedMessage = "ERROR: Only 20 tickets can be requested at once";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
   }
 }

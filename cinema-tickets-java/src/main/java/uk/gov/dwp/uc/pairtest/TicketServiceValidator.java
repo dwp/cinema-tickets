@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
-import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.exception.InfantAdultTicketsException;
+import uk.gov.dwp.uc.pairtest.exception.NoAdultTicketException;
+import uk.gov.dwp.uc.pairtest.exception.TooManyTicketsException;
 
-public class TicketServiceValidatorImpl {
+public class TicketServiceValidator {
 
   public static void validateRequest(TicketTypeRequest... ticketTypeRequests) {
     Map<Type, Integer> mapOfTicketsPerType = getMapOfTicketsPerType(ticketTypeRequests);
@@ -18,12 +20,11 @@ public class TicketServiceValidatorImpl {
 
     if ((numberOfChildTickets > 0 || numberOfInfantTickets > 0)
         && numberOfAdultTickets == 0) {
-      throw new InvalidPurchaseException("ERROR: At least one adult ticket is required when purchasing a child/infant ticket");
+      throw new NoAdultTicketException();
     } else if (totalNumberOfTickets > 20) {
-      throw new InvalidPurchaseException("ERROR: Only 20 tickets can be requested at once");
+      throw new TooManyTicketsException();
     } else if (numberOfInfantTickets > numberOfAdultTickets) {
-      throw new InvalidPurchaseException(
-          "ERROR: Each infant ticket must be accompanied by an adult ticket");
+      throw new InfantAdultTicketsException();
     }
   }
 
