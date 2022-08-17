@@ -41,7 +41,7 @@ public class TicketServiceValidator {
     for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
       int numberOfSeats = mapOfTicketsPerType.get(ticketTypeRequest.getTicketType());
       Type ticketType = ticketTypeRequest.getTicketType();
-      mapOfTicketsPerType.put(ticketType, numberOfSeats + ticketTypeRequest.getNoOfTickets());
+      mapOfTicketsPerType.put(ticketType, numberOfSeats + ticketTypeRequest.getNumberOfTickets());
     }
 
     return mapOfTicketsPerType;

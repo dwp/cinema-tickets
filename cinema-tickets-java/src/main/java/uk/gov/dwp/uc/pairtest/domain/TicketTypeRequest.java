@@ -8,8 +8,9 @@ import java.util.EnumMap;
 
 public class TicketTypeRequest {
 
-  private final int noOfTickets;
   private final Type type;
+  private final int numberOfTickets;
+
   private final EnumMap<Type, Integer> ticketTypePriceMap;
   private final EnumMap<Type, Boolean> ticketTypeSeatReservationMap;
 
@@ -23,13 +24,13 @@ public class TicketTypeRequest {
 
   public TicketTypeRequest(Type type, int noOfTickets) {
     this.type = type;
-    this.noOfTickets = noOfTickets;
+    this.numberOfTickets = noOfTickets;
     this.ticketTypePriceMap = createTicketTypePriceMap();
     this.ticketTypeSeatReservationMap = createTicketTypeSeatReservationMap();
   }
 
-  public int getNoOfTickets() {
-    return noOfTickets;
+  public int getNumberOfTickets() {
+    return numberOfTickets;
   }
 
   public Type getTicketType() {
@@ -37,11 +38,11 @@ public class TicketTypeRequest {
   }
 
   public int getTotalPrice() {
-    return ticketTypePriceMap.get(type) * noOfTickets;
+    return ticketTypePriceMap.get(type) * numberOfTickets;
   }
 
   public int getTotalSeatsToReserve() {
-    return ticketTypeSeatReservationMap.get(type) ? noOfTickets : 0;
+    return ticketTypeSeatReservationMap.get(type) ? numberOfTickets : 0;
   }
 
   public enum Type {
