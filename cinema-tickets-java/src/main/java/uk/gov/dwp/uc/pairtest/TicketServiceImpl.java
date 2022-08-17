@@ -1,5 +1,6 @@
 package uk.gov.dwp.uc.pairtest;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import thirdparty.paymentgateway.TicketPaymentService;
@@ -10,12 +11,8 @@ import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
 public class TicketServiceImpl implements TicketService {
 
-  private TicketPaymentService ticketPaymentService;
-  private SeatReservationService seatReservationService;
-
-  private final int ADULT_TICKET_PRICE = 20;
-  private final int CHILD_TICKET_PRICE = 10;
-  private final int INFANT_TICKET_PRICE = 0;
+  private final TicketPaymentService ticketPaymentService;
+  private final SeatReservationService seatReservationService;
 
   public TicketServiceImpl(TicketPaymentService ticketPaymentService,
       SeatReservationService seatReservationService) {
@@ -33,7 +30,7 @@ public class TicketServiceImpl implements TicketService {
     validatePurchaseRequest(mapOfTicketsPerType, accountId);
 
     // make request to payment service
-    int totalPaymentAmount = calculateTotalPaymentAmount(mapOfTicketsPerType);
+    int totalPaymentAmount = calculateTotalPaymentAmount(ticketTypeRequests);
     ticketPaymentService.makePayment(accountId, totalPaymentAmount);
 
     //make request to seat reservation service
@@ -48,12 +45,10 @@ public class TicketServiceImpl implements TicketService {
     return adultTicketCount + childTicketCount;
   }
 
-  private int calculateTotalPaymentAmount(Map<Type, Integer> mapOfTicketsPerType) {
-    int adultTicketAmount = mapOfTicketsPerType.get(Type.ADULT) * ADULT_TICKET_PRICE;
-    int childTicketAmount = mapOfTicketsPerType.get(Type.CHILD) * CHILD_TICKET_PRICE;
-    int infantTicketAmount = mapOfTicketsPerType.get(Type.INFANT) * INFANT_TICKET_PRICE;
-
-    return adultTicketAmount + childTicketAmount + infantTicketAmount;
+  private int calculateTotalPaymentAmount(TicketTypeRequest... ticketTypeRequests) {
+    return Arrays.stream(ticketTypeRequests)
+        .mapToInt(TicketTypeRequest::getTotalPrice)
+        .sum();
   }
 
   private void validatePurchaseRequest(Map<Type, Integer> mapOfTicketsPerType, Long accountId) {
