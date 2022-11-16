@@ -1,28 +1,51 @@
+const accountIdGreaterThanZero = (data) => {
+  const { accountId } = data;
+
+  const valid = accountId > 0;
+
+  return {
+    valid,
+    error: valid ? null : 'The account ID provided must be greater than 0',
+  };
+};
+
 const infantNotGreaterThanAdult = (data) => {
-    const { ticketTypeRequests } = data;
-    const { Adult: adult, Infant: infant } = ticketTypeRequests;
+  const { adultTickets, infantTickets } = data;
 
-    const valid = adult >= infant;
+  const valid = adultTickets >= infantTickets;
 
-    return {
-        valid,
-        error: valid ? null : 'There must be at least one Adult ticket per Infant ticket',
-    }
-}
+  return {
+    valid,
+    error: valid ? null : 'There must be at least one Adult ticket per Infant ticket',
+  };
+};
 
 const maxTwentyTicketsAllowed = (data) => {
-    const { ticketTypeRequests } = data;
-    const totalTickets = Object.values(ticketTypeRequests).reduce((prev, curr) => prev + curr, 0);
+  const { adultTickets, childTickets, infantTickets } = data;
+  const totalTicketsCount = Object.values({ adultTickets, childTickets, infantTickets }).reduce((prev, curr) => prev + curr, 0);
 
-    const valid = totalTickets <= 20;
+  const valid = totalTicketsCount <= 20;
 
-    return {
-        valid,
-        error: valid ? null : 'Cannot purchase more than 20 tickets at once',
-    }
-}
+  return {
+    valid,
+    error: valid ? null : 'Cannot purchase more than 20 tickets at once',
+  };
+};
+
+const atLeastOneAdult = (data) => {
+  const { adultTickets } = data;
+
+  const valid = adultTickets > 0;
+
+  return {
+    valid,
+    error: valid ? null : 'At least one adult is required for each booking',
+  };
+};
 
 export default [
-    infantNotGreaterThanAdult,
-    maxTwentyTicketsAllowed,
+  accountIdGreaterThanZero,
+  infantNotGreaterThanAdult,
+  maxTwentyTicketsAllowed,
+  atLeastOneAdult,
 ];
