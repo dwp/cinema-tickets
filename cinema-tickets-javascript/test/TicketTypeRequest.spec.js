@@ -18,10 +18,10 @@ describe('TicketTypeRequest tests', () => {
     expect(() => { new TicketTypeRequest('ADULT', -3); }).toThrow(TypeError);
   });
 
-  it.skip('should set the type given valid data', () => {
+  it('should set the type given valid data', () => {
     const ticketTypeRequest = new TicketTypeRequest('ADULT', 10);
 
-    expect(ticketTypeRequest.getType()).toEqual('ADULT');
+    expect(ticketTypeRequest.getTicketType()).toEqual('ADULT');
   });
 
   it('should set the number of tickets given valid data', () => {

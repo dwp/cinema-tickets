@@ -66,7 +66,7 @@ describe('TicketService tests', () => {
     expect(() => { testTicketService.purchaseTickets(accountId, adultTicket, infantTicket); }).toThrow(InvalidPurchaseException);
   });
 
-  it.only('should not allow a purchase with an account ID less than 1', () => {
+  it('should not allow a purchase with an account ID less than 1', () => {
     const accountId = -300;
     const adultTicket = new TicketTypeRequest('ADULT', 1);
 

@@ -1,4 +1,4 @@
-const accountIdGreaterThanZero = (data) => {
+export const accountIdGreaterThanZero = (data) => {
   const { accountId } = data;
 
   const valid = accountId > 0;
@@ -9,7 +9,7 @@ const accountIdGreaterThanZero = (data) => {
   };
 };
 
-const infantNotGreaterThanAdult = (data) => {
+export const infantNotGreaterThanAdult = (data) => {
   const { adultTickets, infantTickets } = data;
 
   const valid = adultTickets >= infantTickets;
@@ -20,7 +20,7 @@ const infantNotGreaterThanAdult = (data) => {
   };
 };
 
-const maxTwentyTicketsAllowed = (data) => {
+export const maxTwentyTicketsAllowed = (data) => {
   const { adultTickets, childTickets, infantTickets } = data;
   const totalTicketsCount = Object.values({ adultTickets, childTickets, infantTickets }).reduce((prev, curr) => prev + curr, 0);
 
@@ -32,7 +32,7 @@ const maxTwentyTicketsAllowed = (data) => {
   };
 };
 
-const atLeastOneAdult = (data) => {
+export const atLeastOneAdult = (data) => {
   const { adultTickets } = data;
 
   const valid = adultTickets > 0;

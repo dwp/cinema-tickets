@@ -11,8 +11,10 @@
         "sourceType": "module"
     },
     "rules": {
+        "indent": ["error", 2]
     },
     "plugins": [
         "jest"
-    ]
+    ],
+    "ignorePatterns": ["**/src/thirdparty/*"]
 }

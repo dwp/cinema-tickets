@@ -73,6 +73,7 @@ export default class TicketService {
       });
 
       if (!validation.valid) {
+        console.error(validation.error);
         throw new InvalidPurchaseException(validation.error);
       }
     });
@@ -84,9 +85,13 @@ export default class TicketService {
    * Method to calculate the cost of the tickets based on the prices defined in
    * @see {TICKET_PRICES} - these values are subject to change.
    *
+   * @param {Object} tickets - an object containing the count for adult, child and infant tickets.
+   *
    * @returns {number} the total cost of the reserved seats in £.
    */
-  _calculateCost(adultTickets, childTickets, infantTickets) {
+  _calculateCost(tickets) {
+    const { adultTickets, childTickets, infantTickets } = tickets;
+
     return adultTickets * TICKET_PRICES.adult + childTickets * TICKET_PRICES.child + infantTickets * TICKET_PRICES.infant;
   }
 
@@ -97,9 +102,13 @@ export default class TicketService {
    * Only adult tickets and child tickets are factored in because infants are expected to sit on the
    * lap of an adult.
    *
+   * @param {Object} tickets - an object containing the count for adult, child and infant tickets.
+   *
    * @returns {number} the total number of seats required.
    */
-  _calculateSeatsRequired(adultTicket, childTickets) {
+  _calculateSeatsRequired(tickets) {
+    const { adultTickets, childTickets } = tickets;
+
     return adultTickets + childTickets;
   }
 
@@ -123,7 +132,7 @@ export default class TicketService {
     const groupedTickets = this._groupTickets(ticketTypeRequests);
 
     this._validateRequest(accountId, groupedTickets);
-    this.#ticketPaymentService.makePayment(accountId, this._calculateCost());
-    this.#seatReservationService.reserveSeat(accountId, this._calculateSeatsRequired());
+    this.#ticketPaymentService.makePayment(accountId, this._calculateCost(groupedTickets));
+    this.#seatReservationService.reserveSeat(accountId, this._calculateSeatsRequired(groupedTickets));
   }
 }
