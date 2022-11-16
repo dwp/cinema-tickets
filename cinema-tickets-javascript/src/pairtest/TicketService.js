@@ -1,8 +1,8 @@
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService';
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService';
 
-import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
-import TicketTypeRequest from './lib/TicketTypeRequest.js';
+import InvalidPurchaseException from './lib/InvalidPurchaseException';
+import TicketTypeRequest from './lib/TicketTypeRequest';
 
 import validators from './validators';
 import { TICKET_PRICES } from './constants';
@@ -37,7 +37,7 @@ export default class TicketService {
       infantTickets: 0,
     };
 
-    for (const ticket of tickets) {
+    tickets.forEach((ticket) => {
       if (ticket.getTicketType() === 'ADULT') {
         allTickets.adultTickets += ticket.getNoOfTickets();
       }
@@ -49,7 +49,7 @@ export default class TicketService {
       if (ticket.getTicketType() === 'INFANT') {
         allTickets.infantTickets += ticket.getNoOfTickets();
       }
-    }
+    });
 
     return allTickets;
   }
@@ -64,8 +64,9 @@ export default class TicketService {
    */
   _validateRequest(accountId, tickets) {
     const { adultTickets, childTickets, infantTickets } = tickets;
-    validators.map((validatorFunction) => {
-      const validation = validatorFunction({
+
+    validators.forEach((validator) => {
+      const validation = validator({
         accountId,
         adultTickets,
         childTickets,
@@ -92,7 +93,9 @@ export default class TicketService {
   _calculateCost(tickets) {
     const { adultTickets, childTickets, infantTickets } = tickets;
 
-    return adultTickets * TICKET_PRICES.adult + childTickets * TICKET_PRICES.child + infantTickets * TICKET_PRICES.infant;
+    return (adultTickets * TICKET_PRICES.adult
+      + childTickets * TICKET_PRICES.child
+      + infantTickets * TICKET_PRICES.infant);
   }
 
   /**
@@ -133,6 +136,9 @@ export default class TicketService {
 
     this._validateRequest(accountId, groupedTickets);
     this.#ticketPaymentService.makePayment(accountId, this._calculateCost(groupedTickets));
-    this.#seatReservationService.reserveSeat(accountId, this._calculateSeatsRequired(groupedTickets));
+    this.#seatReservationService.reserveSeat(
+      accountId,
+      this._calculateSeatsRequired(groupedTickets),
+    );
   }
 }

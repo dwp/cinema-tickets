@@ -3,7 +3,7 @@ import TicketTypeRequest from '../src/pairtest/lib/TicketTypeRequest';
 
 describe('TicketTypeRequest tests', () => {
   it('should not accept any other ticket types other than Adult, Child, Infant', () => {
-    expect(() => { new TicketTypeRequest('FOO', 8); }).toThrow(TypeError);
+    expect(() => { new TicketTypeRequest('BAR', 8); }).toThrow(TypeError);
   });
 
   it('should not allow for a non-integer for the number of specific ticket types', () => {

@@ -41,15 +41,21 @@ describe('validators tests', () => {
 
   describe('maxTwentyTicketsAllowed', () => {
     it('should return valid total tickets are less than 20', () => {
-      expect(maxTwentyTicketsAllowed({ adultTickets: 5, childTickets: 7, infantTickets: 4 }).valid).toBe(true);
+      expect(maxTwentyTicketsAllowed(
+        { adultTickets: 5, childTickets: 7, infantTickets: 4 },
+      ).valid).toBe(true);
     });
 
     it('should return valid if total tickets are equal to 20', () => {
-      expect(maxTwentyTicketsAllowed({ adultTickets: 15, childTickets: 1, infantTickets: 4 }).valid).toBe(true);
+      expect(maxTwentyTicketsAllowed(
+        { adultTickets: 15, childTickets: 1, infantTickets: 4 },
+      ).valid).toBe(true);
     });
 
     it('should return invalid if total tickets are greater than 20', () => {
-      expect(maxTwentyTicketsAllowed({ adultTickets: 5, childTickets: 17, infantTickets: 4 }).valid).toBe(false);
+      expect(maxTwentyTicketsAllowed(
+        { adultTickets: 5, childTickets: 17, infantTickets: 4 },
+      ).valid).toBe(false);
     });
 
     it('should return an error if total tickets are greater than 20', () => {
@@ -59,7 +65,8 @@ describe('validators tests', () => {
 
   describe('atLeastOneAdult', () => {
     it('should return valid if there is one adult', () => {
-      expect(atLeastOneAdult({ adultTickets: 1, childTickets: 7, infantTickets: 1 }).valid).toBe(true);
+      expect(atLeastOneAdult({ adultTickets: 1, childTickets: 7, infantTickets: 1 }).valid)
+        .toBe(true);
     });
 
     it('should return invalid if there are no adults', () => {

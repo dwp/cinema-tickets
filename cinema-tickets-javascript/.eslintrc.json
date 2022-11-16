@@ -11,7 +11,12 @@
         "sourceType": "module"
     },
     "rules": {
-        "indent": ["error", 2]
+        "indent": ["error", 2],
+        "no-unused-vars": ["warn"],
+        "no-underscore-dangle": 0,
+        "import/prefer-default-export": 0,
+        "class-methods-use-this": ["warn"],
+        "no-new": ["warn"]
     },
     "plugins": [
         "jest"

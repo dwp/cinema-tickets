@@ -22,7 +22,11 @@ export const infantNotGreaterThanAdult = (data) => {
 
 export const maxTwentyTicketsAllowed = (data) => {
   const { adultTickets, childTickets, infantTickets } = data;
-  const totalTicketsCount = Object.values({ adultTickets, childTickets, infantTickets }).reduce((prev, curr) => prev + curr, 0);
+  const totalTicketsCount = Object.values({
+    adultTickets,
+    childTickets,
+    infantTickets,
+  }).reduce((prev, curr) => prev + curr, 0);
 
   const valid = totalTicketsCount <= 20;
 
