@@ -3,11 +3,30 @@ import TicketService from '../src/pairtest/TicketService';
 
 import InvalidPurchaseException from '../src/pairtest/lib/InvalidPurchaseException';
 import TicketTypeRequest from '../src/pairtest/lib/TicketTypeRequest';
+import { TICKET_PRICES } from '../src/pairtest/constants';
+
+// Mocks
+import SeatReservationServiceMock from '../src/thirdparty/seatbooking/SeatReservationService';
+import TicketPaymentServiceMock from '../src/thirdparty/paymentgateway/TicketPaymentService';
+
+jest.mock('../src/thirdparty/seatbooking/SeatReservationService');
+jest.mock('../src/thirdparty/paymentgateway/TicketPaymentService');
+
+const reserveSeatMock = jest
+  .spyOn(SeatReservationServiceMock.prototype, 'reserveSeat')
+  .mockImplementation(() => {});
+
+const makePaymentMock = jest
+  .spyOn(TicketPaymentServiceMock.prototype, 'makePayment')
+  .mockImplementation(() => {});
 
 describe('TicketService tests', () => {
   let testTicketService;
 
   beforeEach(() => {
+    SeatReservationServiceMock.mockClear();
+    TicketPaymentServiceMock.mockClear();
+
     testTicketService = new TicketService();
   });
 
@@ -52,5 +71,25 @@ describe('TicketService tests', () => {
     const adultTicket = new TicketTypeRequest('ADULT', 1);
 
     expect(() => { testTicketService.purchaseTickets(accountId, adultTicket); }).toThrow(InvalidPurchaseException);
+  });
+
+  it('should call the makePayment method with valid data', () => {
+    const accountId = 1001;
+    const adultTicket = new TicketTypeRequest('ADULT', 20);
+
+    testTicketService.purchaseTickets(accountId, adultTicket);
+
+    expect(makePaymentMock).toHaveBeenLastCalledWith(1001, 20 * TICKET_PRICES.adult);
+  });
+
+  it('should call the makePayment method with valid data', () => {
+    const accountId = 1001;
+    const adultTicket = new TicketTypeRequest('ADULT', 10);
+    const childTicket = new TicketTypeRequest('CHILD', 5);
+    const infantTicket = new TicketTypeRequest('INFANT', 5);
+
+    testTicketService.purchaseTickets(accountId, adultTicket, childTicket, infantTicket);
+
+    expect(reserveSeatMock).toHaveBeenLastCalledWith(1001, 15);
   });
 });
