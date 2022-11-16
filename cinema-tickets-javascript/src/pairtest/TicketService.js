@@ -8,12 +8,6 @@ import validators from './validators';
 import { TICKET_PRICES } from './constants';
 
 export default class TicketService {
-  #adultTickets;
-
-  #childTickets;
-
-  #infantTickets;
-
   #ticketPaymentService;
 
   #seatReservationService;
@@ -22,9 +16,6 @@ export default class TicketService {
    * @constructor for @see {TicketService}
    */
   constructor() {
-    this.#adultTickets = 0;
-    this.#childTickets = 0;
-    this.#infantTickets = 0;
     this.#ticketPaymentService = new TicketPaymentService();
     this.#seatReservationService = new SeatReservationService();
   }
@@ -32,25 +23,35 @@ export default class TicketService {
   /**
    * @private
    *
-   * Method to update the ticket class parameters for @see {TicketService} when a new payment
-   * request comes in.
+   * Method to collect and group together the count for all adult, child and infant tickets for
+   * a single payment request.
    *
    * @param {Array} tickets - an array of @see {TicketTypeRequest}
+   *
+   * @return {Object} an object with the count of all ticket types.
    */
-  _updateTicketCount(tickets) {
+  _groupTickets(tickets) {
+    const allTickets = {
+      adultTickets: 0,
+      childTickets: 0,
+      infantTickets: 0,
+    };
+
     for (const ticket of tickets) {
       if (ticket.getTicketType() === 'ADULT') {
-        this.#adultTickets += ticket.getNoOfTickets();
+        allTickets.adultTickets += ticket.getNoOfTickets();
       }
 
       if (ticket.getTicketType() === 'CHILD') {
-        this.#childTickets += ticket.getNoOfTickets();
+        allTickets.childTickets += ticket.getNoOfTickets();
       }
 
       if (ticket.getTicketType() === 'INFANT') {
-        this.#infantTickets += ticket.getNoOfTickets();
+        allTickets.infantTickets += ticket.getNoOfTickets();
       }
     }
+
+    return allTickets;
   }
 
   /**
@@ -59,14 +60,16 @@ export default class TicketService {
    * Method to validate the accountId, alongside the ticket requests when purchasing tickets.
    *
    * @param {number} accountId - the account ID must be an integer greater than 0.
+   * @param {Object} tickets - an object containing the number of each ticket type.
    */
-  _validateRequest(accountId) {
+  _validateRequest(accountId, tickets) {
+    const { adultTickets, childTickets, infantTickets } = tickets;
     validators.map((validatorFunction) => {
       const validation = validatorFunction({
         accountId,
-        adultTickets: this.#adultTickets,
-        childTickets: this.#childTickets,
-        infantTickets: this.#infantTickets,
+        adultTickets,
+        childTickets,
+        infantTickets,
       });
 
       if (!validation.valid) {
@@ -83,8 +86,8 @@ export default class TicketService {
    *
    * @returns {number} the total cost of the reserved seats in £.
    */
-  _calculateCost() {
-    return this.#adultTickets * TICKET_PRICES.adult + this.#childTickets * TICKET_PRICES.child + this.#infantTickets * TICKET_PRICES.infant;
+  _calculateCost(adultTickets, childTickets, infantTickets) {
+    return adultTickets * TICKET_PRICES.adult + childTickets * TICKET_PRICES.child + infantTickets * TICKET_PRICES.infant;
   }
 
   /**
@@ -96,8 +99,8 @@ export default class TicketService {
    *
    * @returns {number} the total number of seats required.
    */
-  _calculateSeatsRequired() {
-    return this.#adultTickets + this.#childTickets;
+  _calculateSeatsRequired(adultTicket, childTickets) {
+    return adultTickets + childTickets;
   }
 
   /**
@@ -117,8 +120,9 @@ export default class TicketService {
    *                                      fail validation.
    */
   purchaseTickets(accountId, ...ticketTypeRequests) {
-    this._updateTicketCount(ticketTypeRequests);
-    this._validateRequest(accountId);
+    const groupedTickets = this._groupTickets(ticketTypeRequests);
+
+    this._validateRequest(accountId, groupedTickets);
     this.#ticketPaymentService.makePayment(accountId, this._calculateCost());
     this.#seatReservationService.reserveSeat(accountId, this._calculateSeatsRequired());
   }

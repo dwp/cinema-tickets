@@ -1,16 +1,5 @@
 // SUT
 import TicketTypeRequest from '../src/pairtest/lib/TicketTypeRequest';
-/**
- * Business rules
- *
- * - 3 ticket types
- *      - Infant: £0, Child: £10, Adult: £20
- * - Max 20 tickets can be purchased in one transaction
- * - Infants must sit on an adults lap, are not allocated a seat
- * - Child and infant tickets cannot be purchased without an adult
- * - Accounts with an ID greater than 0 are valid
- * -
- */
 
 describe('TicketTypeRequest tests', () => {
   it('should not accept any other ticket types other than Adult, Child, Infant', () => {
@@ -27,5 +16,17 @@ describe('TicketTypeRequest tests', () => {
 
   it('should not allow for any negative ticket numbers to be purchased', () => {
     expect(() => { new TicketTypeRequest('ADULT', -3); }).toThrow(TypeError);
+  });
+
+  it.skip('should set the type given valid data', () => {
+    const ticketTypeRequest = new TicketTypeRequest('ADULT', 10);
+
+    expect(ticketTypeRequest.getType()).toEqual('ADULT');
+  });
+
+  it('should set the number of tickets given valid data', () => {
+    const ticketTypeRequest = new TicketTypeRequest('INFANT', 7);
+
+    expect(ticketTypeRequest.getNoOfTickets()).toEqual(7);
   });
 });

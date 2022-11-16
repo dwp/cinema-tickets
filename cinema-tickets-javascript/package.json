@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "npm run test -- --coverage"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
