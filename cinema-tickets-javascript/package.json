@@ -1,15 +1,23 @@
 {
   "name": "cinema-tickets-javascript",
+  "type": "module",
   "description": "This is a coding exercise which will allow you to demonstrate how you code and your approach to a given problem.",
   "version": "1.0.0",
   "engines": {
     "node": ">=16.15.1"
   },
-  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^27.1.5",
     "jest": "28.1.1",
     "mocha": "10.0.0"
   }
