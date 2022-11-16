@@ -1,13 +1,11 @@
-import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService';
+import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService';
 
 import validators from './validators';
+import TicketTypeRequest from './lib/TicketTypeRequest.js';
 
 export default class TicketService {
-  /**
-   * Should only have private methods other than the one below.
-   */
   adultTickets;
 
   childTickets;
@@ -16,11 +14,14 @@ export default class TicketService {
 
   ticketPaymentService;
 
+  seatReservationService;
+
   constructor() {
     this.adultTickets = 0;
     this.childTickets = 0;
     this.infantTickets = 0;
     this.ticketPaymentService = new TicketPaymentService();
+    this.seatReservationService = new SeatReservationService();
   }
 
   _updateTicketCount(tickets) {
@@ -66,10 +67,28 @@ export default class TicketService {
     return this.adultTickets * costs.adult + this.childTickets * costs.child;
   }
 
+  _calculateSeatsRequired() {
+    return this.adultTickets + this.childTickets;
+  }
+
+  /**
+   * Public method to purchase tickets given a valid account ID and at least one TicketTypeRequest
+   * objects.
+   * This method will validate the accountId, and ticketTypeRequests, and if valid will call off
+   * to the TicketPaymentService, then to the SeatReservation service respectively to complete
+   * the ticket purchasing operation.
+   * 
+   * @param {number} accountId - the account ID must be an integer greater than 0.
+   * @param {TicketTypeRequest} ticketTypeRequests - a number of valid instances of
+   *                                                 TicketTypeRequest classes.
+   * 
+   * @throws {InvalidPurchaseException} - when either the provided accountId or ticketTypeRequests
+   *                                      fail validation.
+   */
   purchaseTickets(accountId, ...ticketTypeRequests) {
     this._updateTicketCount(ticketTypeRequests);
     this._validateRequest(accountId);
-    this.ticketPaymentService.makePayment(this._calculateCost());
-    // throws InvalidPurchaseException
+    this.ticketPaymentService.makePayment(accountId, this._calculateCost());
+    this.seatReservationService.reserveSeat(accountId, this._calculateSeatsRequired())
   }
 }
