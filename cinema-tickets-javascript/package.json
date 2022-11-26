@@ -9,13 +9,20 @@
   "scripts": {
     "test": "jest"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
   "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "babel-jest": "^29.3.1",
     "jest": "^28.1.1",
     "mocha": "10.0.0"
   },
   "main": "index.js",
   "directories": {
-    "test": "test"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
   "author": "",
   "license": "ISC"
