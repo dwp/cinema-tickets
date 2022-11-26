@@ -21,14 +21,18 @@ export default class TicketService {
    * Should only have private methods other than the one below.
    */
 
-  purchaseTickets(accountId, ...ticketTypeRequests) {
-    // throws InvalidPurchaseException
+  purchaseTickets(accountId, ticketTypeRequests) {
+    // throws InvalidPurchaseExceptions
 
     /*Plan:
     Should check inputs using private methods and then make a request to 
     - TicketPaymentService
     - SatReservtionService
     */
+   console.log(accountId, ticketTypeRequests)
+   const requests = new TicketTypeRequest("ADULT",  5);
+
+   console.log(requests)
   }
 
   
