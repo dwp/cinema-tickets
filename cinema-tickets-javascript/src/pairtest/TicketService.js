@@ -28,18 +28,61 @@ export default class TicketService {
   /**
    * Should only have private methods other than the one below.
    */
+  //variables
+  #AllTicketRequestObjects = [];
+  #AdultsPresent = false;
+  #ChildrenOrInfantsPresent = false;
 
+  //methods
   #checkId(accountId) {
     if (accountId < 1) {
-      throw new InvalidPurchaseException("accountIdError", "accountId must be greater than 0.");
+      throw new InvalidPurchaseException(
+        "accountIdError",
+        "accountId must be greater than 0."
+      );
+    }
+  }
+
+  #checkAdultsPresentForChildrenInfants(arrTicketRequests) {
+    //throw err if children found and adults not found
+    arrTicketRequests.forEach((request) => {
+      if (request.getTicketType() === "ADULT" && request.getNoOfTickets() > 0) {
+        console.log(request.getTicketType(),request.getNoOfTickets())
+        this.#AdultsPresent = true;
+      }
+      if (request.getTicketType() && request.getNoOfTickets() > 0) {
+        this.#ChildrenOrInfantsPresent = true;
+      } 
+      if (request.getTicketType() && request.getNoOfTickets() > 0) {
+        this.#ChildrenOrInfantsPresent = true;
+      }
+    });
+    if (
+      this.#AdultsPresent === false &&
+      this.#ChildrenOrInfantsPresent === true
+    ) {
+      throw new InvalidPurchaseException(
+        "invalidNumberOfAdultTicketsError",
+        "Cannot purchase CHILD or INFANT tickets without purchasing ADULT tickets"
+      );
     }
   }
 
   purchaseTickets(accountId, ticketTypeRequests) {
     // throws InvalidPurchaseExceptions if accountId not valid
+
     this.#checkId(accountId);
-    console.log(ticketTypeRequests)
-    
+    //console.log("ticketTypeRequests", ticketTypeRequests);
+
+    // create new instance of TicketTypeRequest for each ticket type
+    for (const key in ticketTypeRequests) {
+      const ticketRequest = new TicketTypeRequest(key, ticketTypeRequests[key]);
+      this.#AllTicketRequestObjects.push(ticketRequest);
+      // console.log(ticketRequest.getTicketType(), ticketRequest.getNoOfTickets())
+    }
+
+    //throws InvalidPurchaseExceptionsif adults not present for infants or children
+    this.#checkAdultsPresentForChildrenInfants(this.#AllTicketRequestObjects);
 
     /*Plan:
     - generate TicketTypeRequests -> merge -> - SatReservtionService
