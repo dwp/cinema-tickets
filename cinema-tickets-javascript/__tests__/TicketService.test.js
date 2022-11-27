@@ -1,8 +1,9 @@
 import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseException";
+import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest";
 import TicketService from "../src/pairtest/TicketService";
 
 /* Rules
-All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
+- DONE - All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
 - There are 3 types of tickets i.e. Infant, Child, and Adult.
 - The ticket prices are based on the type of ticket (see table below).
 - The ticket purchaser declares how many and what type of tickets they want to buy.
@@ -46,4 +47,28 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
   });
 });
 
+describe("TicketTypeRequest", () => {
+  //valid
+  //no tickets
+  //infants only
+  //infant exceeds adult
+  //more than 20
+  describe("TicketTypeRequestObject returns correct value for ticket types", () => {
+    test("returns correct property values for ADULT tickets", () => {
+        const customer = new TicketTypeRequest("ADULT", 5);
+        expect(customer.getTicketType()).toBe("ADULT");
+        expect(customer.getNoOfTickets()).toBe(5);
+    });
+    test("returns correct property values for CHILD tickets", () => {
+        const customer = new TicketTypeRequest("CHILD", 3);
+        expect(customer.getTicketType()).toBe("CHILD");
+        expect(customer.getNoOfTickets()).toBe(3);
+    });
+    test("returns correct property values for INFANT tickets", () => {
+        const customer = new TicketTypeRequest("INFANT", 0);
+        expect(customer.getTicketType()).toBe("INFANT");
+        expect(customer.getNoOfTickets()).toBe(0);
+    });
+  });
+});
 //Calculates the correct no of seats to reserve and makes a seat reservation request to the SeatReservationService.

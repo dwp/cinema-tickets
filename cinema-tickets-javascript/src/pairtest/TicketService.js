@@ -17,7 +17,7 @@ Provide a working implementation of a `TicketService` that:
 
 # Predefined functions
 
-TicketPaymentService.makePayment(accountID: number, totalCostToPay: NUmber/interger)
+TicketPaymentService.makePayment(accountID: number, totalCostToPay: Number/interger)
 SeatReservationService.reserveSeat(accountId: integer, totalSeatsToAllocate: integer)
 
 CLASS TicketTypeRequest (ticketType: string, noOfTickets: number)
@@ -36,14 +36,15 @@ export default class TicketService {
   }
 
   purchaseTickets(accountId, ticketTypeRequests) {
-    // throws InvalidPurchaseExceptions
-    const isIdValid = this.#checkId(accountId);
+    // throws InvalidPurchaseExceptions if accountId not valid
+    this.#checkId(accountId);
+    console.log(ticketTypeRequests)
     
 
     /*Plan:
-    Should check inputs using private methods and then make a request to 
-    - TicketPaymentService
-    - SatReservtionService
+    - generate TicketTypeRequests -> merge -> - SatReservtionService
+    - calc total payment -> TicketPaymentService
+    
     */
   }
 }
