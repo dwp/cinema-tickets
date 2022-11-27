@@ -1,3 +1,4 @@
+import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseException";
 import TicketService from "../src/pairtest/TicketService";
 
 /* Rules
@@ -22,7 +23,27 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
     expect(test).not.toThrow(Error);
   });
 
-  
+  test("purchaseTickets request of a invalid id of 0 return an InevalidPurchaseException error", () => {
+    try {
+      const customer = new TicketService();
+      customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    } catch (error) {
+      expect(error).toBeInstanceOf(InvalidPurchaseException);
+      expect(error.subType).toBe("accountIdError");
+      expect(error.message).toBe("accounId must be greater than 0.");
+    }
+  });
+
+  test("purchaseTickets request of a invalid id of -1 return an InevalidPurchaseException error", () => {
+    try {
+      const customer = new TicketService();
+      customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    } catch (error) {
+      expect(error).toBeInstanceOf(InvalidPurchaseException);
+      expect(error.subType).toBe("accountIdError");
+      expect(error.message).toBe("accounId must be greater than 0.");
+    }
+  });
 });
 
 //Calculates the correct no of seats to reserve and makes a seat reservation request to the SeatReservationService.
