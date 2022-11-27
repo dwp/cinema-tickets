@@ -31,7 +31,7 @@ export default class TicketService {
 
   #checkId(accountId) {
     if (accountId < 1) {
-      throw new InvalidPurchaseException("accountIdError", "accounId must be greater than 0.");
+      throw new InvalidPurchaseException("accountIdError", "accountId must be greater than 0.");
     }
   }
 

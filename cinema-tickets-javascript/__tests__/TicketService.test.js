@@ -31,7 +31,7 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
     } catch (error) {
       expect(error).toBeInstanceOf(InvalidPurchaseException);
       expect(error.subType).toBe("accountIdError");
-      expect(error.message).toBe("accounId must be greater than 0.");
+      expect(error.message).toBe("accountId must be greater than 0.");
     }
   });
 
@@ -42,32 +42,46 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
     } catch (error) {
       expect(error).toBeInstanceOf(InvalidPurchaseException);
       expect(error.subType).toBe("accountIdError");
-      expect(error.message).toBe("accounId must be greater than 0.");
+      expect(error.message).toBe("accountId must be greater than 0.");
     }
   });
 });
 
 describe("TicketTypeRequest", () => {
   //valid
+  //
+  // negative num
   //no tickets
   //infants only
   //infant exceeds adult
   //more than 20
   describe("TicketTypeRequestObject returns correct value for ticket types", () => {
     test("returns correct property values for ADULT tickets", () => {
-        const customer = new TicketTypeRequest("ADULT", 5);
-        expect(customer.getTicketType()).toBe("ADULT");
-        expect(customer.getNoOfTickets()).toBe(5);
+      const customer = new TicketTypeRequest("ADULT", 5);
+      expect(customer.getTicketType()).toBe("ADULT");
+      expect(customer.getNoOfTickets()).toBe(5);
     });
     test("returns correct property values for CHILD tickets", () => {
-        const customer = new TicketTypeRequest("CHILD", 3);
-        expect(customer.getTicketType()).toBe("CHILD");
-        expect(customer.getNoOfTickets()).toBe(3);
+      const customer = new TicketTypeRequest("CHILD", 3);
+      expect(customer.getTicketType()).toBe("CHILD");
+      expect(customer.getNoOfTickets()).toBe(3);
     });
     test("returns correct property values for INFANT tickets", () => {
-        const customer = new TicketTypeRequest("INFANT", 0);
-        expect(customer.getTicketType()).toBe("INFANT");
-        expect(customer.getNoOfTickets()).toBe(0);
+      const customer = new TicketTypeRequest("INFANT", 0);
+      expect(customer.getTicketType()).toBe("INFANT");
+      expect(customer.getNoOfTickets()).toBe(0);
+    });
+    test("return an InvalidPurchaseException error for negative numbers of tickets", () => {
+      try {
+        const customer = new TicketTypeRequest("ADULT", -5);
+      } catch (error) {
+        console.log(error);
+        expect(error).toBeInstanceOf(InvalidPurchaseException);
+        expect(error.subType).toBe("ticketNumberError");
+        expect(error.message).toBe(
+          "Numbers of tickets purchased must be 0 or greater."
+        );
+      }
     });
   });
 });
