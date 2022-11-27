@@ -28,12 +28,32 @@ export default class TicketService {
   /**
    * Should only have private methods other than the one below.
    */
+
   //variables
+
+   /**
+   * Array of Ticket Request objects for additional processing.
+   * @type {[] Class TicketTypeRequest}
+   */
   #AllTicketRequestObjects = [];
+   /**
+   * Boolean value to represent if ADULT type tickets present in total Ticket requests.
+   * @type {boolean}
+   */
   #AdultsPresent = false;
+   /**
+   * Boolean value to represent if CHILD and/or INFANT type tickets present in total Ticket requests.
+   * @type {boolean}
+   */
   #ChildrenOrInfantsPresent = false;
 
   //methods
+
+  /**
+ * Throws InvalidPurchaseError if accountId is not valid.
+ *
+ * @param {number} accountId id to check.W=
+ */
   #checkId(accountId) {
     if (accountId < 1) {
       throw new InvalidPurchaseException(
@@ -43,6 +63,11 @@ export default class TicketService {
     }
   }
 
+  /**
+ * Throws InvalidPurchaseException if CHILD and/or INFANT tickets purchased without ADULT ticket type.
+ *
+ * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
+ */
   #checkAdultsPresentForChildrenInfants(arrTicketRequests) {
     //throw err if children found and adults not found
     arrTicketRequests.forEach((request) => {
@@ -78,7 +103,6 @@ export default class TicketService {
     for (const key in ticketTypeRequests) {
       const ticketRequest = new TicketTypeRequest(key, ticketTypeRequests[key]);
       this.#AllTicketRequestObjects.push(ticketRequest);
-      // console.log(ticketRequest.getTicketType(), ticketRequest.getNoOfTickets())
     }
 
     //throws InvalidPurchaseExceptionsif adults not present for infants or children
@@ -87,7 +111,7 @@ export default class TicketService {
     /*Plan:
     - generate TicketTypeRequests -> merge -> - SatReservtionService
     - calc total payment -> TicketPaymentService
-    
+
     */
   }
 }
