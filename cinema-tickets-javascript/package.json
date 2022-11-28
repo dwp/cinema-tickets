@@ -3,14 +3,17 @@
   "description": "This is a coding exercise which will allow you to demonstrate how you code and your approach to a given problem.",
   "version": "1.0.0",
   "engines": {
-    "node": ">=16.15.1"
+    "node": "16.11.1"
   },
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:lint": "standard"
   },
   "devDependencies": {
-    "jest": "28.1.1",
-    "mocha": "10.0.0"
+    "chai": "4.3.7",
+    "mocha": "10.0.0",
+    "sinon": "15.0.0",
+    "standard": "17.0.0"
   }
 }
