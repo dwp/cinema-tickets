@@ -2,6 +2,8 @@
  * Immutable Object.
  */
 
+import InvalidPurchaseException from "./InvalidPurchaseException";
+
 export default class TicketTypeRequest {
   #type;
 
@@ -14,6 +16,10 @@ export default class TicketTypeRequest {
 
     if (!Number.isInteger(noOfTickets)) {
       throw new TypeError('noOfTickets must be an integer');
+    }
+
+    if (noOfTickets < 0) {
+      throw new InvalidPurchaseException("ticketNumberError", "Numbers of tickets purchased must be 0 or greater.");
     }
 
     this.#type = type;
