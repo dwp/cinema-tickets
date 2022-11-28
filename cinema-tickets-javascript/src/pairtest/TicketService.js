@@ -29,14 +29,6 @@ export default class TicketService {
    * Should only have private methods other than the one below.
    */
 
-  //variables
-
-  /**
-   * Array of Ticket Request objects for additional processing.
-   * @type {Object[]} An array of TicketTypeRequest objects.
-   */
-  #allTicketRequestObjects = [];
-
   //methods
 
   /**
@@ -111,19 +103,20 @@ export default class TicketService {
    * @param {Object}  ticketTypeRequests Object representing number of ADULT, CHILD and INFANT tickets to purchase.
    */
   purchaseTickets(accountId, ticketTypeRequests) {
+    const allTicketRequestObjects = [];
     // throws InvalidPurchaseExceptions if accountId not valid
     this.#checkId(accountId);
 
     // create new instance of TicketTypeRequest for each ticket type
     for (const key in ticketTypeRequests) {
       const ticketRequest = new TicketTypeRequest(key, ticketTypeRequests[key]);
-      this.#allTicketRequestObjects.push(ticketRequest);
+      allTicketRequestObjects.push(ticketRequest);
     }
 
     //throws InvalidPurchaseExceptions if adults not present for infants or children
-    this.#checkAdultsPresentForChildrenInfants(this.#allTicketRequestObjects);
+    this.#checkAdultsPresentForChildrenInfants(allTicketRequestObjects);
 
     //throws InvalidPurchaseExceptions if total number of tickets is not between 0 exclusive and 20 inclusive.
-    this.#countTickets(this.#allTicketRequestObjects);
+    this.#countTickets(allTicketRequestObjects);
   }
 }
