@@ -53,3 +53,8 @@ Provide a working implementation of a `TicketService` that:
 - I was debating whether to test Class TicketService s private methods by using a getter method to access the private method within the jest testing suite.
 - I have decided not to do this and to instead test the outputs of TicketService.purchaseTickets() after consulting the developer community and also in order to keep all Class TicketService methods private. Getters are a public method and would violate this constraint.
 
+2. The business rules state that "Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.".
+- This rule does not state how many infants can sit on an adults lap.
+- I have assumed that an infinite number of infants can sit on an adult's lap. Makin ticket requests valid for infant's if an adult is also present.
+- I have decided this as The number of infant's which can fit on each Adult's lap is not defined. So rather than deciding an arbitrary number of children can sit on each Adult's lap (1, 2, 4???) I have settled on allowing any number of infants if an adult is present.
+

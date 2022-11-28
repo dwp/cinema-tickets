@@ -144,6 +144,7 @@ export default class TicketService {
     );
 
     //make seatbooking request
+    // see "README.ms "Notes for the examiner from the candidate" 2. for reasoning.
     try {
       const seatBookingRequestInstance = new SeatReservationService();
       seatBookingRequestInstance.reserveSeat(

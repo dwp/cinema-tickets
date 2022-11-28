@@ -7,9 +7,8 @@ import TicketService from "../src/pairtest/TicketService";
 - DONE - Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
 - DONE - Only a maximum of 20 tickets that can be purchased at a time.
 - DONE -  Multiple tickets can be purchased at any given time.
-- Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
+- DONE -Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
 - The ticket prices are based on the type of ticket (see table below).
-- The ticket purchaser declares how many and what type of tickets they want to buy.
 
 total number seat request (not infants) -> seat request
 payment calc
@@ -205,6 +204,7 @@ describe("TicketTypeRequest", () => {
     });
   });
 
+  // see "README.ms "Notes for the examiner from the candidate" 2. for reasoning.
   describe("SeatReservationService", () => {
     test("SeatReservationService returns correct booking object for seat reservations of ADULTS only", () => {
       const test = () => {
