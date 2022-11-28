@@ -47,3 +47,9 @@ Provide a working implementation of a `TicketService` that:
 - Calculates the correct no of seats to reserve and makes a seat reservation request to the `SeatReservationService`.  
 - Rejects any invalid ticket purchase requests. It is up to you to identify what should be deemed as an invalid purchase request.
 
+## Notes for the examiner from the candidate
+
+1. 
+- I was debating whether to test Class TicketService s private methods by using a getter method to access the private method within the jest testing suite.
+- I have decided not to do this and to instead test the outputs of TicketService.purchaseTickets() after consulting the developer community and also in order to keep all Class TicketService methods private. Getters are a public method and would violate this constraint.
+
