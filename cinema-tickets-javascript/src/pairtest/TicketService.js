@@ -33,25 +33,9 @@ export default class TicketService {
 
   /**
    * Array of Ticket Request objects for additional processing.
-   * @type {[] Class TicketTypeRequest}
+   * @type {Object[]} An array of TicketTypeRequest objects.
    */
   #allTicketRequestObjects = [];
-  /**
-   * Boolean value to represent if ADULT type tickets present in total Ticket requests.
-   * @type {boolean}
-   */
-  
-  /**
-   * Boolean value to represent if CHILD and/or INFANT type tickets present in total Ticket requests.
-   * @type {boolean}
-   */
-  
-
-  /**
-   * Number value to count total number of tickets purchased.
-   * @type {number}
-   */
-  #totalTicketCount = 0;
 
   //methods
 
@@ -72,14 +56,13 @@ export default class TicketService {
   /**
    * Throws InvalidPurchaseException if CHILD and/or INFANT tickets purchased without ADULT ticket type.
    *
-   * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
+   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
    */
   #checkAdultsPresentForChildrenInfants(arrTicketRequests) {
     let adultsPresent = false;
     let childrenOrInfantsPresent = false;
     arrTicketRequests.forEach((request) => {
       if (request.getTicketType() === "ADULT" && request.getNoOfTickets() > 0) {
-        //console.log(request.getTicketType(),request.getNoOfTickets())
         adultsPresent = true;
       }
       if (request.getTicketType() && request.getNoOfTickets() > 0) {
@@ -89,11 +72,7 @@ export default class TicketService {
         childrenOrInfantsPresent = true;
       }
     });
-    console.log(adultsPresent, childrenOrInfantsPresent)
-    if (
-      adultsPresent === false &&
-      childrenOrInfantsPresent === true
-    ) {
+    if (adultsPresent === false && childrenOrInfantsPresent === true) {
       throw new InvalidPurchaseException(
         "invalidNumberOfAdultTicketsError",
         "Cannot purchase CHILD or INFANT tickets without purchasing ADULT tickets"
@@ -101,11 +80,10 @@ export default class TicketService {
     }
   }
 
-  
-   /**
+  /**
    * Throws InvalidPurchaseException if number of tickets purchased is not between 0 exclusive and 20 inclusive.
    *
-   * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
+   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
    */
   #countTickets(arrTicketRequests) {
     let totalNoOfTickets = 0;
@@ -113,7 +91,7 @@ export default class TicketService {
       const noOfTickets = request.getNoOfTickets();
       totalNoOfTickets += noOfTickets;
     });
-    if (totalNoOfTickets< 1) {
+    if (totalNoOfTickets < 1) {
       throw new InvalidPurchaseException(
         "invalidNumberOfTicketsError",
         "Cannot purchase 0 tickets."
@@ -126,11 +104,15 @@ export default class TicketService {
     }
   }
 
+  /**
+   * Checks ticket requests for invalid requests using other private methods within Class TicketService. If valid makes requests to TicketPaymentService and SeatReservationService.
+   *
+   * @param {number}  accountId Id of customer making ticket request.
+   * @param {Object}  ticketTypeRequests Object representing number of ADULT, CHILD and INFANT tickets to purchase.
+   */
   purchaseTickets(accountId, ticketTypeRequests) {
     // throws InvalidPurchaseExceptions if accountId not valid
-
     this.#checkId(accountId);
-    //console.log("ticketTypeRequests", ticketTypeRequests);
 
     // create new instance of TicketTypeRequest for each ticket type
     for (const key in ticketTypeRequests) {
@@ -143,9 +125,5 @@ export default class TicketService {
 
     //throws InvalidPurchaseExceptions if total number of tickets is not between 0 exclusive and 20 inclusive.
     this.#countTickets(this.#allTicketRequestObjects);
-    /*Plan:
-    - generate TicketTypeRequests -> merge -> - SatReservtionService
-    - calc total payment -> TicketPaymentService
-    */
   }
 }

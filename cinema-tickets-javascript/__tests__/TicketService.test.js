@@ -6,10 +6,14 @@ import TicketService from "../src/pairtest/TicketService";
 - DONE - All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
 - DONE - Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
 - DONE - Only a maximum of 20 tickets that can be purchased at a time.
+- DONE -  Multiple tickets can be purchased at any given time.
+- Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
 - The ticket prices are based on the type of ticket (see table below).
 - The ticket purchaser declares how many and what type of tickets they want to buy.
-- Multiple tickets can be purchased at any given time.
-- Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
+
+total number seat request (not infants) -> seat request
+payment calc
+payment request
 */
 
 // Calculates the correct amount for the requested tickets and makes a payment request to the TicketPaymentService.
@@ -152,8 +156,6 @@ describe("TicketTypeRequest", () => {
     });
   });
 
-  //no tickets
-  // more than 20
   describe("countTickets", () => {
     test("does not throw InvalidPurchaseException error if total number of tickets between 0 exclusive and 20 inclusive", () => {
       let numOfTickets = 1;
