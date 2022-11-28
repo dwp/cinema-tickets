@@ -1,5 +1,6 @@
 import TicketTypeRequest from "./lib/TicketTypeRequest.js";
 import InvalidPurchaseException from "./lib/InvalidPurchaseException.js";
+import SeatReservationService from "../thirdparty/seatbooking/SeatReservationService.js";
 
 /*
 Provide a working implementation of a `TicketService` that:
@@ -97,6 +98,24 @@ export default class TicketService {
   }
 
   /**
+   * Calculates the total number of seats to reserve from an array of TicketTypeRequest objects.
+   *
+   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
+   *
+   * @return {number} TotalNoOfSeats The total number of seats to reserve.
+   */
+  #calculateNoOfSeats(arrTicketRequests) {
+    let TotalNoOfSeats = 0;
+    arrTicketRequests.forEach((request) => {
+      if (request.getTicketType() !== "INFANT") {
+        const noOfSeats = request.getNoOfTickets();
+        TotalNoOfSeats += noOfSeats;
+      }
+    });
+    return TotalNoOfSeats;
+  }
+
+  /**
    * Checks ticket requests for invalid requests using other private methods within Class TicketService. If valid makes requests to TicketPaymentService and SeatReservationService.
    *
    * @param {number}  accountId Id of customer making ticket request.
@@ -118,5 +137,27 @@ export default class TicketService {
 
     //throws InvalidPurchaseExceptions if total number of tickets is not between 0 exclusive and 20 inclusive.
     this.#countTickets(allTicketRequestObjects);
+
+    //calculate number of seats to reserve
+    const finalNoOfSeatsToReserve = this.#calculateNoOfSeats(
+      allTicketRequestObjects
+    );
+
+    //make seatbooking request
+    try {
+      const seatBookingRequestInstance = new SeatReservationService();
+      seatBookingRequestInstance.reserveSeat(
+        accountId,
+        finalNoOfSeatsToReserve
+      );
+      //assume successful so give user feedback on successful seat reservation
+      const returnBody = {
+        accountId: accountId,
+        bookingSuccessful: true,
+        totalNoOfSeatsReserved: finalNoOfSeatsToReserve,
+      };
+
+      return returnBody;
+    } catch (error) {}
   }
 }
