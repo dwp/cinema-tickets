@@ -5,14 +5,11 @@ import TicketService from "../src/pairtest/TicketService";
 /* Rules
 - DONE - All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
 - DONE - Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
-- There are 3 types of tickets i.e. Infant, Child, and Adult.
+- Only a maximum of 20 tickets that can be purchased at a time.
 - The ticket prices are based on the type of ticket (see table below).
 - The ticket purchaser declares how many and what type of tickets they want to buy.
 - Multiple tickets can be purchased at any given time.
-- Only a maximum of 20 tickets that can be purchased at a time.
 - Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
-
-
 */
 
 // Calculates the correct amount for the requested tickets and makes a payment request to the TicketPaymentService.
@@ -49,10 +46,6 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
 });
 
 describe("TicketTypeRequest", () => {
-  //valid
-  //no tickets
-  //infant exceeds adult
-  //more than 20
   describe("TicketTypeRequestObject returns correct value for ticket types", () => {
     test("returns correct property values for ADULT tickets", () => {
       const customer = new TicketTypeRequest("ADULT", 5);
@@ -108,23 +101,64 @@ describe("TicketTypeRequest", () => {
       }
     });
     test("throws an InvalidPurchaseException error if INFANT AND CHILD tickets purchased without ADULT tickets", () => {
-        try {
-          const customer = new TicketService();
-          customer.purchaseTickets(1, { ADULT: 0, INFANT: 5, CHILD: 5 });
-        } catch (error) {
-          expect(error).toBeInstanceOf(InvalidPurchaseException);
-          expect(error.subType).toBe("invalidNumberOfAdultTicketsError");
-          expect(error.message).toBe(
-            "Cannot purchase CHILD or INFANT tickets without purchasing ADULT tickets"
-          );
-        }
-      });
-    test("does not throw InvalidPurchaseException error if INFANT and CHILDREB present with ADULT", () => {
+      try {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 0, INFANT: 5, CHILD: 5 });
+      } catch (error) {
+        expect(error).toBeInstanceOf(InvalidPurchaseException);
+        expect(error.subType).toBe("invalidNumberOfAdultTicketsError");
+        expect(error.message).toBe(
+          "Cannot purchase CHILD or INFANT tickets without purchasing ADULT tickets"
+        );
+      }
+    });
+    test("does not throw InvalidPurchaseException error if INFANT and CHILDREN present with ADULT", () => {
       const customer = new TicketService();
       const test = () => {
         customer.purchaseTickets(1, { ADULT: 1, INFANT: 1, CHILD: 1 });
       };
       expect(test).not.toThrow(InvalidPurchaseException);
+    });
+  });
+
+  //no tickets
+  // more than 20
+  describe("countTickets", () => {
+    test("does not throw InvalidPurchaseException error if total number of tickets between 0 exclusive and 20 inclusive", () => {
+      let numOfTickets = 1;
+      for (let i = 0; i < 20; i++) {
+        const customer = new TicketService();
+        const test = () => {
+          customer.purchaseTickets(1, {
+            ADULT: numOfTickets,
+            INFANT: 0,
+            CHILD: 0,
+          });
+        };
+        expect(test).not.toThrow(InvalidPurchaseException);
+        numOfTickets += 1;
+      }
+    });
+    test("throws InvalidPurchaseException error if total number of tickets = 0", () => {
+      try {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 0, INFANT: 0, CHILD: 0 });
+      } catch (error) {
+        console.log(error);
+        expect(error).toBeInstanceOf(InvalidPurchaseException);
+        expect(error.subType).toBe("invalidNumberOfTicketsError");
+        expect(error.message).toBe("Cannot purchase 0 tickets.");
+      }
+    });
+    test("throws InvalidPurchaseException error if total number of tickets > 20", () => {
+      try {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 });
+      } catch (error) {
+        expect(error).toBeInstanceOf(InvalidPurchaseException);
+        expect(error.subType).toBe("invalidNumberOfTicketsError");
+        expect(error.message).toBe("Cannot purchase more than 20 tickets.");
+      }
     });
   });
 });

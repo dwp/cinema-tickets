@@ -31,29 +31,35 @@ export default class TicketService {
 
   //variables
 
-   /**
+  /**
    * Array of Ticket Request objects for additional processing.
    * @type {[] Class TicketTypeRequest}
    */
-  #AllTicketRequestObjects = [];
-   /**
+  #allTicketRequestObjects = [];
+  /**
    * Boolean value to represent if ADULT type tickets present in total Ticket requests.
    * @type {boolean}
    */
-  #AdultsPresent = false;
-   /**
+  #adultsPresent = false;
+  /**
    * Boolean value to represent if CHILD and/or INFANT type tickets present in total Ticket requests.
    * @type {boolean}
    */
-  #ChildrenOrInfantsPresent = false;
+  #childrenOrInfantsPresent = false;
+
+  /**
+   * Number value to count total number of tickets purchased.
+   * @type {number}
+   */
+  #totalTicketCount = 0;
 
   //methods
 
   /**
- * Throws InvalidPurchaseError if accountId is not valid.
- *
- * @param {number} accountId id to check.W=
- */
+   * Throws InvalidPurchaseError if accountId is not valid.
+   *
+   * @param {number} accountId id to check.
+   */
   #checkId(accountId) {
     if (accountId < 1) {
       throw new InvalidPurchaseException(
@@ -64,31 +70,57 @@ export default class TicketService {
   }
 
   /**
- * Throws InvalidPurchaseException if CHILD and/or INFANT tickets purchased without ADULT ticket type.
- *
- * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
- */
+   * Throws InvalidPurchaseException if CHILD and/or INFANT tickets purchased without ADULT ticket type.
+   *
+   * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
+   */
   #checkAdultsPresentForChildrenInfants(arrTicketRequests) {
     //throw err if children found and adults not found
     arrTicketRequests.forEach((request) => {
       if (request.getTicketType() === "ADULT" && request.getNoOfTickets() > 0) {
-        console.log(request.getTicketType(),request.getNoOfTickets())
-        this.#AdultsPresent = true;
+        //console.log(request.getTicketType(),request.getNoOfTickets())
+        this.#adultsPresent = true;
       }
       if (request.getTicketType() && request.getNoOfTickets() > 0) {
-        this.#ChildrenOrInfantsPresent = true;
-      } 
+        this.#childrenOrInfantsPresent = true;
+      }
       if (request.getTicketType() && request.getNoOfTickets() > 0) {
-        this.#ChildrenOrInfantsPresent = true;
+        this.#childrenOrInfantsPresent = true;
       }
     });
     if (
-      this.#AdultsPresent === false &&
-      this.#ChildrenOrInfantsPresent === true
+      this.#adultsPresent === false &&
+      this.#childrenOrInfantsPresent === true
     ) {
       throw new InvalidPurchaseException(
         "invalidNumberOfAdultTicketsError",
         "Cannot purchase CHILD or INFANT tickets without purchasing ADULT tickets"
+      );
+    }
+  }
+
+  
+   /**
+   * Throws InvalidPurchaseException if number of tickets purchased is not between 0 exclusive and 20 inclusive.
+   *
+   * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
+   */
+  #countTickets(arrTicketRequests) {
+    let totalNoOfTickets = 0;
+    arrTicketRequests.forEach((request) => {
+      const noOfTickets = request.getNoOfTickets();
+      totalNoOfTickets += noOfTickets;
+      console.log(totalNoOfTickets)
+    });
+    if (totalNoOfTickets< 1) {
+      throw new InvalidPurchaseException(
+        "invalidNumberOfTicketsError",
+        "Cannot purchase 0 tickets."
+      );
+    } else if (totalNoOfTickets > 20) {
+      throw new InvalidPurchaseException(
+        "invalidNumberOfTicketsError",
+        "Cannot purchase more than 20 tickets."
       );
     }
   }
@@ -102,16 +134,17 @@ export default class TicketService {
     // create new instance of TicketTypeRequest for each ticket type
     for (const key in ticketTypeRequests) {
       const ticketRequest = new TicketTypeRequest(key, ticketTypeRequests[key]);
-      this.#AllTicketRequestObjects.push(ticketRequest);
+      this.#allTicketRequestObjects.push(ticketRequest);
     }
 
-    //throws InvalidPurchaseExceptionsif adults not present for infants or children
-    this.#checkAdultsPresentForChildrenInfants(this.#AllTicketRequestObjects);
+    //throws InvalidPurchaseExceptions if adults not present for infants or children
+    this.#checkAdultsPresentForChildrenInfants(this.#allTicketRequestObjects);
 
+    //throws InvalidPurchaseExceptions if total number of tickets is not between 0 exclusive and 20 inclusive.
+    this.#countTickets(this.#allTicketRequestObjects);
     /*Plan:
     - generate TicketTypeRequests -> merge -> - SatReservtionService
     - calc total payment -> TicketPaymentService
-
     */
   }
 }
