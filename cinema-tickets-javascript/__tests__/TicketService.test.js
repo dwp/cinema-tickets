@@ -5,7 +5,7 @@ import TicketService from "../src/pairtest/TicketService";
 /* Rules
 - DONE - All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
 - DONE - Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
-- Only a maximum of 20 tickets that can be purchased at a time.
+- DONE - Only a maximum of 20 tickets that can be purchased at a time.
 - The ticket prices are based on the type of ticket (see table below).
 - The ticket purchaser declares how many and what type of tickets they want to buy.
 - Multiple tickets can be purchased at any given time.
@@ -23,6 +23,11 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
   });
 
   test("purchaseTickets request of a invalid id of 0 return an InevalidPurchaseException error", () => {
+    const test = () => {
+      const customer = new TicketService();
+      customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    };
+    expect(test).toThrow(InvalidPurchaseException);
     try {
       const customer = new TicketService();
       customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
@@ -34,6 +39,11 @@ describe("accountId- rejects accounts of id of 0 or less", () => {
   });
 
   test("purchaseTickets request of a invalid id of -1 return an InevalidPurchaseException error", () => {
+    const test = () => {
+      const customer = new TicketService();
+      customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    };
+    expect(test).toThrow(InvalidPurchaseException);
     try {
       const customer = new TicketService();
       customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
@@ -63,8 +73,14 @@ describe("TicketTypeRequest", () => {
       expect(customer.getNoOfTickets()).toBe(0);
     });
     test("throws an InvalidPurchaseException error for negative numbers of tickets", () => {
+      const test = () => {
+        const customer = new TicketTypeRequest("ADULT", -5);
+        
+      };
+      expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketTypeRequest("ADULT", -5);
+        
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidPurchaseException);
         expect(error.subType).toBe("ticketNumberError");
@@ -77,6 +93,11 @@ describe("TicketTypeRequest", () => {
 
   describe("CHILD and INFANT tickets cannot be purchased without purchasing ADULT tickets", () => {
     test("throws an InvalidPurchaseException error if CHILD tickets purchased without ADULT tickets", () => {
+      const test = () => {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 0, INFANT: 0, CHILD: 4 });
+      };
+      expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketService();
         customer.purchaseTickets(1, { ADULT: 0, INFANT: 0, CHILD: 4 });
@@ -89,6 +110,11 @@ describe("TicketTypeRequest", () => {
       }
     });
     test("throws an InvalidPurchaseException error if INFANT tickets purchased without ADULT tickets", () => {
+      const test = () => {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 0, INFANT: 5, CHILD: 0 });
+      };
+      expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketService();
         customer.purchaseTickets(1, { ADULT: 0, INFANT: 5, CHILD: 0 });
@@ -101,6 +127,11 @@ describe("TicketTypeRequest", () => {
       }
     });
     test("throws an InvalidPurchaseException error if INFANT AND CHILD tickets purchased without ADULT tickets", () => {
+      const test = () => {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 0, INFANT: 5, CHILD: 5 });
+      };
+      expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketService();
         customer.purchaseTickets(1, { ADULT: 0, INFANT: 5, CHILD: 5 });
@@ -140,20 +171,30 @@ describe("TicketTypeRequest", () => {
       }
     });
     test("throws InvalidPurchaseException error if total number of tickets = 0", () => {
+      const test = () => {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 0, INFANT: 0, CHILD: 0 });
+      };
+      expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketService();
         customer.purchaseTickets(1, { ADULT: 0, INFANT: 0, CHILD: 0 });
       } catch (error) {
-        console.log(error);
         expect(error).toBeInstanceOf(InvalidPurchaseException);
         expect(error.subType).toBe("invalidNumberOfTicketsError");
         expect(error.message).toBe("Cannot purchase 0 tickets.");
       }
     });
     test("throws InvalidPurchaseException error if total number of tickets > 20", () => {
+      const test = () => {
+        const customer = new TicketService();
+        customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 });
+      };
+      expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketService();
         customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 });
+        expect(customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 })).toThrow(InvalidPurchaseException)
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidPurchaseException);
         expect(error.subType).toBe("invalidNumberOfTicketsError");
