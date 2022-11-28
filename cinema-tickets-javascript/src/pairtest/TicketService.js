@@ -40,12 +40,12 @@ export default class TicketService {
    * Boolean value to represent if ADULT type tickets present in total Ticket requests.
    * @type {boolean}
    */
-  #adultsPresent = false;
+  
   /**
    * Boolean value to represent if CHILD and/or INFANT type tickets present in total Ticket requests.
    * @type {boolean}
    */
-  #childrenOrInfantsPresent = false;
+  
 
   /**
    * Number value to count total number of tickets purchased.
@@ -75,22 +75,24 @@ export default class TicketService {
    * @param {[]Class TicketTypeRequest} arrTicketRequests The ticketTypeRequest object to check
    */
   #checkAdultsPresentForChildrenInfants(arrTicketRequests) {
-    //throw err if children found and adults not found
+    let adultsPresent = false;
+    let childrenOrInfantsPresent = false;
     arrTicketRequests.forEach((request) => {
       if (request.getTicketType() === "ADULT" && request.getNoOfTickets() > 0) {
         //console.log(request.getTicketType(),request.getNoOfTickets())
-        this.#adultsPresent = true;
+        adultsPresent = true;
       }
       if (request.getTicketType() && request.getNoOfTickets() > 0) {
-        this.#childrenOrInfantsPresent = true;
+        childrenOrInfantsPresent = true;
       }
       if (request.getTicketType() && request.getNoOfTickets() > 0) {
-        this.#childrenOrInfantsPresent = true;
+        childrenOrInfantsPresent = true;
       }
     });
+    console.log(adultsPresent, childrenOrInfantsPresent)
     if (
-      this.#adultsPresent === false &&
-      this.#childrenOrInfantsPresent === true
+      adultsPresent === false &&
+      childrenOrInfantsPresent === true
     ) {
       throw new InvalidPurchaseException(
         "invalidNumberOfAdultTicketsError",
@@ -110,7 +112,6 @@ export default class TicketService {
     arrTicketRequests.forEach((request) => {
       const noOfTickets = request.getNoOfTickets();
       totalNoOfTickets += noOfTickets;
-      console.log(totalNoOfTickets)
     });
     if (totalNoOfTickets< 1) {
       throw new InvalidPurchaseException(
