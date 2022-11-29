@@ -1,16 +1,16 @@
 import { MAXIMUM_TICKET_LIMIT } from "../../constants.js"
 
 export function accountIDValidator (accountID) {
-  const errors = []
+  let error;
 
   if (accountID !== 0 && !accountID) {
-    errors.push('AccountID is not provided!')
+    error = 'AccountID is not provided!'
   } else if (typeof accountID !== 'number') {
-    errors.push('AccountID must be a number')
+    error = 'AccountID must be a number'
   } else if (accountID === 0) {
-    errors.push('AccountID cannot be zero!')
+    error = 'AccountID cannot be zero!'
   }
-  return errors
+  return error
 }
 
 export function requestValidator (request) {

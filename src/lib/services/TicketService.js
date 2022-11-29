@@ -12,9 +12,9 @@ export default class TicketService {
 
   purchaseTickets (accountId, ...ticketTypeRequests) {
     
-    const accountIDErrors = accountIDValidator(accountId)
-    if (accountIDErrors.length > 0) {
-      throw new Error(`${accountIDErrors.join(', ')}`)
+    const accountIDError = accountIDValidator(accountId)
+    if (accountIDError) {
+      throw new Error(accountIDError)
     }
     
     const combinedRequest = combineTicketRequests(ticketTypeRequests)
