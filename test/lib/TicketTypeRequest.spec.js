@@ -1,4 +1,3 @@
-import * as sinon from 'sinon'
 import { assert } from 'chai'
 import TicketTypeRequest from '../../src/lib/TicketTypeRequest.js'
 
