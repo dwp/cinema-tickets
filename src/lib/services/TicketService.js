@@ -14,6 +14,8 @@ export default class TicketService {
     if (accountIDErrors.length > 0) {
       throw new Error(`${accountIDErrors.join(', ')}`)
     }
+
+
     ticketPaymentService.makePayment(accountId, 0)
     // throws InvalidPurchaseException
   }
