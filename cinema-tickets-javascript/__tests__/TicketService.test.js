@@ -2,20 +2,6 @@ import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseExcepti
 import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest";
 import TicketService from "../src/pairtest/TicketService";
 
-/* Rules
-- DONE - All accounts with an id greater than zero are valid. They also have sufficient funds to pay for any no of tickets.
-- DONE - Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
-- DONE - Only a maximum of 20 tickets that can be purchased at a time.
-- DONE -  Multiple tickets can be purchased at any given time.
-- DONE -Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
-- The ticket prices are based on the type of ticket (see table below).
-
-total number seat request (not infants) -> seat request
-payment calc
-payment request
-*/
-
-// Calculates the correct amount for the requested tickets and makes a payment request to the TicketPaymentService.
 describe("TicketService.purchaseTickets() -> #checkId", () => {
   test("purchaseTickets request of a valid id greater than 0 does not return an error", () => {
     const customer = new TicketService();
@@ -348,4 +334,4 @@ describe("TicketService.purchaseTickets() -> TicketPaymentService", () => {
   });
 });
 
-//Calculates the correct no of seats to reserve and makes a seat reservation request to the SeatReservationService.
+
