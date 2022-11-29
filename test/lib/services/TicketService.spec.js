@@ -22,7 +22,7 @@ describe('TicketService', () => {
     it('should call makePayment method of ticketPaymentService', () => {
       const ticketRequest= new TicketTypeRequest('ADULT', 4)
       ticketService.purchaseTickets(1, ticketRequest)
-      sinon.assert.calledOnceWithExactly(makePaymentStub, 1, 0)
+      sinon.assert.calledOnceWithExactly(makePaymentStub, 1, 80)
     })
 
     it('should throw an error if accountID is invalid', () => {

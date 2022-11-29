@@ -3,6 +3,7 @@ import InvalidPurchaseException from '../InvalidPurchaseException.js'
 import TicketPaymentService from '../../thirdparty/paymentgateway/TicketPaymentService.js'
 import { accountIDValidator, requestValidator } from '../helpers/validators.js'
 import { combineTicketRequests } from '../helpers/combineTicketRequests.js'
+import calculatePayment from '../helpers/calculatePayment.js'
 export default class TicketService {
   /**
    * Should only have private methods other than the one below.
@@ -23,6 +24,7 @@ export default class TicketService {
       throw new Error(`${requestErrors.join(', ')}`)
     }
 
-    ticketPaymentService.makePayment(accountId, 0)
+    const totalPaymentAmount = calculatePayment(combinedRequest)
+    ticketPaymentService.makePayment(accountId, totalPaymentAmount)
   }
 }
