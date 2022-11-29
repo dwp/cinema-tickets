@@ -2,49 +2,7 @@ import InvalidPurchaseException from "../src/pairtest/lib/InvalidPurchaseExcepti
 import TicketTypeRequest from "../src/pairtest/lib/TicketTypeRequest";
 import TicketService from "../src/pairtest/TicketService";
 
-describe("TicketService.purchaseTickets() -> #checkId", () => {
-  test("purchaseTickets request of a valid id greater than 0 does not return an error", () => {
-    const customer = new TicketService();
-    const test = () => {
-      customer.purchaseTickets(1, { ADULT: 4, INFANT: 4, CHILD: 4 });
-    };
-    expect(test).not.toThrow(Error);
-  });
-
-  test("purchaseTickets request of a invalid id of 0 return an InevalidPurchaseException error", () => {
-    const test = () => {
-      const customer = new TicketService();
-      customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
-    };
-    expect(test).toThrow(InvalidPurchaseException);
-    try {
-      const customer = new TicketService();
-      customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
-    } catch (error) {
-      expect(error).toBeInstanceOf(InvalidPurchaseException);
-      expect(error.subType).toBe("accountIdError");
-      expect(error.message).toBe("accountId must be greater than 0.");
-    }
-  });
-
-  test("purchaseTickets request of a invalid id of -1 return an InevalidPurchaseException error", () => {
-    const test = () => {
-      const customer = new TicketService();
-      customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
-    };
-    expect(test).toThrow(InvalidPurchaseException);
-    try {
-      const customer = new TicketService();
-      customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
-    } catch (error) {
-      expect(error).toBeInstanceOf(InvalidPurchaseException);
-      expect(error.subType).toBe("accountIdError");
-      expect(error.message).toBe("accountId must be greater than 0.");
-    }
-  });
-});
-
-describe("TicketService.purchaseTickets() -> TicketTypeRequestObject", () => {
+describe("TicketTypeRequest Object", () => {
   test("returns correct property values for ADULT tickets", () => {
     const customer = new TicketTypeRequest("ADULT", 5);
     expect(customer.getTicketType()).toBe("ADULT");
@@ -73,6 +31,48 @@ describe("TicketService.purchaseTickets() -> TicketTypeRequestObject", () => {
       expect(error.message).toBe(
         "Numbers of tickets purchased must be 0 or greater."
       );
+    }
+  });
+});
+
+describe("TicketService.purchaseTickets() -> #checkId", () => {
+  test("purchaseTickets request of a valid accountId greater than 0 does not return an error", () => {
+    const customer = new TicketService();
+    const test = () => {
+      customer.purchaseTickets(1, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    };
+    expect(test).not.toThrow(Error);
+  });
+
+  test("purchaseTickets request of a invalid accountId of 0 return an InevalidPurchaseException error", () => {
+    const test = () => {
+      const customer = new TicketService();
+      customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    };
+    expect(test).toThrow(InvalidPurchaseException);
+    try {
+      const customer = new TicketService();
+      customer.purchaseTickets(0, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    } catch (error) {
+      expect(error).toBeInstanceOf(InvalidPurchaseException);
+      expect(error.subType).toBe("accountIdError");
+      expect(error.message).toBe("accountId must be greater than 0.");
+    }
+  });
+
+  test("purchaseTickets request of a invalid accountId of -1 return an InevalidPurchaseException error", () => {
+    const test = () => {
+      const customer = new TicketService();
+      customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    };
+    expect(test).toThrow(InvalidPurchaseException);
+    try {
+      const customer = new TicketService();
+      customer.purchaseTickets(-1, { ADULT: 4, INFANT: 4, CHILD: 4 });
+    } catch (error) {
+      expect(error).toBeInstanceOf(InvalidPurchaseException);
+      expect(error.subType).toBe("accountIdError");
+      expect(error.message).toBe("accountId must be greater than 0.");
     }
   });
 });
@@ -191,8 +191,8 @@ describe("TicketService.purchaseTickets() -> #countTickets", () => {
 
 // see "README.md "Notes for the examiner from the candidate" 2. for reasoning.
 // see "README.md "Notes for the examiner from the candidate" 4. for reasoning.
-describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
-  test("SeatReservationService returns correct booking object for seat reservations of ADULTS only", () => {
+describe("TicketService.purchaseTickets() -> SeatReservationService and -> TicketPaymentService", () => {
+  test("SeatReservationService returns correct booking object for seat reservations and ticket payments of ADULTS only", () => {
     const test = () => {
       const customer = new TicketService();
       const actual = customer.purchaseTickets(1, {
@@ -209,7 +209,7 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
     };
     expect(test).not.toThrow(Error);
   });
-  test("SeatReservationService returns correct booking object for seat reservations of ADULTS and CHILDREN only", () => {
+  test("SeatReservationService returns correct booking object for seat reservations and ticket payments of ADULTS and CHILDREN only", () => {
     const test = () => {
       const customer = new TicketService();
       const actual = customer.purchaseTickets(2, {
@@ -226,7 +226,7 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
     };
     expect(test).not.toThrow(Error);
   });
-  test("SeatReservationService returns correct booking object for seat reservations of ADULTS and INFANT only", () => {
+  test("SeatReservationService returns correct booking object for seat reservations and ticket payments of ADULTS and INFANT only", () => {
     const test = () => {
       const customer = new TicketService();
       const actual = customer.purchaseTickets(3, {
@@ -243,7 +243,7 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
     };
     expect(test).not.toThrow(Error);
   });
-  test("SeatReservationService returns correct booking object for seat reservations of ADULT,  INFANT and CHILD", () => {
+  test("SeatReservationService returns correct booking object for seat reservations and ticket payments of ADULT, INFANT and CHILD", () => {
     const test = () => {
       const customer = new TicketService();
       const actual = customer.purchaseTickets(4, {
@@ -262,76 +262,5 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
   });
 });
 
-// see "README.md "Notes for the examiner from the candidate" 4. for reasoning.
-describe("TicketService.purchaseTickets() -> TicketPaymentService", () => {
-  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS only", () => {
-    const test = () => {
-      const customer = new TicketService();
-      const actual = customer.purchaseTickets(1, {
-        ADULT: 1,
-        INFANT: 0,
-        CHILD: 0,
-      });
-      expect(actual).toEqual({
-        accountId: 1,
-        bookingSuccessful: true,
-        totalNoOfSeatsReserved: 1,
-        totalTicketsCost: 20,
-      });
-    };
-    expect(test).not.toThrow(Error);
-  });
-  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS and CHILD", () => {
-    const test = () => {
-      const customer = new TicketService();
-      const actual = customer.purchaseTickets(2, {
-        ADULT: 3,
-        INFANT: 0,
-        CHILD: 2,
-      });
-      expect(actual).toEqual({
-        accountId: 2,
-        bookingSuccessful: true,
-        totalNoOfSeatsReserved: 5,
-        totalTicketsCost: 80,
-      });
-    };
-    expect(test).not.toThrow(Error);
-  });
-  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS and INFANT", () => {
-    const test = () => {
-      const customer = new TicketService();
-      const actual = customer.purchaseTickets(3, {
-        ADULT: 3,
-        INFANT: 2,
-        CHILD: 0,
-      });
-      expect(actual).toEqual({
-        accountId: 3,
-        bookingSuccessful: true,
-        totalNoOfSeatsReserved: 3,
-        totalTicketsCost: 60,
-      });
-    };
-    expect(test).not.toThrow(Error);
-  });
-  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS, CHILD and INFANT", () => {
-    const test = () => {
-      const customer = new TicketService();
-      const actual = customer.purchaseTickets(4, {
-        ADULT: 3,
-        INFANT: 2,
-        CHILD: 2,
-      });
-      expect(actual).toEqual({
-        accountId: 4,
-        bookingSuccessful: true,
-        totalNoOfSeatsReserved: 5,
-        totalTicketsCost: 80,
-      });
-    };
-    expect(test).not.toThrow(Error);
-  });
-});
 
 
