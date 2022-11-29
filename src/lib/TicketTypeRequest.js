@@ -2,6 +2,8 @@
  * Immutable Object.
  */
 
+import { PERMITTED_TICKET_TYPES } from "../constants"
+
 export default class TicketTypeRequest {
   #type
 
@@ -28,5 +30,5 @@ export default class TicketTypeRequest {
     return this.#type
   }
 
-  #Type = ['ADULT', 'CHILD', 'INFANT']
+  #Type = PERMITTED_TICKET_TYPES
 }
