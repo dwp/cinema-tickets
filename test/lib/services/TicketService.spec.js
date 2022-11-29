@@ -20,7 +20,7 @@ describe('TicketService', () => {
 
   context('purchaseTickets', () => {
     it('should call makePayment method of ticketPaymentService', () => {
-      let ticketRequestOne = new TicketTypeRequest('ADULT', 4);
+      const ticketRequestOne = new TicketTypeRequest('ADULT', 4)
       ticketService.purchaseTickets(1, ticketRequestOne)
       sinon.assert.calledOnceWithExactly(makePaymentStub, 1, 0)
     })

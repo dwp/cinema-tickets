@@ -18,8 +18,8 @@ export default class TicketTypeRequest {
       throw new TypeError('noOfTickets must be an integer')
     }
 
-    if(noOfTickets > 20) {
-      throw new Error("max noOfTickets is 20!")
+    if (noOfTickets > 20) {
+      throw new Error('max noOfTickets is 20!')
     }
 
     this.#type = type
