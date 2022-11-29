@@ -1,4 +1,22 @@
-﻿# Objective
+﻿# Notes for the examiner from the candidate
+
+1. I was debating whether to test Class `TicketService` s private methods by using a getter method to access the private method and make it available within the jest testing suite.
+- I have decided not to do this and to instead test the outputs of `TicketService.purchaseTickets()` after consulting the developer community and also in order to keep all Class `TicketService` methods private. Getters are a public method and would violate this constraint.
+
+2. The business rules state that `Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.`.
+- This rule does not state how many infants can sit on an adults lap.
+- I have assumed that an infinite number of infants can sit on an adult's lap. Making ticket requests valid for infant's if an adult is also present.
+- I have decided this as the number of infant's which can fit on each Adult's lap is not defined. So rather than deciding an arbitrary number of children can sit on each Adult's lap (1, 2, 4???) I have settled on allowing any number of infants if an adult is present.
+-If only a finite number of infants can fit on an Adult's lap we could create a Class `TicketService` private method to check that the number of infant's is equal or lesser than the number of adult's.
+
+3. `TicketService.purchaseTickets()` makes requests to `SeatReservationService.reserveSeat()` and `TicketPaymentService.makePayment()` to model ticket seat reservations and purchases respectively..
+- However, these methods do not return anything!
+- I have returned an object representing a successful request as to allow me to test that `TicketService.purchaseTickets()` functions as expected.
+- A more ideal solution would be to have `SeatReservationService.reserveSeat()` and `TicketPaymentService.makePayment()` act like a asynchornous method and return a promise which is reolved on a successful request or rejected if the request fails.
+
+4. Some tests in TicketService.test.js will not test ticket booking requests for child, child and infant or just infant tickets on their own as a previous test confirms that these booking requests will throw a InvalidPurchaseExceptionError as `Child and Infant tickets cannot be purchased without purchasing an Adult ticket.`.
+
+# Objective
 
 This is a coding exercise which will allow you to demonstrate how you code and your approach to a given problem. 
 
@@ -47,21 +65,5 @@ Provide a working implementation of a `TicketService` that:
 - Calculates the correct no of seats to reserve and makes a seat reservation request to the `SeatReservationService`.  
 - Rejects any invalid ticket purchase requests. It is up to you to identify what should be deemed as an invalid purchase request.
 
-## Notes for the examiner from the candidate
 
-1. I was debating whether to test Class `TicketService` s private methods by using a getter method to access the private method and make it available within the jest testing suite.
-- I have decided not to do this and to instead test the outputs of `TicketService.purchaseTickets()` after consulting the developer community and also in order to keep all Class `TicketService` methods private. Getters are a public method and would violate this constraint.
-
-2. The business rules state that `Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.`.
-- This rule does not state how many infants can sit on an adults lap.
-- I have assumed that an infinite number of infants can sit on an adult's lap. Making ticket requests valid for infant's if an adult is also present.
-- I have decided this as the number of infant's which can fit on each Adult's lap is not defined. So rather than deciding an arbitrary number of children can sit on each Adult's lap (1, 2, 4???) I have settled on allowing any number of infants if an adult is present.
--If only a finite number of infants can fit on an Adult's lap we could create a Class `TicketService` private method to check that the number of infant's is equal or lesser than the number of adult's.
-
-3. `TicketService.purchaseTickets()` makes requests to `SeatReservationService.reserveSeat()` and `TicketPaymentService.makePayment()` to model ticket seat reservations and purchases respectively..
-- However, these methods do not return anything!
-- I have returned an object representing a successful request as to allow me to test that `TicketService.purchaseTickets()` functions as expected.
-- A more ideal solution would be to have `SeatReservationService.reserveSeat()` and `TicketPaymentService.makePayment()` act like a asynchornous method and return a promise which is reolved on a successful request or rejected if the request fails.
-
-4. Some tests in TicketService.test.js will not test ticket booking requests for child, child and infant or just infant tickets on their own as a previous test confirms that these booking requests will throw a InvalidPurchaseExceptionError as `Child and Infant tickets cannot be purchased without purchasing an Adult ticket.`.
 
