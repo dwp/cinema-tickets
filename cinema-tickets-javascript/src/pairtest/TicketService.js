@@ -7,16 +7,15 @@ export default class TicketService {
   /**
    * Should only have private methods other than the one below.
    */
-  
-  //@typeDefs
 
+  //@typeDefs
   /**
- * @typedef {Object} bookingObject
- * @property {number} accountId id of account.
- * @property {boolean} bookingSuccessful Boolean value representing a successful booking request.
- * @property {number} totalNoOfSeatsReserved The total number of seats to reserve.
- * @property {number} totalTicketsCost The total payment for all tickets purchased.
- */
+   * @typedef {Object} BookingObject
+   * @property {number} accountId id of account.
+   * @property {boolean} bookingSuccessful Boolean value representing a successful booking request.
+   * @property {number} totalNoOfSeatsReserved The total number of seats to reserve.
+   * @property {number} totalTicketsCost The total payment for all tickets purchased.
+   */
 
   //methods
   // see "README.md "Notes for the examiner from the candidate" 1. for reasoning.
@@ -38,7 +37,7 @@ export default class TicketService {
   /**
    * Throws InvalidPurchaseException if CHILD and/or INFANT tickets purchased without ADULT ticket type.
    *
-   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
+   * @param {Array.<TicketTypeRequest>} allTicketRequestObjects An array of TicketTypeRequest instances to check.
    */
   #checkAdultsPresentForChildrenInfants(allTicketRequestObjects) {
     let adultsPresent = false;
@@ -65,7 +64,7 @@ export default class TicketService {
   /**
    * Throws InvalidPurchaseException if number of tickets purchased is not between 0 exclusive and 20 inclusive.
    *
-   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
+   * @param {Array.<TicketTypeRequest>} allTicketRequestObjects An array of TicketTypeRequest instances to check.
    */
   #countTickets(allTicketRequestObjects) {
     let totalNoOfTickets = 0;
@@ -89,7 +88,7 @@ export default class TicketService {
   /**
    * Calculates the total number of seats to reserve from an array of TicketTypeRequest objects.
    *
-   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
+   * @param {Array.<TicketTypeRequest>} allTicketRequestObjects An array of TicketTypeRequest instances to check.
    *
    * @return {number} TotalNoOfSeats The total number of seats to reserve.
    */
@@ -107,9 +106,9 @@ export default class TicketService {
   /**
    * Calculates the total payment for all tickets purchased from an array of TicketTypeRequest objects.
    *
-   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
+   * @param {Array.<TicketTypeRequest>} allTicketRequestObjects An array of TicketTypeRequest instances to check.
    *
-   * @return {number} totalAmountToPay The total payment for all tickets purchased.
+   * @return {number} totalAmountToPay The total payment in GBP for all tickets purchased.
    */
   #calculateTotalAmountToPay(allTicketRequestObjects) {
     let totalAmountToPay = 0;
@@ -133,9 +132,9 @@ export default class TicketService {
    *
    * @param {number}  accountId id of customer making ticket request.
    * @param {number}  finalNoOfSeatsToReserve The total number of seats to reserve.
-   * @param {number}  totalAmountToPay The total payment for all tickets purchased.
-   * 
-   * @return {Object} bookingObject Object modelling the successful booking requests.
+   * @param {number}  totalAmountToPay The total payment in GBP for all tickets purchased.
+   *
+   * @return {BookingObject} bookingObject Object modelling the successful booking requests.
    */
   #makeBookingRequests(accountId, finalNoOfSeatsToReserve, totalAmountToPay) {
     const seatBookingRequestInstance = new SeatReservationService();
@@ -158,14 +157,16 @@ export default class TicketService {
    * Checks ticket requests for invalid requests using other private methods within Class TicketService. If valid makes requests to TicketPaymentService and SeatReservationService.
    *
    * @param {number}  accountId Id of customer making ticket request.
-   * @param {Object}  ticketTypeRequests Object representing number of ADULT, CHILD and INFANT tickets to purchase.
+   * @param {TicketTypeRequest}  ticketTypeRequests Object representing number of ADULT, CHILD and INFANT tickets to purchase.
+   *
+   * @return {BookingObject} bookingObject Object modelling the successful booking requests.
    */
   purchaseTickets(accountId, ticketTypeRequests) {
     const allTicketRequestObjects = [];
     // throws InvalidPurchaseExceptions if accountId not valid
     this.#checkId(accountId);
 
-    // create new instance of TicketTypeRequest for each ticket type
+    // populate allTicketRequestObjects with TicketTypeRequest instances.
     for (const key in ticketTypeRequests) {
       const ticketRequest = new TicketTypeRequest(key, ticketTypeRequests[key]);
       allTicketRequestObjects.push(ticketRequest);
@@ -199,7 +200,7 @@ export default class TicketService {
       );
       return seatReservationAndPaymentRequests;
     } catch (error) {
-      throw new Error();
+      throw new Error(error);
     }
   }
 }
