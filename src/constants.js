@@ -1,4 +1,4 @@
-const PERMITTED_TICKET_TYPES = Object.freeze['ADULT', 'CHILD', 'INFANT']
+const PERMITTED_TICKET_TYPES = ['ADULT', 'CHILD', 'INFANT']
 
 const PRICE_LIST = Object.freeze({
   ADULT: 20,

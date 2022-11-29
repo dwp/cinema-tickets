@@ -2,7 +2,7 @@
  * Immutable Object.
  */
 
-import { PERMITTED_TICKET_TYPES } from '../constants'
+import { PERMITTED_TICKET_TYPES } from '../constants.js'
 
 export default class TicketTypeRequest {
   #type
@@ -16,6 +16,10 @@ export default class TicketTypeRequest {
 
     if (!Number.isInteger(noOfTickets)) {
       throw new TypeError('noOfTickets must be an integer')
+    }
+
+    if(noOfTickets > 20) {
+      throw new Error("max noOfTickets is 20!")
     }
 
     this.#type = type
