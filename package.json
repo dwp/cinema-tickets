@@ -7,7 +7,7 @@
   },
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:unit": "mocha 'test/**/*.js' --recursive --timeout 60000 --exit",
     "test:lint": "standard"
   },
   "devDependencies": {
