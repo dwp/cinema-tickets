@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import calculateSeatReservation from '../../../src/lib/helpers/calculateSeatReservation.js'
 
-describe.only('calculateSeatReservation', () => {
+describe('calculateSeatReservation', () => {
     let numberOfSeats;
     let ticketRequest
     it('should return a number', () => {
