@@ -15,6 +15,7 @@ export function accountIDValidator (accountID) {
 
 export function requestValidator (request) {
   const errors = []
+  // sum all of the requested tickets
   const totalNumberOfTickets = Object.values(request).reduce((a, b) => a + b)
 
   if (totalNumberOfTickets > MAXIMUM_TICKET_LIMIT) {
