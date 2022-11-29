@@ -1,7 +1,7 @@
-import { MAXIMUM_TICKET_LIMIT } from "../../constants.js"
+import { MAXIMUM_TICKET_LIMIT } from '../../constants.js'
 
 export function accountIDValidator (accountID) {
-  let error;
+  let error
 
   if (accountID !== 0 && !accountID) {
     error = 'AccountID is not provided!'

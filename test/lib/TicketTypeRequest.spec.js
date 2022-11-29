@@ -2,7 +2,6 @@ import { assert } from 'chai'
 import TicketTypeRequest from '../../src/lib/TicketTypeRequest.js'
 
 describe('TicketTypeRequest', () => {
-
   context('constructor', () => {
     it('should throw an error if invalid type is passed', () => {
       assert.throws(() => { new TicketTypeRequest('ELDER', 10) }, 'type must be ADULT, CHILD, or INFANT')

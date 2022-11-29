@@ -11,27 +11,26 @@ export default class TicketService {
    */
 
   purchaseTickets (accountId, ...ticketTypeRequests) {
-    
     const accountIDError = accountIDValidator(accountId)
     if (accountIDError) {
       throw new Error(accountIDError)
     }
-    
+
     const combinedRequest = combineTicketRequests(ticketTypeRequests)
-    const requestErrors = requestValidator(combinedRequest);
-    
-    if(requestErrors.length > 0) {
+    const requestErrors = requestValidator(combinedRequest)
+
+    if (requestErrors.length > 0) {
       throw new Error(`${requestErrors.join(', ')}`)
     }
-    
+
     // spin up connectors now parameters are validated
     const ticketPaymentService = new TicketPaymentService()
-    const seatReservationService = new SeatReservationService();
+    const seatReservationService = new SeatReservationService()
 
     const totalPaymentAmount = calculatePayment(combinedRequest)
     ticketPaymentService.makePayment(accountId, totalPaymentAmount)
 
-    const totalNumberOfSeats = calculateSeatReservation(combinedRequest);
-    seatReservationService.reserveSeat(accountId, totalNumberOfSeats);
+    const totalNumberOfSeats = calculateSeatReservation(combinedRequest)
+    seatReservationService.reserveSeat(accountId, totalNumberOfSeats)
   }
 }

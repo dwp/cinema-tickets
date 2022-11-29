@@ -23,7 +23,7 @@ describe('TicketService', () => {
   })
 
   context('purchaseTickets', () => {
-    let ticketRequest;
+    let ticketRequest
     it('should call makePayment method of ticketPaymentService', () => {
       ticketRequest = new TicketTypeRequest('ADULT', 4)
       ticketService.purchaseTickets(1, ticketRequest)
@@ -44,6 +44,5 @@ describe('TicketService', () => {
       const ticketRequests = [new TicketTypeRequest('INFANT', 9), new TicketTypeRequest('ADULT', 2)]
       assert.throws(() => { ticketService.purchaseTickets(1, ...ticketRequests) }, 'Too many infants! Each infant needs an adult\'s lap to sit on.')
     })
-
   })
 })

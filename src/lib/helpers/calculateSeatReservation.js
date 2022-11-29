@@ -1,3 +1,3 @@
 export default function calculateSeatReservation (ticketRequest) {
-    return ticketRequest['ADULT'] + ticketRequest['CHILD']
+  return ticketRequest.ADULT + ticketRequest.CHILD
 }

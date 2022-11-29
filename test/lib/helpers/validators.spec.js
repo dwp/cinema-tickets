@@ -5,7 +5,7 @@ import { accountIDValidator, requestValidator } from '../../../src/lib/helpers/v
 describe('validators', () => {
   describe('accountIDValidator', () => {
     it('should return no errors for a valid accountID', () => {
-      expect(accountIDValidator(1)).to.be.eq(undefined);
+      expect(accountIDValidator(1)).to.be.eq(undefined)
     })
 
     it('should return an error when AccountID is null', () => {
