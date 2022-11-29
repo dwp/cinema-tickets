@@ -7,6 +7,16 @@ export default class TicketService {
   /**
    * Should only have private methods other than the one below.
    */
+  
+  //@typeDefs
+
+  /**
+ * @typedef {Object} bookingObject
+ * @property {number} accountId id of account.
+ * @property {boolean} bookingSuccessful Boolean value representing a successful booking request.
+ * @property {number} totalNoOfSeatsReserved The total number of seats to reserve.
+ * @property {number} totalTicketsCost The total payment for all tickets purchased.
+ */
 
   //methods
   // see "README.md "Notes for the examiner from the candidate" 1. for reasoning.
@@ -99,7 +109,7 @@ export default class TicketService {
    *
    * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
    *
-   * @return {number} totalAmountToPay The total  payment for all tickets purchased.
+   * @return {number} totalAmountToPay The total payment for all tickets purchased.
    */
   #calculateTotalAmountToPay(allTicketRequestObjects) {
     let totalAmountToPay = 0;
@@ -116,6 +126,32 @@ export default class TicketService {
       }
     });
     return totalAmountToPay;
+  }
+
+  /**
+   * Makes seat reservation requests to SeatReservationService.reserveSeat() and payment requests to TicketPaymentService.makePayment().
+   *
+   * @param {number}  accountId id of customer making ticket request.
+   * @param {number}  finalNoOfSeatsToReserve The total number of seats to reserve.
+   * @param {number}  totalAmountToPay The total payment for all tickets purchased.
+   * 
+   * @return {Object} bookingObject Object modelling the successful booking requests.
+   */
+  #makeBookingRequests(accountId, finalNoOfSeatsToReserve, totalAmountToPay) {
+    const seatBookingRequestInstance = new SeatReservationService();
+    seatBookingRequestInstance.reserveSeat(accountId, finalNoOfSeatsToReserve);
+
+    const ticketPaymentRequestInstance = new TicketPaymentService();
+    ticketPaymentRequestInstance.makePayment(accountId, totalAmountToPay);
+
+    const bookingObject = {
+      accountId: accountId,
+      bookingSuccessful: true,
+      totalNoOfSeatsReserved: finalNoOfSeatsToReserve,
+      totalTicketsCost: totalAmountToPay,
+    };
+
+    return bookingObject;
   }
 
   /**
@@ -156,23 +192,12 @@ export default class TicketService {
     //assume successful so give user feedback on successful seat reservation.
     // see "README.md "Notes for the examiner from the candidate" 3. for reasoning.
     try {
-      const seatBookingRequestInstance = new SeatReservationService();
-      seatBookingRequestInstance.reserveSeat(
+      const seatReservationAndPaymentRequests = this.#makeBookingRequests(
         accountId,
-        finalNoOfSeatsToReserve
+        finalNoOfSeatsToReserve,
+        totalAmountToPay
       );
-
-      const ticketPaymentRequestInstance = new TicketPaymentService();
-      ticketPaymentRequestInstance.makePayment(accountId, totalAmountToPay);
-
-      const returnBody = {
-        accountId: accountId,
-        bookingSuccessful: true,
-        totalNoOfSeatsReserved: finalNoOfSeatsToReserve,
-        totalTicketsCost: totalAmountToPay,
-      };
-
-      return returnBody;
+      return seatReservationAndPaymentRequests;
     } catch (error) {
       throw new Error();
     }
