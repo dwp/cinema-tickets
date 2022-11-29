@@ -1,5 +1,6 @@
 import TicketTypeRequest from "./lib/TicketTypeRequest.js";
 import InvalidPurchaseException from "./lib/InvalidPurchaseException.js";
+import SeatReservationService from "../thirdparty/seatbooking/SeatReservationService.js";
 
 /*
 Provide a working implementation of a `TicketService` that:
@@ -29,15 +30,8 @@ export default class TicketService {
    * Should only have private methods other than the one below.
    */
 
-  //variables
-
-  /**
-   * Array of Ticket Request objects for additional processing.
-   * @type {Object[]} An array of TicketTypeRequest objects.
-   */
-  #allTicketRequestObjects = [];
-
   //methods
+  // see "README.md "Notes for the examiner from the candidate" 1. for reasoning.
 
   /**
    * Throws InvalidPurchaseError if accountId is not valid.
@@ -105,25 +99,68 @@ export default class TicketService {
   }
 
   /**
+   * Calculates the total number of seats to reserve from an array of TicketTypeRequest objects.
+   *
+   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
+   *
+   * @return {number} TotalNoOfSeats The total number of seats to reserve.
+   */
+  #calculateNoOfSeats(arrTicketRequests) {
+    let TotalNoOfSeats = 0;
+    arrTicketRequests.forEach((request) => {
+      if (request.getTicketType() !== "INFANT") {
+        const noOfSeats = request.getNoOfTickets();
+        TotalNoOfSeats += noOfSeats;
+      }
+    });
+    return TotalNoOfSeats;
+  }
+
+  /**
    * Checks ticket requests for invalid requests using other private methods within Class TicketService. If valid makes requests to TicketPaymentService and SeatReservationService.
    *
    * @param {number}  accountId Id of customer making ticket request.
    * @param {Object}  ticketTypeRequests Object representing number of ADULT, CHILD and INFANT tickets to purchase.
    */
   purchaseTickets(accountId, ticketTypeRequests) {
+    const allTicketRequestObjects = [];
     // throws InvalidPurchaseExceptions if accountId not valid
     this.#checkId(accountId);
 
     // create new instance of TicketTypeRequest for each ticket type
     for (const key in ticketTypeRequests) {
       const ticketRequest = new TicketTypeRequest(key, ticketTypeRequests[key]);
-      this.#allTicketRequestObjects.push(ticketRequest);
+      allTicketRequestObjects.push(ticketRequest);
     }
 
     //throws InvalidPurchaseExceptions if adults not present for infants or children
-    this.#checkAdultsPresentForChildrenInfants(this.#allTicketRequestObjects);
+    this.#checkAdultsPresentForChildrenInfants(allTicketRequestObjects);
 
     //throws InvalidPurchaseExceptions if total number of tickets is not between 0 exclusive and 20 inclusive.
-    this.#countTickets(this.#allTicketRequestObjects);
+    this.#countTickets(allTicketRequestObjects);
+
+    //calculate number of seats to reserve
+    // see "README.md "Notes for the examiner from the candidate" 2. for reasoning.
+    const finalNoOfSeatsToReserve = this.#calculateNoOfSeats(
+      allTicketRequestObjects
+    );
+
+    //make seatbooking request
+    try {
+      const seatBookingRequestInstance = new SeatReservationService();
+      seatBookingRequestInstance.reserveSeat(
+        accountId,
+        finalNoOfSeatsToReserve
+      );
+      //assume successful so give user feedback on successful seat reservation.
+      // see "README.md "Notes for the examiner from the candidate" 3. for reasoning.
+      const returnBody = {
+        accountId: accountId,
+        bookingSuccessful: true,
+        totalNoOfSeatsReserved: finalNoOfSeatsToReserve,
+      };
+
+      return returnBody;
+    } catch (error) {}
   }
 }

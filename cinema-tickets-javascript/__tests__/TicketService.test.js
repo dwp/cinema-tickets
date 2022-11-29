@@ -7,9 +7,8 @@ import TicketService from "../src/pairtest/TicketService";
 - DONE - Child and Infant tickets cannot be purchased without purchasing an Adult ticket.
 - DONE - Only a maximum of 20 tickets that can be purchased at a time.
 - DONE -  Multiple tickets can be purchased at any given time.
-- Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
+- DONE -Infants do not pay for a ticket and are not allocated a seat. They will be sitting on an Adult's lap.
 - The ticket prices are based on the type of ticket (see table below).
-- The ticket purchaser declares how many and what type of tickets they want to buy.
 
 total number seat request (not infants) -> seat request
 payment calc
@@ -79,12 +78,10 @@ describe("TicketTypeRequest", () => {
     test("throws an InvalidPurchaseException error for negative numbers of tickets", () => {
       const test = () => {
         const customer = new TicketTypeRequest("ADULT", -5);
-        
       };
       expect(test).toThrow(InvalidPurchaseException);
       try {
         const customer = new TicketTypeRequest("ADULT", -5);
-        
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidPurchaseException);
         expect(error.subType).toBe("ticketNumberError");
@@ -196,12 +193,82 @@ describe("TicketTypeRequest", () => {
       try {
         const customer = new TicketService();
         customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 });
-        expect(customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 })).toThrow(InvalidPurchaseException)
+        expect(
+          customer.purchaseTickets(1, { ADULT: 18, INFANT: 2, CHILD: 1 })
+        ).toThrow(InvalidPurchaseException);
       } catch (error) {
         expect(error).toBeInstanceOf(InvalidPurchaseException);
         expect(error.subType).toBe("invalidNumberOfTicketsError");
         expect(error.message).toBe("Cannot purchase more than 20 tickets.");
       }
+    });
+  });
+
+  // see "README.ms "Notes for the examiner from the candidate" 2. for reasoning.
+  describe("SeatReservationService", () => {
+    test("SeatReservationService returns correct booking object for seat reservations of ADULTS only", () => {
+      const test = () => {
+        const customer = new TicketService();
+        const actual = customer.purchaseTickets(1, {
+          ADULT: 1,
+          INFANT: 0,
+          CHILD: 0,
+        });
+        expect(actual).toEqual({
+          accountId: 1,
+          bookingSuccessful: true,
+          totalNoOfSeatsReserved: 1,
+        });
+      };
+      expect(test).not.toThrow(Error);
+    });
+    test("SeatReservationService returns correct booking object for seat reservations of ADULTS and CHILDREN only", () => {
+      const test = () => {
+        const customer = new TicketService();
+        const actual = customer.purchaseTickets(2, {
+          ADULT: 1,
+          INFANT: 0,
+          CHILD: 3,
+        });
+        expect(actual).toEqual({
+          accountId: 2,
+          bookingSuccessful: true,
+          totalNoOfSeatsReserved: 4,
+        });
+      };
+      expect(test).not.toThrow(Error);
+    });
+    test("SeatReservationService returns correct booking object for seat reservations of ADULTS and INFANT only", () => {
+      const test = () => {
+        const customer = new TicketService();
+        const actual = customer.purchaseTickets(3, {
+          ADULT: 5,
+          INFANT: 3,
+          CHILD: 0,
+        });
+        expect(actual).toEqual({
+          accountId: 3,
+          bookingSuccessful: true,
+          totalNoOfSeatsReserved: 5,
+        });
+      };
+      expect(test).not.toThrow(Error);
+    });
+    test("SeatReservationService returns correct booking object for seat reservations of ADULT,  INFANT and CHILD", () => {
+      const test = () => {
+        const customer = new TicketService();
+        const actual = customer.purchaseTickets(4, {
+          ADULT: 5,
+          INFANT: 3,
+          CHILD: 2,
+        });
+        expect(actual).toEqual({
+          accountId: 4,
+          bookingSuccessful: true,
+          totalNoOfSeatsReserved: 7,
+        });
+      };
+      expect(test).not.toThrow(Error);
     });
   });
 });
