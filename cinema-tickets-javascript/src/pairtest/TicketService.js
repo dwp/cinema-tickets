@@ -31,6 +31,7 @@ export default class TicketService {
    */
 
   //methods
+  // see "README.md "Notes for the examiner from the candidate" 1. for reasoning.
 
   /**
    * Throws InvalidPurchaseError if accountId is not valid.
@@ -139,19 +140,20 @@ export default class TicketService {
     this.#countTickets(allTicketRequestObjects);
 
     //calculate number of seats to reserve
+    // see "README.md "Notes for the examiner from the candidate" 2. for reasoning.
     const finalNoOfSeatsToReserve = this.#calculateNoOfSeats(
       allTicketRequestObjects
     );
 
     //make seatbooking request
-    // see "README.ms "Notes for the examiner from the candidate" 2. for reasoning.
     try {
       const seatBookingRequestInstance = new SeatReservationService();
       seatBookingRequestInstance.reserveSeat(
         accountId,
         finalNoOfSeatsToReserve
       );
-      //assume successful so give user feedback on successful seat reservation
+      //assume successful so give user feedback on successful seat reservation.
+      // see "README.md "Notes for the examiner from the candidate" 3. for reasoning.
       const returnBody = {
         accountId: accountId,
         bookingSuccessful: true,
