@@ -5,8 +5,8 @@ export function combineTicketRequests (ticketRequests) {
     INFANT: 0
   }
 
-  if (!ticketRequests) {
-    throw new Error('Error in combineTicketRequests: no requests were provided!')
+  if (!ticketRequests || Object.keys(ticketRequests).length < 1) {
+    throw new Error('Error in combineTicketRequests: no valid requests were provided!')
   }
 
   for (const request of ticketRequests) {

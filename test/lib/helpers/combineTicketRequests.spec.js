@@ -3,8 +3,12 @@ import { assert, expect } from 'chai'
 import TicketTypeRequest from '../../../src/lib/TicketTypeRequest.js'
 
 describe('combineTicketRequests', () => {
-  it('should throw an error if no requests passed', () => {
-    assert.throws(() => { combineTicketRequests() }, 'Error in combineTicketRequests: no requests were provided!')
+  it('should throw an error if no requests passed - undefined', () => {
+    assert.throws(() => { combineTicketRequests() }, 'Error in combineTicketRequests: no valid requests were provided!')
+  })
+
+  it('should throw an error if passed an empty object', () => {
+    assert.throws(() => { combineTicketRequests({}) }, 'Error in combineTicketRequests: no valid requests were provided!')
   })
 
   it('should handle a single ticket', () => {
