@@ -8,8 +8,8 @@ export default class TicketService {
 
   purchaseTickets (accountId, ...ticketTypeRequests) {
     const ticketPaymentService = new TicketPaymentService();
-
-    ticketPaymentService.makePayment()
+    
+    ticketPaymentService.makePayment(accountId, 0)
     // throws InvalidPurchaseException
   }
 }
