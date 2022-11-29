@@ -15,10 +15,14 @@ export default class TicketService {
     if (accountIDErrors.length > 0) {
       throw new Error(`${accountIDErrors.join(', ')}`)
     }
-    const combinedRequest = combineTicketRequests(ticketTypeRequests)
 
-    const requestErrors = requestValidator(combinedRequest)
+    const combinedRequest = combineTicketRequests(ticketTypeRequests)
+    const requestErrors = requestValidator(combinedRequest);
+
+    if(requestErrors.length > 0) {
+      throw new Error(`${requestErrors.join(', ')}`)
+    }
+
     ticketPaymentService.makePayment(accountId, 0)
-    // throws InvalidPurchaseException
   }
 }

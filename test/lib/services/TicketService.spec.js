@@ -20,13 +20,19 @@ describe('TicketService', () => {
 
   context('purchaseTickets', () => {
     it('should call makePayment method of ticketPaymentService', () => {
-      const ticketRequestOne = new TicketTypeRequest('ADULT', 4)
-      ticketService.purchaseTickets(1, ticketRequestOne)
+      const ticketRequest= new TicketTypeRequest('ADULT', 4)
+      ticketService.purchaseTickets(1, ticketRequest)
       sinon.assert.calledOnceWithExactly(makePaymentStub, 1, 0)
     })
 
     it('should throw an error if accountID is invalid', () => {
       assert.throws(() => { ticketService.purchaseTickets(0, 0) }, 'AccountID cannot be zero!')
+    })
+
+    it('should throw an error if given an invalid request', () => {
+      const ticketRequest = new TicketTypeRequest('INFANT', 9)
+      const ticketRequestTwo = new TicketTypeRequest('ADULT', 2)
+      assert.throws(() => { ticketService.purchaseTickets(1, ticketRequest, ticketRequestTwo) }, 'Too many infants! Each infant needs an adult\'s lap to sit on.')
     })
   })
 })
