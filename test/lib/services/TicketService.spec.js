@@ -3,6 +3,7 @@ import { assert } from 'chai'
 
 import TicketPaymentService from '../../../src/thirdparty/paymentgateway/TicketPaymentService.js'
 import TicketService from '../../../src/lib/services/TicketService.js'
+import TicketTypeRequest from '../../../src/lib/TicketTypeRequest.js'
 
 describe('TicketService', () => {
   let makePaymentStub
@@ -19,7 +20,8 @@ describe('TicketService', () => {
 
   context('purchaseTickets', () => {
     it('should call makePayment method of ticketPaymentService', () => {
-      ticketService.purchaseTickets(1, 0)
+      let ticketRequestOne = new TicketTypeRequest('ADULT', 4);
+      ticketService.purchaseTickets(1, ticketRequestOne)
       sinon.assert.calledOnceWithExactly(makePaymentStub, 1, 0)
     })
 
