@@ -63,3 +63,5 @@ Provide a working implementation of a `TicketService` that:
 - I have returned an object representing a successful request as to allow me to test that `TicketService.purchaseTickets()` functions as expected.
 - A more ideal solution would be to have `SeatReservationService.reserveSeat()` and `TicketPaymentService.makePayment()` act like a asynchornous method and return a promise which is reolved on a successful request or rejected if the request fails.
 
+4. Some tests in TicketService.test.js will not test ticket booking requests for child, child and infant or just infant tickets on their own as a previous test confirms that these booking requests will throw a InvalidPurchaseExceptionError as `Child and Infant tickets cannot be purchased without purchasing an Adult ticket.`.
+

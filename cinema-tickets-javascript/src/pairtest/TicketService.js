@@ -1,6 +1,7 @@
 import TicketTypeRequest from "./lib/TicketTypeRequest.js";
 import InvalidPurchaseException from "./lib/InvalidPurchaseException.js";
 import SeatReservationService from "../thirdparty/seatbooking/SeatReservationService.js";
+import TicketPaymentService from "../thirdparty/paymentgateway/TicketPaymentService.js";
 
 /*
 Provide a working implementation of a `TicketService` that:
@@ -50,12 +51,12 @@ export default class TicketService {
   /**
    * Throws InvalidPurchaseException if CHILD and/or INFANT tickets purchased without ADULT ticket type.
    *
-   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
+   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
    */
-  #checkAdultsPresentForChildrenInfants(arrTicketRequests) {
+  #checkAdultsPresentForChildrenInfants(allTicketRequestObjects) {
     let adultsPresent = false;
     let childrenOrInfantsPresent = false;
-    arrTicketRequests.forEach((request) => {
+    allTicketRequestObjects.forEach((request) => {
       if (request.getTicketType() === "ADULT" && request.getNoOfTickets() > 0) {
         adultsPresent = true;
       }
@@ -77,11 +78,11 @@ export default class TicketService {
   /**
    * Throws InvalidPurchaseException if number of tickets purchased is not between 0 exclusive and 20 inclusive.
    *
-   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
+   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
    */
-  #countTickets(arrTicketRequests) {
+  #countTickets(allTicketRequestObjects) {
     let totalNoOfTickets = 0;
-    arrTicketRequests.forEach((request) => {
+    allTicketRequestObjects.forEach((request) => {
       const noOfTickets = request.getNoOfTickets();
       totalNoOfTickets += noOfTickets;
     });
@@ -101,19 +102,43 @@ export default class TicketService {
   /**
    * Calculates the total number of seats to reserve from an array of TicketTypeRequest objects.
    *
-   * @param {Object[]} arrTicketRequests An array of ticketTypeRequest object to check.
+   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
    *
    * @return {number} TotalNoOfSeats The total number of seats to reserve.
    */
-  #calculateNoOfSeats(arrTicketRequests) {
-    let TotalNoOfSeats = 0;
-    arrTicketRequests.forEach((request) => {
+  #calculateNoOfSeats(allTicketRequestObjects) {
+    let totalNoOfSeats = 0;
+    allTicketRequestObjects.forEach((request) => {
       if (request.getTicketType() !== "INFANT") {
         const noOfSeats = request.getNoOfTickets();
-        TotalNoOfSeats += noOfSeats;
+        totalNoOfSeats += noOfSeats;
       }
     });
-    return TotalNoOfSeats;
+    return totalNoOfSeats;
+  }
+
+  /**
+   * Calculates the total payment for all tickets purchased from an array of TicketTypeRequest objects.
+   *
+   * @param {Object[]} allTicketRequestObjects An array of ticketTypeRequest object to check.
+   *
+   * @return {number} totalAmountToPay The total  payment for all tickets purchased.
+   */
+  #calculateTotalAmountToPay(allTicketRequestObjects) {
+    let totalAmountToPay = 0;
+    allTicketRequestObjects.forEach((request) => {
+      if (request.getTicketType() === "ADULT") {
+        const amountToPayPerType = request.getNoOfTickets() * 20;
+        totalAmountToPay += amountToPayPerType;
+      } else if (request.getTicketType() === "CHILD") {
+        const amountToPayPerType = request.getNoOfTickets() * 10;
+        totalAmountToPay += amountToPayPerType;
+      } else if (request.getTicketType() === "INFANT") {
+        const amountToPayPerType = request.getNoOfTickets() * 0;
+        totalAmountToPay += amountToPayPerType;
+      }
+    });
+    return totalAmountToPay;
   }
 
   /**
@@ -145,22 +170,34 @@ export default class TicketService {
       allTicketRequestObjects
     );
 
-    //make seatbooking request
+    //calculate total amount to pay for all tickets
+    const totalAmountToPay = this.#calculateTotalAmountToPay(
+      allTicketRequestObjects
+    );
+
+    //make seatbooking and payment requests
+    //assume successful so give user feedback on successful seat reservation.
+    // see "README.md "Notes for the examiner from the candidate" 3. for reasoning.
     try {
       const seatBookingRequestInstance = new SeatReservationService();
       seatBookingRequestInstance.reserveSeat(
         accountId,
         finalNoOfSeatsToReserve
       );
-      //assume successful so give user feedback on successful seat reservation.
-      // see "README.md "Notes for the examiner from the candidate" 3. for reasoning.
+
+      const ticketPaymentRequestInstance = new TicketPaymentService();
+      ticketPaymentRequestInstance.makePayment(accountId, totalAmountToPay);
+
       const returnBody = {
         accountId: accountId,
         bookingSuccessful: true,
         totalNoOfSeatsReserved: finalNoOfSeatsToReserve,
+        totalTicketsCost: totalAmountToPay,
       };
 
       return returnBody;
-    } catch (error) {}
+    } catch (error) {
+      throw new Error();
+    }
   }
 }

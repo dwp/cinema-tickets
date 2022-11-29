@@ -203,7 +203,8 @@ describe("TicketService.purchaseTickets() -> #countTickets", () => {
   });
 });
 
-// see "README.ms "Notes for the examiner from the candidate" 2. for reasoning.
+// see "README.md "Notes for the examiner from the candidate" 2. for reasoning.
+// see "README.md "Notes for the examiner from the candidate" 4. for reasoning.
 describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
   test("SeatReservationService returns correct booking object for seat reservations of ADULTS only", () => {
     const test = () => {
@@ -217,6 +218,7 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
         accountId: 1,
         bookingSuccessful: true,
         totalNoOfSeatsReserved: 1,
+        totalTicketsCost: 20,
       });
     };
     expect(test).not.toThrow(Error);
@@ -233,6 +235,7 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
         accountId: 2,
         bookingSuccessful: true,
         totalNoOfSeatsReserved: 4,
+        totalTicketsCost: 50,
       });
     };
     expect(test).not.toThrow(Error);
@@ -249,6 +252,7 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
         accountId: 3,
         bookingSuccessful: true,
         totalNoOfSeatsReserved: 5,
+        totalTicketsCost: 100,
       });
     };
     expect(test).not.toThrow(Error);
@@ -265,12 +269,83 @@ describe("TicketService.purchaseTickets() -> SeatReservationService", () => {
         accountId: 4,
         bookingSuccessful: true,
         totalNoOfSeatsReserved: 7,
+        totalTicketsCost: 120,
       });
     };
     expect(test).not.toThrow(Error);
   });
 });
 
-describe("TicketService.purchaseTickets() -> TicketPaymentService")
+// see "README.md "Notes for the examiner from the candidate" 4. for reasoning.
+describe("TicketService.purchaseTickets() -> TicketPaymentService", () => {
+  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS only", () => {
+    const test = () => {
+      const customer = new TicketService();
+      const actual = customer.purchaseTickets(1, {
+        ADULT: 1,
+        INFANT: 0,
+        CHILD: 0,
+      });
+      expect(actual).toEqual({
+        accountId: 1,
+        bookingSuccessful: true,
+        totalNoOfSeatsReserved: 1,
+        totalTicketsCost: 20,
+      });
+    };
+    expect(test).not.toThrow(Error);
+  });
+  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS and CHILD", () => {
+    const test = () => {
+      const customer = new TicketService();
+      const actual = customer.purchaseTickets(2, {
+        ADULT: 3,
+        INFANT: 0,
+        CHILD: 2,
+      });
+      expect(actual).toEqual({
+        accountId: 2,
+        bookingSuccessful: true,
+        totalNoOfSeatsReserved: 5,
+        totalTicketsCost: 80,
+      });
+    };
+    expect(test).not.toThrow(Error);
+  });
+  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS and INFANT", () => {
+    const test = () => {
+      const customer = new TicketService();
+      const actual = customer.purchaseTickets(3, {
+        ADULT: 3,
+        INFANT: 2,
+        CHILD: 0,
+      });
+      expect(actual).toEqual({
+        accountId: 3,
+        bookingSuccessful: true,
+        totalNoOfSeatsReserved: 3,
+        totalTicketsCost: 60,
+      });
+    };
+    expect(test).not.toThrow(Error);
+  });
+  test("TicketPaymentSystem returns correct booking object for ticket payments of ADULTS, CHILD and INFANT", () => {
+    const test = () => {
+      const customer = new TicketService();
+      const actual = customer.purchaseTickets(4, {
+        ADULT: 3,
+        INFANT: 2,
+        CHILD: 2,
+      });
+      expect(actual).toEqual({
+        accountId: 4,
+        bookingSuccessful: true,
+        totalNoOfSeatsReserved: 5,
+        totalTicketsCost: 80,
+      });
+    };
+    expect(test).not.toThrow(Error);
+  });
+});
 
 //Calculates the correct no of seats to reserve and makes a seat reservation request to the SeatReservationService.
