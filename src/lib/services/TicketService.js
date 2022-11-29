@@ -1,5 +1,5 @@
-import TicketTypeRequest from './lib/TicketTypeRequest.js'
-import InvalidPurchaseException from './lib/InvalidPurchaseException.js'
+import TicketTypeRequest from './lib/TicketTypeRequest.js.js'
+import InvalidPurchaseException from './lib/InvalidPurchaseException.js.js'
 
 export default class TicketService {
   /**
