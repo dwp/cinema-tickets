@@ -1,3 +1,5 @@
+import { MAXIMUM_TICKET_LIMIT } from "../../constants.js"
+
 export function accountIDValidator (accountID) {
   const errors = []
 
@@ -15,8 +17,8 @@ export function requestValidator (request) {
   const errors = []
   const totalNumberOfTickets = Object.values(request).reduce((a, b) => a + b)
 
-  if (totalNumberOfTickets > 20) {
-    errors.push('Max number of tickets available to purchase at once is 20!')
+  if (totalNumberOfTickets > MAXIMUM_TICKET_LIMIT) {
+    errors.push(`Max number of tickets available to purchase at once is ${MAXIMUM_TICKET_LIMIT}!`)
   }
 
   if (request.CHILD === totalNumberOfTickets) {
