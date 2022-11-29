@@ -30,9 +30,8 @@ describe('TicketService', () => {
     })
 
     it('should throw an error if given an invalid request', () => {
-      const ticketRequest = new TicketTypeRequest('INFANT', 9)
-      const ticketRequestTwo = new TicketTypeRequest('ADULT', 2)
-      assert.throws(() => { ticketService.purchaseTickets(1, ticketRequest, ticketRequestTwo) }, 'Too many infants! Each infant needs an adult\'s lap to sit on.')
+      const ticketRequests = [new TicketTypeRequest('INFANT', 9), new TicketTypeRequest('ADULT', 2)]
+      assert.throws(() => { ticketService.purchaseTickets(1, ...ticketRequests) }, 'Too many infants! Each infant needs an adult\'s lap to sit on.')
     })
   })
 })
