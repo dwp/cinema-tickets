@@ -2,7 +2,7 @@
  * Immutable Object.
  */
 
-import { PERMITTED_TICKET_TYPES } from "../constants"
+import { PERMITTED_TICKET_TYPES } from '../constants'
 
 export default class TicketTypeRequest {
   #type
