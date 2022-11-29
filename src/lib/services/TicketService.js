@@ -1,5 +1,3 @@
-import TicketTypeRequest from '../TicketTypeRequest.js'
-import InvalidPurchaseException from '../InvalidPurchaseException.js'
 import TicketPaymentService from '../../thirdparty/paymentgateway/TicketPaymentService.js'
 import { accountIDValidator, requestValidator } from '../helpers/validators.js'
 import { combineTicketRequests } from '../helpers/combineTicketRequests.js'
