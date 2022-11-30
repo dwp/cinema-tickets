@@ -8,9 +8,11 @@ describe('ticketRoutes', () => {
         app = {
             post: sinon.spy()
         }
-        ticketRoutes(app);
     });
+
     it('should call post route', () => {
+        ticketRoutes(app);
+
         sinon.assert.calledOnceWithMatch(app.post, '/tickets', Function)
     });
 });

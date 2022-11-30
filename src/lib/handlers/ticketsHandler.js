@@ -20,5 +20,5 @@ export function ticketsHandler (ticketsRequestBody) {
     }
 
     const ticketService = new TicketService();
-    return ticketService.purchaseTickets(accountId, ...ticketRequests)
+    return ticketService.purchaseTickets(accountId, ...transformedTicketRequests)
 }
