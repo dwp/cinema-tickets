@@ -6,10 +6,10 @@
     "node": "16.11.1"
   },
   "type": "module",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
     "test:unit": "mocha 'test/**/*.js' --recursive --timeout 60000 --exit",
     "test:lint": "standard"
   },
