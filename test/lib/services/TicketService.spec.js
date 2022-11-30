@@ -1,5 +1,5 @@
 import * as sinon from 'sinon'
-import { assert } from 'chai'
+import { assert, expect } from 'chai'
 
 import TicketPaymentService from '../../../src/thirdparty/paymentgateway/TicketPaymentService.js'
 import SeatReservationService from '../../../src/thirdparty/seatbooking/SeatReservationService.js'
@@ -34,6 +34,15 @@ describe('TicketService', () => {
       ticketRequest = new TicketTypeRequest('ADULT', 4)
       ticketService.purchaseTickets(1, ticketRequest)
       sinon.assert.calledOnceWithExactly(reserveSeatStub, 1, 4)
+    })
+
+    it('should return success with message', () => {
+      ticketRequest = new TicketTypeRequest('ADULT', 4)
+      let result = ticketService.purchaseTickets(1, ticketRequest)
+      expect(result).to.be.deep.eq({
+        code: 200,
+        message: "You have successfully reserved 4 seats for £80."
+      })
     })
 
     it('should throw an error if accountID is invalid', () => {
