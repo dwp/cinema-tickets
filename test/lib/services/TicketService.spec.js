@@ -38,10 +38,10 @@ describe('TicketService', () => {
 
     it('should return success with message', () => {
       ticketRequest = new TicketTypeRequest('ADULT', 4)
-      let result = ticketService.purchaseTickets(1, ticketRequest)
+      const result = ticketService.purchaseTickets(1, ticketRequest)
       expect(result).to.be.deep.eq({
         code: 200,
-        message: "You have successfully reserved 4 seats for £80."
+        message: 'You have successfully reserved 4 seats for £80.'
       })
     })
 

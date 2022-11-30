@@ -36,7 +36,7 @@ export default class TicketService {
     const plural = totalNumberOfSeats > 1 ? 'seats' : 'seat'
 
     return {
-      code: 200, 
+      code: 200,
       message: `You have successfully reserved ${totalNumberOfSeats} ${plural} for £${totalPaymentAmount}.`
     }
   }

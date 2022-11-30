@@ -1,4 +1,4 @@
-import { ticketRoutes } from "./tickets.js"
+import { ticketRoutes } from './tickets.js'
 export function router (app) {
-    ticketRoutes(app)
+  ticketRoutes(app)
 };
