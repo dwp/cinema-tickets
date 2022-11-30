@@ -46,6 +46,16 @@ describe('validators', () => {
       expect(requestValidator(request)).to.be.deep.eq(['Max number of tickets available to purchase at once is 20!'])
     })
 
+    it('should return an error if 0 tickets requested', () => {
+      const request = {
+        ADULT: 0,
+        CHILD: 0,
+        INFANT: 0
+      }
+
+      expect(requestValidator(request)).to.be.deep.eq(['No tickets were requested!'])
+    })
+
     it('should return an error when children are not accompanied by an adult', () => {
       const request = {
         ADULT: 0,
