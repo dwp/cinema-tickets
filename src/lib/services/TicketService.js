@@ -32,5 +32,12 @@ export default class TicketService {
 
     const totalNumberOfSeats = calculateSeatReservation(combinedRequest)
     seatReservationService.reserveSeat(accountId, totalNumberOfSeats)
+
+    const plural = totalNumberOfSeats > 1 ? 'seats' : 'seat'
+
+    return {
+      code: 200, 
+      message: `You have successfully reserved ${totalNumberOfSeats} ${plural} for £${totalPaymentAmount}.`
+    }
   }
 }
