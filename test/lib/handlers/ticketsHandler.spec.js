@@ -2,6 +2,7 @@ import { assert, expect } from "chai";
 import sinon from "sinon";
 import { ticketsHandler } from "../../../src/lib/handlers/ticketsHandler.js";
 import TicketService from "../../../src/lib/services/TicketService.js"
+import TicketTypeRequest from "../../../src/lib/TicketTypeRequest.js";
 
 describe('ticketsHandler', () => {
     let app;
@@ -30,8 +31,9 @@ describe('ticketsHandler', () => {
 
     it('should call purchase tickets', () => {
         const result = ticketsHandler(testRequest);
+        const expectedRequest = new TicketTypeRequest('ADULT', 1)
 
-        sinon.assert.calledOnceWithExactly(purchaseTicketsStub, 1, { type: 'ADULT', noOfTickets: 1})
+        sinon.assert.calledOnceWithMatch(purchaseTicketsStub, 1, expectedRequest)
         expect(result).to.be.deep.eq({
             code: 200,
             message: "success"
