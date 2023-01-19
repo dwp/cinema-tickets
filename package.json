@@ -15,5 +15,8 @@
     "eslint": "^8.32.0",
     "jest": "28.1.1",
     "mocha": "10.0.0"
+  },
+  "dependencies": {
+    "winston": "^3.8.2"
   }
 }
