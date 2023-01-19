@@ -25,7 +25,7 @@ A simple NodeJS/Express API has been included for testing purposes
 To run API - `npm start` then 
 - run the following command to test success
 ```
-curl --location --request POST 'http://localhost:8080' \
+curl --location --request POST 'http://localhost:8080/tickets' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "accountid": 123,
@@ -41,7 +41,7 @@ curl --location --request POST 'http://localhost:8080' \
 - run the following command to view error response (make changes to the data-raw parameters to visualise error scenarios)
 
 ```
-curl --location --request POST 'http://localhost:8080' \
+curl --location --request POST 'http://localhost:8080/tickets' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "accountid": "MYACC",
