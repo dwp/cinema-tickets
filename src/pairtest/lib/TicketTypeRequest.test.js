@@ -55,7 +55,7 @@ describe("TicketTypeRequest", () => {
         });
     })
     
-    describe('success scenarios', () => {
+    describe("success scenarios", () => {
         const ticketRequest = new TicketTypeRequest("ADULT", 1);
         test("should return the number of tickets in a request", () => { 
             const numOfTickets = ticketRequest.getNoOfTickets();
