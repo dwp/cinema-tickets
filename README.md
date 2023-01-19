@@ -17,3 +17,39 @@ Throws InvalidPurchaseException for:
 Throws TypeError for:
  - incorrectly formed number of tickets (not an integer)
  - incorrectly formed number of seats (not an integer)
+
+## API
+A simple NodeJS/Express API has been included for testing purposes
+To run API - `npm start` then 
+- run the following command to test success
+```
+curl --location --request POST 'http://localhost:8080' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "accountid": 123,
+    "ticketRequests": [
+        {
+            "ticketType": "ADULT",
+            "noOfTickets": 1
+        }
+    ]
+}'
+```
+
+- run the following command to view error response (make changes to the data-raw parameters to visualise error scenarios)
+
+```
+curl --location --request POST 'http://localhost:8080' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "accountid": "MYACC",
+    "ticketRequests": [
+        {
+            "ticketType": "ADULT",
+            "noOfTickets": 1
+        }
+    ]
+
+
+}'
+```
