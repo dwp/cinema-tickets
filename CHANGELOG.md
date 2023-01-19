@@ -2,6 +2,9 @@
 All notable changes to this project to be documented in this file
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v1.0.5
+Add in API tests to aid automated testing
+
 ## v1.0.4
 Add Dockerfile for containerisation
 

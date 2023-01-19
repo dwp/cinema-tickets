@@ -9,11 +9,12 @@ import * as services from "../../test/service-objects.js";
 // allow the app to use request body
 app.use(express.json());
 
-// Would use cors middleware here if connecting to a frontend to allow traffic from specific location
+// Would add cors middleware here if connecting to a frontend to allow traffic from specific location
 
 const port = process.env.port || 8080;
 
-app.post("/", function (req, res) { 
+// Future iterations could include swagger to control the API contract
+app.post("/tickets", function (req, res) { 
 
   // services to be injected when creating the new TicketService object
     const SRS = services.SRS;
@@ -40,3 +41,5 @@ app.post("/", function (req, res) {
 app.listen(port, function () {
     console.log(`Example app listening on port ${port}!`)
 })
+
+export default app
