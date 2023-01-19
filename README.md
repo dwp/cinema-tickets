@@ -7,6 +7,8 @@ NOTE - REQUIRES NODE VERSION ^16.15.1
 
 To run unit tests - `npm test`
 
+NOTE - SOME UNIT TESTS ARE CURRENTLY BEING SKIPPED, THESE HAVE BEEN LEFT IN FOR DISCUSSION AS THEY COVER SCENARIOS THAT THE 3RD PART CODE ALLOWS THROUGH THAT WOULD VIOLATE THE TEST LOGIC
+
 Throws InvalidPurchaseException for:
  - request to book tickets for an invalid account number (including zero and negative integers)
  - request to book tickets without an adult
@@ -53,3 +55,11 @@ curl --location --request POST 'http://localhost:8080' \
 
 }'
 ```
+
+## Containerisation
+A Dockerfile has been provided in order to run a containerised version of the application
+To run, use the following commands:
+- `docker build . -t <name>`
+- `docker run -p 5020:8080 -d <name>`
+
+And test by amending the cURL requests given above to use port 5020
