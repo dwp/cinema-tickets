@@ -42,6 +42,10 @@ The app can be executed using these commands in the root:
 npm start (to run the service in 'prod' mode)
 npm run dev (run the service in dev mode)
 ```
+OR
+```
+npm run docker:start (to start the services in docker)
+```
 
 ## Running the Tests
 
@@ -65,7 +69,7 @@ My approach with vanilla Node, thus far, is to eschew using Object Oriented desi
 
 ## Potential Improvements
 
-- Logging - Simply because of time constraints, I didn't employ a logging library into my solution. I'd ideally use or `npmlogger`.
+- Logging - Simply because of time constraints, I didn't employ a logging library into my solution. I'd ideally use `bunyan` or `npmlogger`.
 - Custom Errors - This was more of an oversight, I did make a note to transform my standard `Error` into custom exceptions i.e `InvalidAccountIDException` when I implemented the express API, but that got lost in favour of expanding my postman collection. I'd also expand the service to send back different codes (i.e 4xx for bad requests) to improve the service for downstream consumers
 -Typescript - When I start a new project, I tend to use TypeScript (mainly for readability purposes and better IntelliSense), but this project was to be completed using JavaScript.
 - Remove all OO code in favour of functional - Mixing OO and functional detracts from a cohesive style throughout the codebase, ideally I'd refactor to make a.) my existing code align with FP, and b.) refactor all OO code into more functional code
