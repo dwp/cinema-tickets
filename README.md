@@ -42,6 +42,10 @@ The app can be executed using these commands in the root:
 npm start (to run the service in 'prod' mode)
 npm run dev (run the service in dev mode)
 ```
+OR
+```
+npm run docker:start (to start the services in docker)
+```
 
 ## Running the Tests
 
