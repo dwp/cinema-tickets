@@ -1,12 +1,12 @@
 package uk.gov.dwp.uc.pairtest;
 
+import static uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type.ADULT;
+import static uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type.INFANT;
+
 import thirdparty.paymentgateway.TicketPaymentService;
 import thirdparty.seatbooking.SeatReservationService;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
-
-import static uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type.ADULT;
-import static uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type.INFANT;
 
 public class TicketServiceImpl implements TicketService {
 

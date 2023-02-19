@@ -128,6 +128,13 @@ class TicketServiceImplTest {
             250),
         arguments(
             new TicketTypeRequest[] {
+              new TicketTypeRequest(INFANT, 5),
+              new TicketTypeRequest(CHILD, 5),
+              new TicketTypeRequest(ADULT, 5)
+            },
+            150),
+        arguments(
+            new TicketTypeRequest[] {
               new TicketTypeRequest(ADULT, 1),
               new TicketTypeRequest(ADULT, 5),
               new TicketTypeRequest(ADULT, 2)
@@ -152,6 +159,13 @@ class TicketServiceImplTest {
               new TicketTypeRequest(ADULT, 10)
             },
             15),
+        arguments(
+            new TicketTypeRequest[] {
+                new TicketTypeRequest(INFANT, 5),
+                new TicketTypeRequest(CHILD, 5),
+                new TicketTypeRequest(ADULT, 5)
+            },
+            10),
         arguments(
             new TicketTypeRequest[] {
               new TicketTypeRequest(ADULT, 1),
