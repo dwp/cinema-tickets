@@ -1,4 +1,0 @@
-
-class InvalidPurchaseException(Exception):
-
-    pass
