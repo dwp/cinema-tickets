@@ -1,11 +1,11 @@
-name: Testing
+name: Unit and Postman Tests
 
 on:
   pull_request:
     branches: [ main ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
