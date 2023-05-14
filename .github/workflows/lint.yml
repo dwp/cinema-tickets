@@ -1,0 +1,17 @@
+name: Lint 
+
+on: 
+  pull_request: 
+    branches:
+      - main
+
+jobs:
+  standard-linting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.11.1'
+      - run: npm install standard
+      - run: npx standard src/
