@@ -7,12 +7,12 @@ export function ticketsHandler (ticketsRequestBody) {
     throw new Error('No Account ID provided')
   }
 
-  if (!ticketsRequestBody.ticketRequests) {
+  if (!ticketRequests) {
     throw new Error('No Ticket Requests provided')
   }
 
   const transformedTicketRequests = []
-  for (const request of ticketsRequestBody.ticketRequests) {
+  for (const request of ticketRequests) {
     transformedTicketRequests.push(
       new TicketTypeRequest(request.type, request.noOfTickets)
     )
