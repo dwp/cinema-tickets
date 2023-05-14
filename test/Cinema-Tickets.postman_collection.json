@@ -220,7 +220,11 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Should return an error when children arent accompanied by adult\", () => {",
-									"   pm.expect(pm.response.text()).to.include(\"Children must be accommodated by an adult!\");",
+									"   pm.response.to.have.status(400)",
+									"   pm.response.to.have.jsonBody({",
+									"    \"code\": 400,",
+									"    \"message\": \"Children must be accommodated by an adult!\"",
+									"   })",
 									"})"
 								],
 								"type": "text/javascript"
@@ -260,8 +264,12 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Should return an error when children arent accompanied by adult\", () => {",
-									"   pm.expect(pm.response.text()).to.include(\"Infants and children must be accommodated by an adult!, Too many infants! Each infant needs an adult&#39;s lap to sit on.\");",
+									"pm.test(\"Should return an error when children and infants arent accompanied by adult\", () => {",
+									"   pm.response.to.have.status(400)",
+									"   pm.response.to.have.jsonBody({",
+									"    \"code\": 400,",
+									"    \"message\": \"Infants and children must be accommodated by an adult!, Too many infants! Each infant needs an adult's lap to sit on.\"",
+									"    })",
 									"})"
 								],
 								"type": "text/javascript"
@@ -301,8 +309,12 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Should return an error when too many tickets requested\", () => {",
-									"   pm.expect(pm.response.text()).to.include(\"max noOfTickets is 20!\");",
+									"pm.test(\"Should return an error when children and infants arent accompanied by adult\", () => {",
+									"   pm.response.to.have.status(400)",
+									"   pm.response.to.have.jsonBody({",
+									"    \"code\": 400,",
+									"    \"message\": \"max noOfTickets is 20!\"",
+									"    })",
 									"})"
 								],
 								"type": "text/javascript"
@@ -351,10 +363,7 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"pm.test(\"Should return a 200\", () => {",
-							"    pm.response.to.have.status(500)",
-							"    pm.response.to.be.error;",
-							"})"
+							""
 						]
 					}
 				}

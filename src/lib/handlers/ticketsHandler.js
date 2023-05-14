@@ -1,14 +1,15 @@
 import TicketTypeRequest from '../TicketTypeRequest.js'
 import TicketService from '../services/TicketService.js'
+import { HttpError } from '../errors/HttpError.js'
 
 export function ticketsHandler (ticketsRequestBody) {
   const { accountId, ticketRequests } = ticketsRequestBody
   if (!ticketsRequestBody.accountId) {
-    throw new Error('No Account ID provided')
+    throw new HttpError('No Account ID provided', 400)
   }
 
   if (!ticketRequests) {
-    throw new Error('No Ticket Requests provided')
+    throw new HttpError('No Ticket Requests provided', 400)
   }
 
   const transformedTicketRequests = []

@@ -3,6 +3,7 @@
  */
 
 import { MAXIMUM_TICKET_LIMIT, PERMITTED_TICKET_TYPES } from '../constants.js'
+import { HttpError } from './errors/HttpError.js'
 
 export default class TicketTypeRequest {
   #type
@@ -19,7 +20,7 @@ export default class TicketTypeRequest {
     }
 
     if (noOfTickets > MAXIMUM_TICKET_LIMIT) {
-      throw new Error(`max noOfTickets is ${MAXIMUM_TICKET_LIMIT}!`)
+      throw new HttpError(`max noOfTickets is ${MAXIMUM_TICKET_LIMIT}!`, 400)
     }
 
     this.#type = type

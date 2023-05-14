@@ -12,6 +12,7 @@
     "dev": "nodemon src/app.js",
     "test:unit": "mocha 'test/**/*.js' --recursive --timeout 60000 --exit",
     "test:lint": "standard src/",
+    "test:postman": "node_modules/newman/bin/newman.js run test/Cinema-Tickets.postman_collection.json",
     "docker:build": "docker build . -t cinema-tickets",
     "docker:run": "docker run -p 8085:8085 cinema-tickets",
     "docker:start": "npm run docker:build && npm run docker:run"
