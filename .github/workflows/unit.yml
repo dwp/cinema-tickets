@@ -13,5 +13,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.11.1'
+      - name: Install Dependencies
       - run: npm ci
+      - name: Run unit tests
       - run: npm run test:unit
+      - name: Run API and Postman suite
+      - run: 
+        npm start & sleep 2 
+        node_modules/newman/bin/newman.js run test/cinema-tickets.postman_collection.json
