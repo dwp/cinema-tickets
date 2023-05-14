@@ -18,4 +18,4 @@ jobs:
     - name: Run unit tests
       run: npm run test:unit
     - name: Run API and Postman suite
-      run: ls
+      run: cd test && ls
