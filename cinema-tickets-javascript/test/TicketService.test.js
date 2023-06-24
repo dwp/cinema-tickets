@@ -18,4 +18,16 @@ describe('TicketService', () => {
       ticketService.purchaseTickets(invalidAccountId, adultTicketTypeRequest);
     }).to.throw(InvalidPurchaseException, 'Invalid account ID');
   });
+
+  it('should throw InvalidPurchaseException when someone tries to buy more than 20 tickets at a time', () => {
+    const accountId = 1;
+    const invalidTicketTypeRequest = new TicketTypeRequest('ADULT', 21);
+
+    expect(() => {
+      ticketService.purchaseTickets(accountId, invalidTicketTypeRequest);
+    }).to.throw(
+      InvalidPurchaseException,
+      'Cannot purchase more than 20 tickets at a time'
+    );
+  });
 });
