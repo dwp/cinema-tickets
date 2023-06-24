@@ -30,4 +30,24 @@ describe('TicketService', () => {
       'Cannot purchase more than 20 tickets at a time'
     );
   });
+
+  it('should throw InvalidPurchaseException when someone tries to buy a child or infant ticket without a adult ticket', () => {
+    const accountId = 1;
+    const infantTicketTypeRequest = new TicketTypeRequest('INFANT', 21);
+    const childTicketTypeRequest = new TicketTypeRequest('CHILD', 21);
+
+    expect(() => {
+      ticketService.purchaseTickets(accountId, infantTicketTypeRequest);
+    }).to.throw(
+      InvalidPurchaseException,
+      'Cannot purchase a infant ticket without an adult ticket'
+    );
+
+    expect(() => {
+      ticketService.purchaseTickets(accountId, childTicketTypeRequest);
+    }).to.throw(
+      InvalidPurchaseException,
+      'Cannot purchase a child ticket without an adult ticket'
+    );
+  });
 });
