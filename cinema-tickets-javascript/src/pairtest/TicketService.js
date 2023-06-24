@@ -14,5 +14,17 @@ export default class TicketService {
     if (accountId <= 0) {
       throw new InvalidPurchaseException('Invalid account ID');
     }
+
+    let totalTickets = 0;
+
+    ticketTypeRequests.forEach((ticketTypeRequest) => {
+      totalTickets += ticketTypeRequest.getNoOfTickets();
+    });
+
+    if (totalTickets > 20) {
+      throw new InvalidPurchaseException(
+        'Cannot purchase more than 20 tickets at a time'
+      );
+    }
   }
 }
