@@ -60,7 +60,7 @@ describe('TicketService', () => {
     const childTypeRequests = new TicketTypeRequest('CHILD', 1);
     const infantTypeRequests = new TicketTypeRequest('INFANT', 1);
 
-    TicketService.purchaseTickets(
+    ticketService.purchaseTickets(
       accountId,
       dadTypeRequests1,
       momTypeRequests,
@@ -75,7 +75,7 @@ describe('TicketService', () => {
     // 1 infant = 1 * £0 = £0
     // £40 + £10 + £0 = £50 total
     const expectedPaymentRequest =
-      ticketService.paymentService.paymentRequests[0];
+      ticketService._ticketPaymentService.paymentRequests[0];
 
     expect(expectedPaymentRequest).to.deep.equal({ accountId: 1, amount: 50 });
   });

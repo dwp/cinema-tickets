@@ -1,14 +1,22 @@
 import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
-
+import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
 export default class TicketService {
   /**
    * Should only have private methods other than the one below.
    */
 
+  constructor(ticketPaymentService) {
+    this._ticketPaymentService = ticketPaymentService;
+  }
+
   purchaseTickets(accountId, ...ticketTypeRequests) {
     // throws InvalidPurchaseException
     this._validatePurchace(accountId, ticketTypeRequests);
+
+    const totalAmountToPay =
+      this._calculateTotalAmountToPay(ticketTypeRequests);
+    this._ticketPaymentService.requestPayment(accountId, totalAmountToPay);
   }
   _validatePurchace(accountId, ticketTypeRequests) {
     if (accountId <= 0) {
@@ -53,5 +61,25 @@ export default class TicketService {
         'Cannot purchase a child ticket without an adult ticket'
       );
     }
+  }
+
+  _calculateTotalAmountToPay(ticketTypeRequests) {
+    let totalAmountToPay = 0;
+
+    ticketTypeRequests.forEach((ticketTypeRequest) => {
+      switch (ticketTypeRequest.getTicketType()) {
+        case 'INFANT':
+          totalAmountToPay += 0 * ticketTypeRequest.getNoOfTickets();
+          break;
+        case 'CHILD':
+          totalAmountToPay += 10 * ticketTypeRequest.getNoOfTickets();
+          break;
+        case 'ADULT':
+          totalAmountToPay += 20 * ticketTypeRequest.getNoOfTickets();
+          break;
+      }
+    });
+    // console.log(totalAmountToPay);
+    return totalAmountToPay;
   }
 }
