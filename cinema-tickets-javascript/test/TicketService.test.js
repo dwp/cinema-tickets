@@ -33,8 +33,8 @@ describe('TicketService', () => {
 
   it('should throw InvalidPurchaseException when someone tries to buy a child or infant ticket without a adult ticket', () => {
     const accountId = 1;
-    const infantTicketTypeRequest = new TicketTypeRequest('INFANT', 21);
-    const childTicketTypeRequest = new TicketTypeRequest('CHILD', 21);
+    const infantTicketTypeRequest = new TicketTypeRequest('INFANT', 1);
+    const childTicketTypeRequest = new TicketTypeRequest('CHILD', 1);
 
     expect(() => {
       ticketService.purchaseTickets(accountId, infantTicketTypeRequest);
