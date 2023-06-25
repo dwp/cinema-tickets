@@ -19,6 +19,10 @@ export default class TicketService {
     const totalAmountToPay =
       this._calculateTotalAmountToPay(ticketTypeRequests);
     this._ticketPaymentService.requestPayment(accountId, totalAmountToPay);
+
+    const totalSeatsToReserve =
+      this._calculateTotalSeatsToReserve(ticketTypeRequests);
+    this._seatReservationService.reserveSeat(accountId, totalSeatsToReserve);
   }
   _validatePurchace(accountId, ticketTypeRequests) {
     if (accountId <= 0) {
@@ -83,5 +87,15 @@ export default class TicketService {
     });
     // console.log(totalAmountToPay);
     return totalAmountToPay;
+  }
+
+  _calculateTotalSeatsToReserve(ticketTypeRequests) {
+    return ticketTypeRequests.reduce((totalSeats, ticketTypeRequest) => {
+      if (ticketTypeRequest.getTicketType() !== 'INFANT') {
+        totalSeats += ticketTypeRequest.getNoOfTickets();
+      }
+      // console.log(totalSeats);
+      return totalSeats;
+    }, 0);
   }
 }

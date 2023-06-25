@@ -112,9 +112,8 @@ describe('TicketService', () => {
 
     expect(expectedSeatsReserved).to.deep.equal({
       accountId: 1,
-      seats: 3,
+      totalSeats: 3,
     });
-
     expect(ticketService._seatReservationService.requestReceived).to.equal(
       true
     );

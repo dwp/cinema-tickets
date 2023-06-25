@@ -7,7 +7,7 @@ export default class MockTicketPaymentService extends SeatReservationService {
     this.requestReceived = false;
   }
 
-  reserveSeats(accountId, totalSeats) {
+  reserveSeat(accountId, totalSeats) {
     super.reserveSeat(accountId, totalSeats);
     this.seatReservations.push({ accountId, totalSeats });
     this.requestReceived = true;
