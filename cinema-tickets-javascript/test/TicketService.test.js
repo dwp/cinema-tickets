@@ -78,5 +78,7 @@ describe('TicketService', () => {
       ticketService._ticketPaymentService.paymentRequests[0];
 
     expect(expectedPaymentRequest).to.deep.equal({ accountId: 1, amount: 50 });
+
+    expect(ticketService._ticketPaymentService.requestReceived).to.equal(true);
   });
 });
