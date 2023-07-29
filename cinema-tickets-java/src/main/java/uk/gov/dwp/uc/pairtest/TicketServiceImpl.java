@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import thirdparty.paymentgateway.TicketPaymentService;
-import thirdparty.paymentgateway.TicketPaymentServiceImpl;
 import thirdparty.seatbooking.SeatReservationService;
-import thirdparty.seatbooking.SeatReservationServiceImpl;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
 
@@ -33,9 +31,17 @@ public class TicketServiceImpl implements TicketService {
 
     private final static Logger          LOGGER             = LoggerFactory.getLogger(TicketServiceImpl.class);
     private final static int             MAX_TICKET_COUNT   = 20;
-    private final TicketPaymentService   paymentService     = new TicketPaymentServiceImpl();
-    private final SeatReservationService reservationService = new SeatReservationServiceImpl();
+    private final TicketPaymentService   paymentService;
+    private final SeatReservationService reservationService;
 
+    /**
+     * The default constructor which initializes third-party service instances.
+     */
+    public TicketServiceImpl(TicketPaymentService paymentService, SeatReservationService reservationService) {
+        this.paymentService = paymentService;
+        this.reservationService = reservationService;
+    }
+    
     /**
      * Should only have private methods other than the one below.
      */

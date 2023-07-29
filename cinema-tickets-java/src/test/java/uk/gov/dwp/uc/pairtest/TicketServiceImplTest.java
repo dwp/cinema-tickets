@@ -28,11 +28,17 @@ package uk.gov.dwp.uc.pairtest;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
+import thirdparty.paymentgateway.TicketPaymentService;
+import thirdparty.paymentgateway.TicketPaymentServiceImpl;
+import thirdparty.seatbooking.SeatReservationService;
+import thirdparty.seatbooking.SeatReservationServiceImpl;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest;
 import uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest.Type;
 import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
+import uk.gov.dwp.uc.pairtest.factory.ServiceFactory;
 
 /**
  * <p>
@@ -47,7 +53,8 @@ import uk.gov.dwp.uc.pairtest.exception.InvalidPurchaseException;
  */
 public class TicketServiceImplTest {
 
-    private final TicketService ticketService = new TicketServiceImpl();
+    private final ServiceFactory serviceFactory = new ServiceFactory();
+    private final TicketService ticketService = new TicketServiceImpl(serviceFactory.getPaymentServiceInstance(), serviceFactory.getReservationServiceInstance());
 
     /**
      * Test method for {@link uk.gov.dwp.uc.pairtest.TicketServiceImpl#purchaseTickets(java.lang.Long, uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest[])}.
@@ -160,19 +167,62 @@ public class TicketServiceImplTest {
     /**
      * Test method for {@link uk.gov.dwp.uc.pairtest.TicketServiceImpl#purchaseTickets(java.lang.Long, uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest[])}.
      * <p>
+     *  Test failure scenario - Null ticket type requests.
+     * </p>
+     */
+    @Test(expected = InvalidPurchaseException.class)
+    public void testPurchaseTicketsFailNullRequests() {
+        // When
+        final Long accountId = 1000l;
+        // Given
+        ticketService.purchaseTickets(accountId, null);
+        // Then
+        // Exception expected
+    }
+
+    /**
+     * Test method for {@link uk.gov.dwp.uc.pairtest.TicketServiceImpl#purchaseTickets(java.lang.Long, uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest[])}.
+     * <p>
      *  Test failure scenario - Test invocations.
      * </p>
      */
     @Test
     public void testPurchaseTicketsVerifyInvocations() {
         // When
-        final TicketService ticketServiceSpy = Mockito.spy(ticketService);
         final Long accountId = 1000l;
         final TicketTypeRequest ticketTypeRequest1 = createTicketTypeRequest(Type.ADULT, 1);
         // Given
-        ticketServiceSpy.purchaseTickets(accountId, ticketTypeRequest1);
+        final TicketService spyTicketService = Mockito.spy(ticketService);
+        spyTicketService.purchaseTickets(accountId, ticketTypeRequest1);
         // Then
-        Mockito.verify(ticketServiceSpy, Mockito.times(1)).purchaseTickets(accountId, ticketTypeRequest1);
+        Mockito.verify(spyTicketService, Mockito.times(1)).purchaseTickets(accountId, ticketTypeRequest1);
+    }
+
+    /**
+     * Test method for {@link uk.gov.dwp.uc.pairtest.TicketServiceImpl#purchaseTickets(java.lang.Long, uk.gov.dwp.uc.pairtest.domain.TicketTypeRequest[])}.
+     * <p>
+     *  Test failure scenario - Third party service error.
+     * </p>
+     */
+    @Test
+    public void testPurchaseTicketsThirdPartyServiceError() {
+        // When
+        final Long accountId = 1000l;
+        final TicketTypeRequest ticketTypeRequest1 = createTicketTypeRequest(Type.ADULT, 1);
+
+        final TicketPaymentService mockPaymentService = Mockito.mock(TicketPaymentServiceImpl.class);
+        Mockito.doThrow(RuntimeException.class).when(mockPaymentService).makePayment(ArgumentMatchers.anyLong(), ArgumentMatchers.anyInt());
+        
+        final SeatReservationService mockReservationService = Mockito.mock(SeatReservationServiceImpl.class);
+        Mockito.doCallRealMethod().when(mockReservationService).reserveSeat(ArgumentMatchers.anyLong(), ArgumentMatchers.anyInt());
+
+        // Given
+        final TicketService spyTicketService = Mockito.spy(new TicketServiceImpl(mockPaymentService, mockReservationService));
+        spyTicketService.purchaseTickets(accountId, ticketTypeRequest1);
+
+        // Then
+        Mockito.verify(spyTicketService, Mockito.times(1)).purchaseTickets(accountId, ticketTypeRequest1);
+        Mockito.verify(mockPaymentService, Mockito.times(1)).makePayment(accountId, 20);
     }
 
     /**
