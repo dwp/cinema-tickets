@@ -2,6 +2,7 @@ import TicketValidator from './lib/TicketValidator.js';
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js';
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
 import TicketPriceMap from './lib/TicketPriceMap.js';
+import { INITIAL_TICKET_COUNT_OBJECT } from './lib/Constants.js';
 
 export default class TicketService {
 
@@ -32,14 +33,8 @@ export default class TicketService {
   }
 
   #getTicketCountObject(ticketTypeRequests) {
-    const ticketCounts = {
-      'ADULT': 0,
-      'CHILD': 0,
-      'INFANT': 0
-    };
-
+    const ticketCounts = structuredClone(INITIAL_TICKET_COUNT_OBJECT);
     ticketTypeRequests.forEach((request) => ticketCounts[request.getTicketType()] += request.getNoOfTickets())
     return ticketCounts;
   }
-
 }

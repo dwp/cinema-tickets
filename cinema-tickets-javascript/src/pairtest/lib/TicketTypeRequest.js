@@ -1,6 +1,7 @@
 /**
  * Immutable Object.
  */
+import { ADULT, CHILD, INFANT } from './Constants.js';
 
 export default class TicketTypeRequest {
   #type;
@@ -28,5 +29,5 @@ export default class TicketTypeRequest {
     return this.#type;
   }
 
-  #Type = ['ADULT', 'CHILD', 'INFANT'];
+  #Type = [ADULT, CHILD, INFANT];
 }
