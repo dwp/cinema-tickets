@@ -120,6 +120,7 @@ describe('Ticket Service', () => {
 
   describe('seat booking', () => {
     let reserveSeatStub;
+    const accountId = 1;
 
     beforeEach(() => {
       reserveSeatStub = sandbox.stub();
@@ -132,48 +133,73 @@ describe('Ticket Service', () => {
     });
 
     it('should reserve 1 seat for 1 adult', () => {
-      const accountId = 1;
       const ticketTypeRequest = new TicketTypeRequest('ADULT', 1);
-      const reserveSeatStub = sandbox.stub();
 
-      const mockSeatBookingService = {
-        reserveSeat: reserveSeatStub,
-      }
-
-      testService = new TicketService(mockSeatBookingService);
       testService.purchaseTickets(accountId, ticketTypeRequest);
       expect(reserveSeatStub).to.have.been.calledWith(accountId, 1);
     });
 
     it('should reserve 2 seats for 1 adult and 1 child', () => {
-      const accountId = 1;
       const ticketTypeRequest = new TicketTypeRequest('ADULT', 1);
       const ticketTypeRequestChild = new TicketTypeRequest('CHILD', 1);
-      const reserveSeatStub = sandbox.stub();
 
-      const mockSeatBookingService = {
-        reserveSeat: reserveSeatStub,
-      }
-
-      testService = new TicketService(mockSeatBookingService);
       testService.purchaseTickets(accountId, ticketTypeRequest, ticketTypeRequestChild);
       expect(reserveSeatStub).to.have.been.calledWith(accountId, 2);
     });
 
     it('should reserve 10 seats for 5 adults, 5 children, and 5 infants', () => {
-      const accountId = 1;
       const ticketTypeRequest = new TicketTypeRequest('ADULT', 5);
       const ticketTypeRequestChild = new TicketTypeRequest('CHILD', 5);
       const ticketTypeRequestInfant = new TicketTypeRequest('INFANT', 5);
-      const reserveSeatStub = sandbox.stub();
+
+      testService.purchaseTickets(accountId, ticketTypeRequest, ticketTypeRequestChild, ticketTypeRequestInfant);
+      expect(reserveSeatStub).to.have.been.calledWith(accountId, 10);
+    });
+  });
+
+  describe('ticket payment', () => {
+    let reserveSeatStub;
+    let makePaymentStub;
+
+    const accountId = 1;
+
+    beforeEach(() => {
+      reserveSeatStub = sandbox.stub();
+      makePaymentStub = sandbox.stub();
 
       const mockSeatBookingService = {
         reserveSeat: reserveSeatStub,
       }
 
-      testService = new TicketService(mockSeatBookingService);
+      const mockPaymentService = {
+        makePayment: makePaymentStub,
+      }
+
+      testService = new TicketService(mockSeatBookingService, mockPaymentService);
+    });
+
+    it('should charge 20 for a single adult ticket', () => {
+      const ticketTypeRequest = new TicketTypeRequest('ADULT', 1);
+      testService.purchaseTickets(accountId, ticketTypeRequest);
+
+      expect(makePaymentStub).to.have.been.calledOnceWith(1, 20);
+    });
+
+    it('should charge 50 for a 2x adult tickets and 1x child ticket', () => {
+      const ticketTypeRequest = new TicketTypeRequest('ADULT', 2);
+      const ticketTypeRequestChild = new TicketTypeRequest('CHILD', 1);
+      testService.purchaseTickets(accountId, ticketTypeRequest, ticketTypeRequestChild);
+
+      expect(makePaymentStub).to.have.been.calledOnceWith(1, 50);
+    });
+
+    it('should charge 50 for a 2x adult tickets, 1x child ticket and 2x infant tickets', () => {
+      const ticketTypeRequest = new TicketTypeRequest('ADULT', 2);
+      const ticketTypeRequestChild = new TicketTypeRequest('CHILD', 1);
+      const ticketTypeRequestInfant = new TicketTypeRequest('INFANT', 2);
       testService.purchaseTickets(accountId, ticketTypeRequest, ticketTypeRequestChild, ticketTypeRequestInfant);
-      expect(reserveSeatStub).to.have.been.calledWith(accountId, 10);
+
+      expect(makePaymentStub).to.have.been.calledOnceWith(1, 50);
     });
   });
 });
