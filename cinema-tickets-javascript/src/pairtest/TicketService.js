@@ -1,6 +1,4 @@
-import TicketTypeRequest from './lib/TicketTypeRequest.js';
 import InvalidPurchaseException from './lib/InvalidPurchaseException.js';
-import { init } from 'mocha/lib/cli/commands.js';
 
 export default class TicketService {
   /**
@@ -8,10 +6,11 @@ export default class TicketService {
    */
 
   purchaseTickets(accountId, ...ticketTypeRequests) {
-    if (accountId <= 0) {
-      throw new InvalidPurchaseException();
-    }
+    const ticketCountObject = this.#getTicketCountObject(ticketTypeRequests);
+    this.#validateTicketRequests(accountId, ticketCountObject);
+  }
 
+  #getTicketCountObject(ticketTypeRequests) {
     const ticketCounts = {
       'ADULT': 0,
       'CHILD': 0,
@@ -19,17 +18,37 @@ export default class TicketService {
     };
 
     ticketTypeRequests.forEach((request) => ticketCounts[request.getTicketType()] += request.getNoOfTickets())
+    return ticketCounts;
+  }
 
-    if (Object.values(ticketCounts).reduce((total, value) => total + value, 0) > 20) {
+  #validateTicketRequests(accountId, ticketCounts) {
+    if (accountId <= 0) {
       throw new InvalidPurchaseException();
     }
 
-    if ((ticketCounts.CHILD >= 1 || ticketCounts.INFANT >= 1) && ticketCounts.ADULT === 0) {
+    if (this.#calculateTotalNumberOfTickets(ticketCounts) > 20) {
       throw new InvalidPurchaseException();
     }
 
-    if (ticketCounts.INFANT > ticketCounts.ADULT) {
+    if (this.#isChildOrInfantTicketsWithoutAdult(ticketCounts)) {
+      throw new InvalidPurchaseException();
+    }
+
+    if (this.#isMoreInfantsThanAdults(ticketCounts)) {
       throw new InvalidPurchaseException();
     }
   }
+
+  #calculateTotalNumberOfTickets(ticketCounts) {
+    return Object.values(ticketCounts).reduce((total, value) => total + value, 0);
+  }
+
+  #isChildOrInfantTicketsWithoutAdult(ticketCounts) {
+    return (ticketCounts.CHILD >= 1 || ticketCounts.INFANT >= 1) && ticketCounts.ADULT === 0;
+  }
+
+  #isMoreInfantsThanAdults(ticketCounts) {
+    return ticketCounts.INFANT > ticketCounts.ADULT;
+  }
+
 }
