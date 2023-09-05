@@ -17,11 +17,18 @@ export default class TicketService {
     const ticketCountObject = this.#getTicketCountObject(ticketTypeRequests);
     TicketValidator.validateTicketRequests(accountId, ticketCountObject);
 
+    this.#reserveSeats(accountId, ticketCountObject);
+    this.#makePayment(accountId, ticketCountObject)
+  }
+
+  #makePayment(accountId, ticketCountObject) {
+    const totalCostOfOrder = (ticketCountObject.ADULT * TicketPriceMap.ADULT) + (ticketCountObject.CHILD * TicketPriceMap.CHILD) + (ticketCountObject.INFANT * TicketPriceMap.INFANT);
+    this.#ticketPaymentService.makePayment(accountId, totalCostOfOrder);
+  }
+
+  #reserveSeats(accountId, ticketCountObject) {
     const totalNumberOfSeats = ticketCountObject.ADULT + ticketCountObject.CHILD;
     this.#reservationService.reserveSeat(accountId, totalNumberOfSeats);
-
-    const totalCostOfOrder = (ticketCountObject.ADULT * TicketPriceMap.ADULT) + (ticketCountObject.CHILD * TicketPriceMap.CHILD) + (ticketCountObject.INFANT * TicketPriceMap.INFANT)
-    this.#ticketPaymentService.makePayment(accountId, totalCostOfOrder);
   }
 
   #getTicketCountObject(ticketTypeRequests) {
