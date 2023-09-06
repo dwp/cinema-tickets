@@ -7,3 +7,4 @@ export const INITIAL_TICKET_COUNT_OBJECT = {
   CHILD: 0,
   INFANT: 0
 };
+export const CURRENCY_DECIMAL_PLACES = 2;

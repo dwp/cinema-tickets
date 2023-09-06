@@ -2,7 +2,14 @@ import TicketValidator from './lib/TicketValidator.js';
 import SeatReservationService from '../thirdparty/seatbooking/SeatReservationService.js';
 import TicketPaymentService from '../thirdparty/paymentgateway/TicketPaymentService.js';
 import TicketPriceMap from './lib/TicketPriceMap.js';
-import { INITIAL_TICKET_COUNT_OBJECT } from './lib/Constants.js';
+import {
+  ADULT,
+  CHILD,
+  INFANT,
+  CURRENCY_DECIMAL_PLACES,
+  INITIAL_TICKET_COUNT_OBJECT
+} from './lib/Constants.js';
+import log from './lib/Logger.js';
 
 export default class TicketService {
 
@@ -16,6 +23,7 @@ export default class TicketService {
 
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const ticketCountObject = this.#getTicketCountObject(ticketTypeRequests);
+    log.info(`Received request - ${ADULT}: ${ticketCountObject.ADULT}, ${CHILD}: ${ticketCountObject.CHILD}, ${INFANT}: ${ticketCountObject.INFANT}`);
     TicketValidator.validateTicketRequests(accountId, ticketCountObject);
 
     this.#reserveSeats(accountId, ticketCountObject);
@@ -24,11 +32,13 @@ export default class TicketService {
 
   #makePayment(accountId, ticketCountObject) {
     const totalCostOfOrder = (ticketCountObject.ADULT * TicketPriceMap.ADULT) + (ticketCountObject.CHILD * TicketPriceMap.CHILD) + (ticketCountObject.INFANT * TicketPriceMap.INFANT);
+    log.info(`Making payment of £${totalCostOfOrder.toFixed(CURRENCY_DECIMAL_PLACES)}`);
     this.#ticketPaymentService.makePayment(accountId, totalCostOfOrder);
   }
 
   #reserveSeats(accountId, ticketCountObject) {
     const totalNumberOfSeats = ticketCountObject.ADULT + ticketCountObject.CHILD;
+    log.info(`Reserving ${totalNumberOfSeats} seat(s)`);
     this.#reservationService.reserveSeat(accountId, totalNumberOfSeats);
   }
 
