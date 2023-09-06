@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "build": "rimraf dist && babel src --out-dir dist  --copy-files",
-    "lint": "eslint .",
+    "lint": "eslint ./server.js ./src/**/*.js",
     "start": "node ./server.js",
     "test": "mocha --exit ./test/**/*.js ./test/*.js"
   },
