@@ -23,22 +23,23 @@ export default class TicketService {
 
   purchaseTickets(accountId, ...ticketTypeRequests) {
     const ticketCountObject = this.#getTicketCountObject(ticketTypeRequests);
-    log.info(`Received request - ${ADULT}: ${ticketCountObject.ADULT}, ${CHILD}: ${ticketCountObject.CHILD}, ${INFANT}: ${ticketCountObject.INFANT}`);
+    log.info(`Account ID: ${accountId}, Tickets - ${ADULT}: ${ticketCountObject.ADULT}, ${CHILD}: ${ticketCountObject.CHILD}, ${INFANT}: ${ticketCountObject.INFANT}`);
     TicketValidator.validateTicketRequests(accountId, ticketCountObject);
 
     this.#reserveSeats(accountId, ticketCountObject);
     this.#makePayment(accountId, ticketCountObject)
+    log.info('Request successful');
   }
 
   #makePayment(accountId, ticketCountObject) {
     const totalCostOfOrder = (ticketCountObject.ADULT * TicketPriceMap.ADULT) + (ticketCountObject.CHILD * TicketPriceMap.CHILD) + (ticketCountObject.INFANT * TicketPriceMap.INFANT);
-    log.info(`Making payment of £${totalCostOfOrder.toFixed(CURRENCY_DECIMAL_PLACES)}`);
+    log.info(`Making payment of £${totalCostOfOrder.toFixed(CURRENCY_DECIMAL_PLACES)} with account ID: ${accountId}`);
     this.#ticketPaymentService.makePayment(accountId, totalCostOfOrder);
   }
 
   #reserveSeats(accountId, ticketCountObject) {
     const totalNumberOfSeats = ticketCountObject.ADULT + ticketCountObject.CHILD;
-    log.info(`Reserving ${totalNumberOfSeats} seat(s)`);
+    log.info(`Reserving ${totalNumberOfSeats} seat(s) with account ID: ${accountId}`);
     this.#reservationService.reserveSeat(accountId, totalNumberOfSeats);
   }
 
