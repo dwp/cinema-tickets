@@ -4,6 +4,4 @@ const TICKET_TYPES = {
   INFANT: 0,
 };
 
-module.exports = {
-  TICKET_TYPES,
-};
+export default TICKET_TYPES;

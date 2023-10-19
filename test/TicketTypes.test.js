@@ -1,7 +1,7 @@
-const chai = require('chai');
+import chai from 'chai';
+import TICKET_TYPES from '../src/pairtest/lib/TicketTypes.js';
 
 const { expect } = chai;
-const { TICKET_TYPES } = require('../src/pairtest/lib/TicketTypes');
 
 describe('TicketTypes', () => {
   it('should have three types of tickets - ADULT, CHILD & INFANT', () => {

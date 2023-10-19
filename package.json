@@ -5,7 +5,7 @@
   "engines": {
     "node": "20.8.1"
   },
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "eslint": "eslint --ignore-path .gitignore .",
     "test": "mocha \"test/**/*.test.js\""
