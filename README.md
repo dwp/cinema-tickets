@@ -32,5 +32,7 @@ Throughout the course of this project, I faced several challenges:
 Here are some areas I'd like to focus on in future iterations:
 
 **Service Mocking**: To ease development and testing, mocking third-party services would be beneficial.
+
 **Validator Enhancement**: We can extend and modularize the Validator logic for greater flexibility.
+
 **Logging**: A better logging system rather than the console.
