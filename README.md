@@ -29,8 +29,8 @@ Throughout the course of this project, I faced several challenges:
 **Validation:** Creating a system to verify all ticket requests proved challenging.
 
 ## 🛠️ Things to Improve
-Every project has room for improvement. Here are some areas I'd like to focus on in future iterations:
+Here are some areas I'd like to focus on in future iterations:
 
-Service Mocking: To ease development and testing, mocking third-party services would be beneficial.
-Validator Enhancement: We can extend and modularize the Validator logic for greater flexibility.
-Logging: A better logging system rather than the console.
+**Service Mocking**: To ease development and testing, mocking third-party services would be beneficial.
+**Validator Enhancement**: We can extend and modularize the Validator logic for greater flexibility.
+**Logging**: A better logging system rather than the console.
