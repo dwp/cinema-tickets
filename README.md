@@ -20,7 +20,7 @@ npm test
 ## 🤔 Struggles & Learnings
 Throughout the course of this project, I faced several challenges:
 
-**Unfamiliarity:** The project Type being set to Module was a challenge for me to get used to. Also working with classes isn't something I've done a lot.
+**Unfamiliarity:** The project Type being set to Module was a challenge for me to get used to. Also working with classes isn't something I've not done a lot of.
 
 **Third-party Dependencies**: Integrating with third-party services like TicketPaymentService and SeatReservationService presented unforeseen issues. Ensuring reliability and handling errors was a journey in itself.
 
