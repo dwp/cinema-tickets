@@ -1,0 +1,10 @@
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/thirdparty/seatbooking/SeatReservationServiceImpl.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/thirdparty/paymentgateway/TicketPaymentServiceImpl.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/uk/gov/dwp/uc/pairtest/validation/ValidAccountId.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/uk/gov/dwp/uc/pairtest/TicketService.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/uk/gov/dwp/uc/pairtest/domain/TicketTypeRequest.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/uk/gov/dwp/uc/pairtest/TicketServiceImpl.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/uk/gov/dwp/uc/pairtest/validation/AccountIdValidator.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/thirdparty/seatbooking/SeatReservationService.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/thirdparty/paymentgateway/TicketPaymentService.java
+/Users/troy.snowden/Documents/Projects/coding-exercises/git/seo-application/cinema-tickets/cinema-tickets-java/src/main/java/uk/gov/dwp/uc/pairtest/exception/InvalidPurchaseException.java
