@@ -1,6 +1,8 @@
 ## Change Log
 All notable changes to this project to be documented in this file
 This project adheres to [Semantic Versioning](http://semver.org/).
+## v1.0.6
+Fix vulnerabilities
 
 ## v1.0.5
 Add in API tests to aid automated testing
