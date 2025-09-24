@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ticketdb
+    username: ticket_user
+    password: ticket_pass
+    driver-class-name: org.postgresql.Driver
+
+  redis:
+    host: localhost
+    port: 6379
+
+logging:
+  level:
+    root: INFO
+    uk.gov.dwp.pairtest: DEBUG
+
+ticket:
+  prices:
+    ADULT: 25
+    CHILD: 15
+    INFANT: 0

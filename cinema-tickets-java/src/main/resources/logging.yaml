@@ -1,0 +1,7 @@
+logging:
+  file:
+    name: logs/ticket-service.log
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    uk.gov.dwp.pairtest: DEBUG

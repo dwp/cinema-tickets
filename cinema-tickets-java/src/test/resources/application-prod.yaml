@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:db}:${DB_PORT:5432}/ticketdb
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    driver-class-name: org.postgresql.Driver
+
+  redis:
+    host: ${REDIS_HOST:redis}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASS:}
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: WARN
+    uk.gov.dwp.pairtest: INFO
+
+
+ticket:
+  prices: "{ADULT:25, CHILD:15, INFANT:0}"

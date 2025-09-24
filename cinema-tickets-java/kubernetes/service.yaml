@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ticket-service-secrets
+type: Opaque
+data:
+  DB_USER: dGlja2V0X3VzZXI=   # base64 of ticket_user
+  DB_PASS: dGlja2V0X3Bhc3M=   # base64 of ticket_pass
+  REDIS_PASS: cmVkaXNfcGFzcw== # base64 of redis_pass
