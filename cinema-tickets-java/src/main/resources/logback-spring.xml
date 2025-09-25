@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Spring profile-specific log level -->
+    <springProfile name="dev">
+        <logger name="uk.gov.dwp.pairtest" level="DEBUG"/>
+    </springProfile>
+
+    <springProfile name="!dev">
+        <logger name="uk.gov.dwp.pairtest" level="INFO"/>
+    </springProfile>
+
+    <!-- Console appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- JSON structured logging -->
+            <customFields>{"application":"cinema-tickets","environment":"${spring.profiles.active}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- File appender (optional) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/cinema-tickets.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/cinema-tickets-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
