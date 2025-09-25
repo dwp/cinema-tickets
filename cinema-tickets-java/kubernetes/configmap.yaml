@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ticket-service-config
-data:
-  SPRING_PROFILES_ACTIVE: "prod"
-  REDIS_HOST: "redis"
-  DB_HOST: "postgres"
-  DB_PORT: "5432"
