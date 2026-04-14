@@ -1,3 +1,1 @@
-export default class InvalidPurchaseException extends Error {
-
-}
+export default class InvalidPurchaseException extends Error {}
