@@ -15,8 +15,7 @@ mvn test
 ## Assumptions
 1. Account ID is greater than zero
 2. Each request must contain at least 1 ticket
-3. Number of infant tickets should be less than or equal to number of adults as infant is going to sit on Adult's lap
-4. Third party services always succeed whenever requested
+3. Third party services always succeed whenever requested
 
 ## Validations
 1. TicketRequests array for null or empty
@@ -25,7 +24,6 @@ mvn test
 4. Ticket quantity for 0 and negative values
 5. Maximum number of allowed tickets 
 6. Child/infant ticket requires an adult ticket
-7. Sufficient adult tickets for infants
 
 ## Implementation
 - Third party services are injected through Constructor  style dependency injection, this allows tests to mock these services
@@ -40,7 +38,6 @@ mvn test
   - Invalid AccountID, ticket quantities
   - Maximum 25 tickets per purchase, including infants
   - Adult required for Child/infant purchase
-  - an Adult per infant
 - Calculations
   - for mixed types of tickets
   - same types of tickets

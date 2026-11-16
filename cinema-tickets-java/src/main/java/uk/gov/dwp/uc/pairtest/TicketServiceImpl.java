@@ -76,10 +76,6 @@ public class TicketServiceImpl implements TicketService {
         if((childTicketCounts > 0 || infantTicketCounts > 0) && adultTicketCounts ==0){
             throw new InvalidPurchaseException("Child and Infant tickets cannot be purchased without purchasing an Adult ticket");
         }
-
-        if( infantTicketCounts >  adultTicketCounts){
-            throw new InvalidPurchaseException("Number of Infant tickets cannot be more than number of Adult tickets");
-        }
     }
 
     private record PurchaseSummary(int amount, int seats){}

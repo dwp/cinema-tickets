@@ -187,23 +187,6 @@ class TicketServiceImplTest {
     }
 
     @Test
-    @DisplayName("Reject when adult ticket(s) not gt or eq to Infant(s)")
-    void shouldRejectWhenInfantTicketsMoreThanAdults(){
-        TicketTypeRequest[] ticketTypeRequests = {new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 10),
-                new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 9)};
-        InvalidPurchaseException exception = assertThrows(
-                InvalidPurchaseException.class,
-                () -> service.purchaseTickets(1L, ticketTypeRequests)
-        );
-        assertEquals(
-                "Number of Infant tickets cannot be more than number of Adult tickets",
-                exception.getMessage()
-        );
-        verifyNoInteractions(seatReservationService);
-        verifyNoInteractions(paymentService);
-    }
-
-    @Test
     @DisplayName("Reject large ticket quantities without overflow")
     void shouldRejectWhenLargeNumberOfTickets(){
         TicketTypeRequest[] ticketTypeRequests = {new TicketTypeRequest(TicketTypeRequest.Type.INFANT, Integer.MAX_VALUE),
